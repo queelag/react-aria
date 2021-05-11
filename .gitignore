@@ -1,0 +1,9 @@
+# FOLDERS
+declarations
+dist
+node_modules
+
+# FILES
+.DS_Store
+.env
+yarn-error.log

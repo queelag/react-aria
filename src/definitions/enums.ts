@@ -1,0 +1,15 @@
+export enum ComponentName {
+  ACCORDION = 'ACCORDION',
+  ACCORDION_SECTION = 'ACCORDION_SECTION',
+  ACCORDION_SECTION_HEADER = 'ACCORDION_SECTION_HEADER',
+  ACCORDION_SECTION_CONTENT = 'ACCORDION_SECTION_CONTENT'
+}
+
+export enum Key {
+  ARROW_DOWN = 'ArrowDown',
+  ARROW_UP = 'ArrowUp',
+  END = 'End',
+  ENTER = 'Enter',
+  HOME = 'Home',
+  SPACE = ' '
+}

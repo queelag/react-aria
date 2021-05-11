@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationDir": "declarations",
+    "incremental": true,
+    "jsx": "react",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "ESNext"
+  },
+  "include": ["src"]
+}

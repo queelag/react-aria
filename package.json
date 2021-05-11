@@ -1,0 +1,41 @@
+{
+  "name": "@queelag/react-aria",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Dario Sechi",
+  "license": "MIT",
+  "devDependencies": {
+    "@microsoft/api-extractor": "^7.14.0",
+    "@types/chance": "^1.1.1",
+    "@types/jest": "^26.0.22",
+    "@types/lodash": "^4.14.168",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@types/react-window": "^1.8.2",
+    "chance": "^1.1.7",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.5.5",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "joi": "^17.4.0",
+    "lodash": "^4.17.21",
+    "mobx": "^6.2.0",
+    "mobx-react": "^7.1.0",
+    "nanoid": "^3.1.22",
+    "queue": "^6.0.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-window": "^1.8.6",
+    "squircleyjs": "^1.1.0"
+  },
+  "scripts": {
+    "build": "rm -rf declarations && rm -rf dist && yarn tsc && yarn dts",
+    "test": "yarn jest",
+    "dts": "yarn api-extractor run --local",
+    "tarball": "yarn version && cp package.json dist/. && cd dist && yarn pack",
+    "deploy": "yarn test && MODE=PRODUCTION yarn build && yarn tarball && yarn publish dist/*.tgz --access public && git push"
+  }
+}

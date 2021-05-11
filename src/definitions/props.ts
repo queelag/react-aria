@@ -2,32 +2,62 @@ import { ReactNode } from 'react'
 import { ID } from './types'
 
 export type AccordionProps = {
-  children: (props: AccordionChildProps) => ReactNode
+  children: (props: AccordionChildrenProps) => ReactNode
+  /**
+   * The number of sections.
+   */
   size: number
-} & Omit<HTMLDivProps, 'children'>
+} & Omit<HTMLDivProps, 'children' | 'id'>
 
-export type AccordionChildProps = {
+export type AccordionChildrenProps = {
+  /**
+   * The stateful list of boolean values which handle the visibility of the section panels.
+   */
   expandedSections: boolean[]
+  /**
+   * The keyboard interactions handler.
+   */
   onKeyDown: (event: KeyboardEvent) => void
+  /**
+   * The expandedSections setter which sets every value except from the index to false.
+   */
   setExpandedSection: (expanded: boolean, index: number) => void
 }
 
 export type AccordionSectionProps = {
-  children: (props: AccordionSectionChildProps) => ReactNode
+  children: (props: AccordionSectionChildrenProps) => ReactNode
+  /**
+   * The index of this section, it is required to handle the expansion logic.
+   */
   index: number
+  /**
+   * Setting this to true will automatically open the section on mount.
+   */
   isExpanded?: boolean
-} & AccordionChildProps &
-  Omit<HTMLDivProps, 'children'>
+} & AccordionChildrenProps &
+  Omit<HTMLDivProps, 'children' | 'id' | 'onKeyDown'>
 
-export type AccordionSectionChildProps = {
+export type AccordionSectionChildrenProps = {
+  /**
+   * The ID of the content element.
+   */
   contentID: ID
+  /**
+   * The expanded state derived from expandedSections[index].
+   */
   expanded: boolean
+  /**
+   * The ID of the header element.
+   */
   headerID: ID
+  /**
+   * The expandedSections[index] setter, it behaves like the one in the AccordionSection but the index is implicit.
+   */
   setExpanded: (expanded: boolean) => void
 }
 
-export type AccordionSectionContentProps = AccordionSectionChildProps & HTMLDivProps
-export type AccordionSectionHeaderProps = AccordionSectionChildProps & HTMLButtonProps
+export type AccordionSectionPanelProps = Pick<AccordionSectionChildrenProps, 'contentID' | 'headerID'> & Omit<HTMLDivProps, 'aria-labelledby' | 'id' | 'role'>
+export type AccordionSectionHeaderProps = AccordionSectionChildrenProps & Omit<HTMLButtonProps, 'aria-controls' | 'aria-expanded' | 'id' | 'type'>
 
 export type HTMLButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
 export type HTMLDivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>

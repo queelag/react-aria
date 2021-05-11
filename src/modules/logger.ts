@@ -1,12 +1,12 @@
 import { ID } from '../definitions/types'
 
 class Logger {
-  static debug(id: ID, message: string): void {
-    console.debug(`${id} -> ${message}`)
+  static debug(id: ID, ...messages: string[]): void {
+    console.debug(`${id} -> ${messages.join(' ')}`)
   }
 
-  static error(id: ID, message: string): void {
-    console.error(`${id} -> ${message}`)
+  static error(id: ID, ...messages: string[]): void {
+    console.error(`${id} -> ${messages.join(' ')}`)
   }
 }
 

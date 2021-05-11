@@ -5,16 +5,33 @@
   "author": "Dario Sechi",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
     "@microsoft/api-extractor": "^7.14.0",
+    "@storybook/addon-a11y": "^6.2.9",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-docs": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/react": "^6.2.9",
+    "@tailwindcss/forms": "^0.3.2",
     "@types/chance": "^1.1.1",
     "@types/jest": "^26.0.22",
     "@types/lodash": "^4.14.168",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
     "@types/react-window": "^1.8.2",
+    "autoprefixer": "^10.2.5",
+    "babel-loader": "^8.2.2",
     "chance": "^1.1.7",
+    "framer-motion": "^4.1.15",
     "jest": "^26.6.3",
+    "postcss": "^8.2.15",
+    "postcss-loader": "4.2",
     "prettier": "^2.2.1",
+    "storybook": "^6.2.9",
+    "tailwindcss": "^2.1.2",
     "ts-jest": "^26.5.5",
     "typescript": "^4.2.4"
   },
@@ -36,6 +53,8 @@
     "test": "yarn jest",
     "dts": "yarn api-extractor run --local",
     "tarball": "yarn version && cp package.json dist/. && cd dist && yarn pack",
-    "deploy": "yarn test && MODE=PRODUCTION yarn build && yarn tarball && yarn publish dist/*.tgz --access public && git push"
+    "deploy": "yarn test && MODE=PRODUCTION yarn build && yarn tarball && yarn publish dist/*.tgz --access public && git push",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   }
 }

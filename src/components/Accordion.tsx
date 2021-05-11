@@ -1,16 +1,21 @@
 import { omit, slice } from 'lodash'
-import React, { FocusEvent, useMemo, useState } from 'react'
+import React, { FocusEvent, MouseEvent, useEffect, useMemo, useState } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
-import { AccordionProps, AccordionSectionContentProps, AccordionSectionHeaderProps, AccordionSectionProps } from '../definitions/props'
+import { AccordionProps, AccordionSectionHeaderProps, AccordionSectionPanelProps, AccordionSectionProps } from '../definitions/props'
 import useID from '../hooks/use.id'
 import Logger from '../modules/logger'
 
+/**
+ * An accordion is a vertically stacked set of interactive headings that each contain a title, content snippet, or thumbnail representing a section of content. The headings function as controls that enable users to reveal or hide their associated sections of content. Accordions are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.
+ */
 function Accordion(props: AccordionProps) {
   const [expandedSections, setExpandedSections] = useState<boolean[]>(new Array(props.size).fill(false))
   const id = useID(ComponentName.ACCORDION)
 
   const onKeyDown = useMemo(
     () => (e: KeyboardEvent) => {
+      e.preventDefault()
+
       let sections: HTMLDivElement[], focusedSection: HTMLDivElement | undefined, focusedSectionIndex: number
 
       sections = slice(document.querySelectorAll(`#${id} [id^='${ComponentName.ACCORDION_SECTION_HEADER}-']`))
@@ -70,6 +75,12 @@ function Accordion(props: AccordionProps) {
           Logger.debug(id, `${e.key} pressed, the last element has been focused`)
 
           break
+        case Key.ENTER:
+        case Key.SPACE:
+          setExpandedSection(true, focusedSectionIndex)
+          Logger.debug(id, `${e.key} pressed, expanding the focused element`)
+
+          break
       }
     },
     []
@@ -91,38 +102,60 @@ function Accordion(props: AccordionProps) {
   )
 }
 
+/**
+ * The accordion section contains the header and the panel components.
+ */
 function AccordionSection(props: AccordionSectionProps) {
   const id = useID(ComponentName.ACCORDION_SECTION)
   const contentID = useID(ComponentName.ACCORDION_SECTION_CONTENT)
   const headerID = useID(ComponentName.ACCORDION_SECTION_HEADER)
 
-  const onBlur = (e: FocusEvent) => {
+  const onBlur = (event: FocusEvent<HTMLDivElement>) => {
     window.removeEventListener('keydown', props.onKeyDown)
+    Logger.debug(id, `The keydown listener has been removed`)
+
+    props.onBlur && props.onBlur(event)
   }
 
-  const onFocus = (e: FocusEvent) => {
+  const onFocus = (event: FocusEvent<HTMLDivElement>) => {
     window.addEventListener('keydown', props.onKeyDown)
+    Logger.debug(id, 'The keydown listener has been added')
+
+    props.onFocus && props.onFocus(event)
   }
 
   const setExpanded = (expanded: boolean) => {
     props.setExpandedSection(expanded, props.index)
   }
 
-  //   useEffect(() => {
-  //     setExpanded(true)
-  //   }, [props.isExpanded])
+  useEffect(() => {
+    props.isExpanded && setExpanded(true)
+  }, [props.isExpanded])
+
+  useEffect(
+    () => () => {
+      window.removeEventListener('keydown', props.onKeyDown)
+      Logger.debug(id, `The keydown listener has been removed`)
+    },
+    []
+  )
 
   return (
-    <div {...omit(props, 'expandedSections', 'onKeyDown', 'setExpandedSection')} id={id} onBlur={onBlur} onFocus={onFocus}>
+    <div {...omit(props, 'expandedSections', 'index', 'isExpanded', 'onKeyDown', 'setExpandedSection')} id={id} onBlur={onBlur} onFocus={onFocus}>
       {props.children({ contentID, expanded: props.expandedSections[props.index], headerID, setExpanded })}
     </div>
   )
 }
 
+/**
+ * Label for or thumbnail representing a section of content that also serves as a control for showing, and in some implementations, hiding the section of content.
+ */
 function AccordionSectionHeader(props: AccordionSectionHeaderProps) {
-  const onClick = () => {
+  const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     props.setExpanded(!props.expanded)
-    Logger.debug(props.headerID, `Clicked, expanding the section`)
+    Logger.debug(props.headerID, `Clicked, ${props.expanded ? 'collapsing' : 'expanding'} the section`)
+
+    props.onClick && props.onClick(event)
   }
 
   return (
@@ -137,8 +170,11 @@ function AccordionSectionHeader(props: AccordionSectionHeaderProps) {
   )
 }
 
-function AccordionSectionContent(props: AccordionSectionContentProps) {
+/**
+ * Section of content associated with an accordion header.
+ */
+function AccordionSectionPanel(props: AccordionSectionPanelProps) {
   return <div {...omit(props, 'contentID', 'expanded', 'headerID', 'setExpanded')} aria-labelledby={props.headerID} id={props.contentID} role='region' />
 }
 
-export { Accordion, AccordionSection, AccordionSectionContent, AccordionSectionHeader }
+export { Accordion, AccordionSection, AccordionSectionPanel, AccordionSectionHeader }

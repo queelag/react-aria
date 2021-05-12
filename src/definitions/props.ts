@@ -61,6 +61,35 @@ export type AccordionSectionHeaderProps = AccordionSectionChildrenProps & Omit<H
 
 export type AlertProps = Omit<HTMLDivProps, 'id'>
 
+export type AlertDialogChildrenProps = {
+  /**
+   * The ID of the description element.
+   */
+  descriptionID: ID
+  /**
+   * The ID of the title element.
+   */
+  titleID: ID
+}
+
+export type AlertDialogProps = {
+  children: (props: AlertDialogChildrenProps) => ReactNode
+} & Omit<HTMLDivProps, 'children' | 'id' | 'ref'>
+
+export type AlertDialogDescriptionProps = Pick<AlertDialogChildrenProps, 'descriptionID'> & Omit<HTMLSpanProps, 'id'>
+export type AlertDialogTitleProps = Pick<AlertDialogChildrenProps, 'titleID'> & Omit<HTMLSpanProps, 'id'>
+
+export type FocusTrapProps = {
+  /**
+   * Setting this to true will automatically focus the first inside element inside the trap.
+   */
+  autoFocus?: boolean
+  /**
+   * Setting this to true will automatically restore the focus to the element that lost it before being moved to the trap.
+   */
+  restoreFocus?: boolean
+} & Omit<HTMLDivProps, 'id' | 'ref'>
+
 export type HTMLButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
 export type HTMLDivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 export type HTMLElementProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>

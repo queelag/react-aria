@@ -20,10 +20,7 @@ class Logger {
   }
 
   private static format(args: any[] = []): string {
-    return [
-      args.filter((v: any) => ['boolean', 'number', 'string'].includes(typeof v)).join(' -> '),
-      args.filter((v: any) => ['object'].includes(typeof v)).join(', ')
-    ].join('\n')
+    return args.filter((v: any) => ['boolean', 'number', 'string'].includes(typeof v)).join(' -> ')
   }
 }
 

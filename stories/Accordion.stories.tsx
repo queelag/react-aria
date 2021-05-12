@@ -1,10 +1,10 @@
 import { KeyboardArrowDownRounded } from '@material-ui/icons'
 import { Meta } from '@storybook/react'
 import Chance from 'chance'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import React, { Fragment } from 'react'
-import { Accordion, AccordionSection, AccordionSectionHeader, AccordionSectionPanel } from '../components/Accordion'
-import { AccordionChildrenProps, AccordionSectionChildrenProps } from '../definitions/props'
+import { Accordion, AccordionSection, AccordionSectionHeader, AccordionSectionPanel } from '../src/components/Accordion'
+import { AccordionChildrenProps, AccordionSectionChildrenProps } from '../src/definitions/props'
 
 const sections: { description: string; title: string }[] = new Array(3).fill(0).map((v) => ({
   description: Chance().paragraph({ sentences: 1 }),
@@ -20,7 +20,7 @@ export const Raw = () => (
             {(props: AccordionSectionChildrenProps) => (
               <Fragment>
                 <AccordionSectionHeader {...props}>{v.title}</AccordionSectionHeader>
-                {props.expanded && <AccordionSectionPanel {...props}>{v.description}</AccordionSectionPanel>}
+                <AccordionSectionPanel {...props}>{props.expanded && v.description}</AccordionSectionPanel>
               </Fragment>
             )}
           </AccordionSection>
@@ -48,21 +48,16 @@ export const Styled = () => {
                         </motion.div>
                       </div>
                     </AccordionSectionHeader>
-                    <AnimatePresence>
-                      {props.expanded && (
-                        <motion.div
-                          animate={{ height: 'auto' }}
-                          className='overflow-hidden bg-gray-100'
-                          exit={{ height: 0 }}
-                          initial={{ height: 0 }}
-                          transition={{ type: 'linear' }}
-                        >
-                          <AccordionSectionPanel {...props} className='p-6 text-sm'>
-                            {v.description}
-                          </AccordionSectionPanel>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    <AccordionSectionPanel {...props}>
+                      <motion.div
+                        animate={{ height: props.expanded ? 'auto' : 0 }}
+                        className='overflow-hidden bg-gray-100'
+                        initial={{ height: 0 }}
+                        transition={{ type: 'linear' }}
+                      >
+                        <div className='p-6 text-sm'>{v.description}</div>
+                      </motion.div>
+                    </AccordionSectionPanel>
                   </Fragment>
                 )}
               </AccordionSection>

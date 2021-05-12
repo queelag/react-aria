@@ -3,7 +3,7 @@ import { Meta } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React from 'react'
-import { Alert } from '../components/Alert'
+import { Alert } from '../src/components/Alert'
 
 export const Raw = () => <Alert>{Chance().paragraph({ sentences: 1 })}</Alert>
 

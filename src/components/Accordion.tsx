@@ -13,71 +13,61 @@ function Accordion(props: AccordionProps) {
   const [expandedSections, setExpandedSections] = useState<boolean[]>(new Array(props.size).fill(false))
   const id = useID(ComponentName.ACCORDION)
 
-  const handleKeyboardEvents = (e: KeyboardEvent) => {
-    let sections: HTMLDivElement[], focusedSection: HTMLDivElement | undefined, focusedSectionIndex: number
+  const handleKeyboardInteractions = (e: KeyboardEvent) => {
+    let sections: HTMLDivElement[], focusedSectionIndex: number
 
     sections = slice(document.querySelectorAll(`#${id} ${DocumentUtils.toPrefixIDSelector(ComponentName.ACCORDION_SECTION_HEADER)}`))
-    if (sections.length <= 0) return Logger.error(id, 'onKeyDown', `There are no sections`)
-
-    focusedSection = sections.find((v: HTMLDivElement) => document.activeElement === v)
-    if (!focusedSection) return Logger.error(id, 'onKeyDown', `Failed to find the focused section`)
+    if (sections.length <= 0) return Logger.error(id, 'handleKeyboardInteractions', `There are no sections`)
 
     focusedSectionIndex = sections.findIndex((v: HTMLDivElement) => document.activeElement === v)
-    if (focusedSectionIndex < 0) return Logger.error(id, 'onKeyDown', `Failed to find the focused section index`)
-
-    switch (e.key) {
-      case Key.ARROW_DOWN:
-      case Key.ARROW_UP:
-      case Key.END:
-      case Key.HOME:
-        focusedSection.blur()
-        Logger.debug(id, 'onKeyDown', `The focused section has been blurred`)
-
-        break
-    }
+    if (focusedSectionIndex < 0) return Logger.error(id, 'handleKeyboardInteractions', `Failed to find the focused section index`)
 
     switch (e.key) {
       case Key.ARROW_DOWN:
         let next: HTMLDivElement
 
-        next = sections[focusedSectionIndex + 1] || focusedSection
-        next.focus()
+        next = sections[focusedSectionIndex + 1]
+        if (!next) return Logger.debug(id, 'handleKeyboardInteractions', `Failed to find the next element`)
 
-        Logger.debug(id, 'onKeyDown', e.key, `The next element has been focused`)
+        next.focus()
+        Logger.debug(id, 'handleKeyboardInteractions', e.key, `The next element has been focused`)
 
         break
       case Key.ARROW_UP:
         let previous: HTMLDivElement
 
-        previous = sections[focusedSectionIndex - 1] || focusedSection
-        previous.focus()
+        previous = sections[focusedSectionIndex - 1]
+        if (!previous) return Logger.debug(id, 'handleKeyboardInteractions', `Failed to find the previous element`)
 
-        Logger.debug(id, 'onKeyDown', e.key, `The previous element has been focused`)
+        previous.focus()
+        Logger.debug(id, 'handleKeyboardInteractions', e.key, `The previous element has been focused`)
 
         break
       case Key.END:
         let last: HTMLDivElement
 
-        last = sections[sections.length - 1] || focusedSection
-        last.focus()
+        last = sections[sections.length - 1]
+        if (!last) return Logger.debug(id, 'handleKeyboardInteractions', `Failed to find the last element`)
 
-        Logger.debug(id, 'onKeyDown', e.key, `The last element has been focused`)
+        last.focus()
+        Logger.debug(id, 'handleKeyboardInteractions', e.key, `The last element has been focused`)
 
         break
       case Key.HOME:
         let first: HTMLDivElement
 
-        first = sections[0] || focusedSection
-        first.focus()
+        first = sections[0]
+        if (!first) return Logger.debug(id, 'handleKeyboardInteractions', `Failed to find the first element`)
 
-        Logger.debug(id, 'onKeyDown', e.key, `The first element has been focused`)
+        first.focus()
+        Logger.debug(id, 'handleKeyboardInteractions', e.key, `The first element has been focused`)
 
         break
     }
   }
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    handleKeyboardEvents(event)
+    handleKeyboardInteractions(event)
     props.onKeyDown && props.onKeyDown(event)
   }
 

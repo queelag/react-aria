@@ -10,7 +10,7 @@ class DocumentUtils {
   }
 
   static toPrefixIDSelector(id: ID): string {
-    return `[id^='${id}-']`
+    return `[id^="${id}-"]`
   }
 }
 

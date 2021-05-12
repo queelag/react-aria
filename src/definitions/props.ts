@@ -15,13 +15,9 @@ export type AccordionChildrenProps = {
    */
   expandedSections: boolean[]
   /**
-   * The keyboard interactions handler.
-   */
-  onKeyDown: (event: KeyboardEvent) => void
-  /**
    * The expandedSections setter which sets every value except from the index to false.
    */
-  setExpandedSection: (expanded: boolean, index: number) => void
+  setExpandedSection: (expanded: boolean, index: number, isCollapsable: boolean) => void
 }
 
 export type AccordionSectionProps = {
@@ -30,6 +26,10 @@ export type AccordionSectionProps = {
    * The index of this section, it is required to handle the expansion logic.
    */
   index: number
+  /**
+   * Setting this to false will disable the collapse of an expanded section
+   */
+  isCollapsable?: boolean
   /**
    * Setting this to true will automatically open the section on mount.
    */
@@ -58,6 +58,8 @@ export type AccordionSectionChildrenProps = {
 
 export type AccordionSectionPanelProps = Pick<AccordionSectionChildrenProps, 'contentID' | 'headerID'> & Omit<HTMLDivProps, 'aria-labelledby' | 'id' | 'role'>
 export type AccordionSectionHeaderProps = AccordionSectionChildrenProps & Omit<HTMLButtonProps, 'aria-controls' | 'aria-expanded' | 'id' | 'type'>
+
+export type AlertProps = Omit<HTMLDivProps, 'id'>
 
 export type HTMLButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
 export type HTMLDivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>

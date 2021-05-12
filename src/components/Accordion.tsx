@@ -1,9 +1,10 @@
 import { omit, slice } from 'lodash'
-import React, { FocusEvent, MouseEvent, useEffect, useMemo, useState } from 'react'
+import React, { KeyboardEvent, MouseEvent, useEffect, useState } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { AccordionProps, AccordionSectionHeaderProps, AccordionSectionPanelProps, AccordionSectionProps } from '../definitions/props'
 import useID from '../hooks/use.id'
 import Logger from '../modules/logger'
+import DocumentUtils from '../utils/document.utils'
 
 /**
  * An accordion is a vertically stacked set of interactive headings that each contain a title, content snippet, or thumbnail representing a section of content. The headings function as controls that enable users to reveal or hide their associated sections of content. Accordions are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.
@@ -12,92 +13,92 @@ function Accordion(props: AccordionProps) {
   const [expandedSections, setExpandedSections] = useState<boolean[]>(new Array(props.size).fill(false))
   const id = useID(ComponentName.ACCORDION)
 
-  const onKeyDown = useMemo(
-    () => (e: KeyboardEvent) => {
-      e.preventDefault()
+  const handleKeyboardEvents = (e: KeyboardEvent) => {
+    let sections: HTMLDivElement[], focusedSection: HTMLDivElement | undefined, focusedSectionIndex: number
 
-      let sections: HTMLDivElement[], focusedSection: HTMLDivElement | undefined, focusedSectionIndex: number
+    sections = slice(document.querySelectorAll(`#${id} ${DocumentUtils.toPrefixIDSelector(ComponentName.ACCORDION_SECTION_HEADER)}`))
+    if (sections.length <= 0) return Logger.error(id, 'onKeyDown', `There are no sections`)
 
-      sections = slice(document.querySelectorAll(`#${id} [id^='${ComponentName.ACCORDION_SECTION_HEADER}-']`))
-      if (sections.length <= 0) return Logger.error(id, `There are no sections`)
+    focusedSection = sections.find((v: HTMLDivElement) => document.activeElement === v)
+    if (!focusedSection) return Logger.error(id, 'onKeyDown', `Failed to find the focused section`)
 
-      focusedSection = sections.find((v: HTMLDivElement) => document.activeElement === v)
-      if (!focusedSection) return Logger.error(id, `Failed to find the focused section`)
+    focusedSectionIndex = sections.findIndex((v: HTMLDivElement) => document.activeElement === v)
+    if (focusedSectionIndex < 0) return Logger.error(id, 'onKeyDown', `Failed to find the focused section index`)
 
-      focusedSectionIndex = sections.findIndex((v: HTMLDivElement) => document.activeElement === v)
-      if (focusedSectionIndex < 0) return Logger.error(id, `Failed to find the focused section index`)
+    switch (e.key) {
+      case Key.ARROW_DOWN:
+      case Key.ARROW_UP:
+      case Key.END:
+      case Key.HOME:
+        focusedSection.blur()
+        Logger.debug(id, 'onKeyDown', `The focused section has been blurred`)
 
-      switch (e.key) {
-        case Key.ARROW_DOWN:
-        case Key.ARROW_UP:
-        case Key.END:
-        case Key.HOME:
-          focusedSection.blur()
-          Logger.debug(id, `The focused section has been blurred`)
+        break
+    }
 
-          break
-      }
+    switch (e.key) {
+      case Key.ARROW_DOWN:
+        let next: HTMLDivElement
 
-      switch (e.key) {
-        case Key.ARROW_DOWN:
-          let next: HTMLDivElement
+        next = sections[focusedSectionIndex + 1] || focusedSection
+        next.focus()
 
-          next = sections[focusedSectionIndex + 1] || focusedSection
-          next.focus()
+        Logger.debug(id, 'onKeyDown', e.key, `The next element has been focused`)
 
-          Logger.debug(id, `${e.key} pressed, the next element has been focused`)
+        break
+      case Key.ARROW_UP:
+        let previous: HTMLDivElement
 
-          break
-        case Key.ARROW_UP:
-          let previous: HTMLDivElement
+        previous = sections[focusedSectionIndex - 1] || focusedSection
+        previous.focus()
 
-          previous = sections[focusedSectionIndex - 1] || focusedSection
-          previous.focus()
+        Logger.debug(id, 'onKeyDown', e.key, `The previous element has been focused`)
 
-          Logger.debug(id, `${e.key} pressed, the previous element has been focused`)
+        break
+      case Key.END:
+        let last: HTMLDivElement
 
-          break
-        case Key.END:
-          let first: HTMLDivElement
+        last = sections[sections.length - 1] || focusedSection
+        last.focus()
 
-          first = sections[0] || focusedSection
-          first.focus()
+        Logger.debug(id, 'onKeyDown', e.key, `The last element has been focused`)
 
-          Logger.debug(id, `${e.key} pressed, the first element has been focused`)
+        break
+      case Key.HOME:
+        let first: HTMLDivElement
 
-          break
-        case Key.HOME:
-          let last: HTMLDivElement
+        first = sections[0] || focusedSection
+        first.focus()
 
-          last = sections[sections.length - 1] || focusedSection
-          last.focus()
+        Logger.debug(id, 'onKeyDown', e.key, `The first element has been focused`)
 
-          Logger.debug(id, `${e.key} pressed, the last element has been focused`)
+        break
+    }
+  }
 
-          break
-        case Key.ENTER:
-        case Key.SPACE:
-          setExpandedSection(true, focusedSectionIndex)
-          Logger.debug(id, `${e.key} pressed, expanding the focused element`)
+  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    handleKeyboardEvents(event)
+    props.onKeyDown && props.onKeyDown(event)
+  }
 
-          break
-      }
-    },
-    []
-  )
-
-  const setExpandedSection = (expanded: boolean, index: number) => {
+  const setExpandedSection = (expanded: boolean, index: number, isCollapsable: boolean) => {
     let clone: boolean[]
+
+    if (expanded === false && isCollapsable === false) {
+      Logger.debug(id, 'setExpandedSection', `The isCollapsable prop is falsy, the section can't be collapsed`)
+      return
+    }
 
     clone = expandedSections.slice().fill(false)
     clone[index] = expanded
 
     setExpandedSections(clone)
+    Logger.debug(id, 'setExpandedSection', `Every section has been collapsed, the section ${index} has been ${expanded ? 'expanded' : 'collapsed'}`)
   }
 
   return (
-    <div {...props} id={id}>
-      {props.children({ expandedSections, onKeyDown, setExpandedSection })}
+    <div {...props} id={id} onKeyDown={onKeyDown}>
+      {props.children({ expandedSections, setExpandedSection })}
     </div>
   )
 }
@@ -107,41 +108,22 @@ function Accordion(props: AccordionProps) {
  */
 function AccordionSection(props: AccordionSectionProps) {
   const id = useID(ComponentName.ACCORDION_SECTION)
-  const contentID = useID(ComponentName.ACCORDION_SECTION_CONTENT)
+  const contentID = useID(ComponentName.ACCORDION_SECTION_PANEL)
   const headerID = useID(ComponentName.ACCORDION_SECTION_HEADER)
 
-  const onBlur = (event: FocusEvent<HTMLDivElement>) => {
-    window.removeEventListener('keydown', props.onKeyDown)
-    Logger.debug(id, `The keydown listener has been removed`)
-
-    props.onBlur && props.onBlur(event)
-  }
-
-  const onFocus = (event: FocusEvent<HTMLDivElement>) => {
-    window.addEventListener('keydown', props.onKeyDown)
-    Logger.debug(id, 'The keydown listener has been added')
-
-    props.onFocus && props.onFocus(event)
-  }
-
   const setExpanded = (expanded: boolean) => {
-    props.setExpandedSection(expanded, props.index)
+    props.setExpandedSection(expanded, props.index, typeof props.isCollapsable === 'boolean' ? props.isCollapsable : true)
   }
 
   useEffect(() => {
-    props.isExpanded && setExpanded(true)
+    if (props.isExpanded === true) {
+      setExpanded(true)
+      Logger.debug(id, 'useEffect', 'The isExpanded prop is truthy, expanding the section')
+    }
   }, [props.isExpanded])
 
-  useEffect(
-    () => () => {
-      window.removeEventListener('keydown', props.onKeyDown)
-      Logger.debug(id, `The keydown listener has been removed`)
-    },
-    []
-  )
-
   return (
-    <div {...omit(props, 'expandedSections', 'index', 'isExpanded', 'onKeyDown', 'setExpandedSection')} id={id} onBlur={onBlur} onFocus={onFocus}>
+    <div {...omit(props, 'expandedSections', 'index', 'isCollapsable', 'isExpanded', 'setExpandedSection', 'setFocused')} id={id}>
       {props.children({ contentID, expanded: props.expandedSections[props.index], headerID, setExpanded })}
     </div>
   )
@@ -153,7 +135,7 @@ function AccordionSection(props: AccordionSectionProps) {
 function AccordionSectionHeader(props: AccordionSectionHeaderProps) {
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     props.setExpanded(!props.expanded)
-    Logger.debug(props.headerID, `Clicked, ${props.expanded ? 'collapsing' : 'expanding'} the section`)
+    Logger.debug(props.headerID, 'onClick', `The section has been ${!props.expanded ? 'expanded' : 'collapsed'}`)
 
     props.onClick && props.onClick(event)
   }

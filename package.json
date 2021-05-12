@@ -16,6 +16,8 @@
     "@storybook/addon-links": "^6.2.9",
     "@storybook/react": "^6.2.9",
     "@tailwindcss/forms": "^0.3.2",
+    "@testing-library/react": "^11.2.6",
+    "@testing-library/react-hooks": "^5.1.2",
     "@types/chance": "^1.1.1",
     "@types/jest": "^26.0.22",
     "@types/lodash": "^4.14.168",

@@ -23,6 +23,7 @@ export enum Key {
   ARROW_UP = 'ArrowUp',
   END = 'End',
   ENTER = 'Enter',
+  ESCAPE = 'Escape',
   HOME = 'Home',
   SPACE = ' ',
   TAB = 'Tab'

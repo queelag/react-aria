@@ -1,23 +1,23 @@
-import { ReactNode } from 'react'
+import { MutableRefObject, ReactNode } from 'react'
 import { ID } from './types'
 
 export type AccordionProps = {
   children: (props: AccordionChildrenProps) => ReactNode
-  /**
-   * The number of sections.
-   */
-  size: number
 } & Omit<HTMLDivProps, 'children' | 'id'>
 
 export type AccordionChildrenProps = {
   /**
-   * The stateful list of boolean values which handle the visibility of the section panels.
+   * The stateful map of boolean values which handle the visibility of the section panels.
    */
-  expandedSections: boolean[]
+  expandedSections: Map<number, boolean>
   /**
    * The expandedSections setter which sets every value except from the index to false.
    */
   setExpandedSection: (expanded: boolean, index: number, isCollapsable: boolean) => void
+  /**
+   * The section ref setter, necessary to handle the keyboard interactions.
+   */
+  setSectionRef: (ref: MutableRefObject<HTMLDivElement>, index: number) => void
 }
 
 export type AccordionSectionProps = {
@@ -74,6 +74,10 @@ export type AlertDialogChildrenProps = {
 
 export type AlertDialogProps = {
   children: (props: AlertDialogChildrenProps) => ReactNode
+  /**
+   * The method which handles the closure of the alert dialog.
+   */
+  onClose: () => void
 } & Omit<HTMLDivProps, 'children' | 'id' | 'ref'>
 
 export type AlertDialogDescriptionProps = Pick<AlertDialogChildrenProps, 'descriptionID'> & Omit<HTMLSpanProps, 'id'>

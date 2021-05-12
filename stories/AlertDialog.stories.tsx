@@ -19,7 +19,7 @@ export const Raw = () => {
         Show Alert Dialog
       </button>
       {visible && (
-        <AlertDialog className='bg-black bg-opacity-50'>
+        <AlertDialog className='bg-black bg-opacity-50' onClose={onClick}>
           {(props: AlertDialogChildrenProps) => (
             <FocusTrap className='w-64 flex flex-col bg-white'>
               <AlertDialogTitle {...props} className='font-bold'>
@@ -51,18 +51,16 @@ export const Styled = () => {
 
   return (
     <div className='styled max-w-lg flex justify-center items-center rounded-md px-16 py-32 bg-gradient-to-br from-green-400 via-green-500 to-green-600'>
-      <motion.button
-        className='px-12 py-6 bg-white text-green-700 font-medium rounded-md focus:ring-2 ring-offset-2 ring-blue-700'
+      <button
+        className='px-12 py-6 bg-white text-green-700 font-medium rounded-md focus:ring-2 ring-offset-2 ring-offset-green-500 ring-white  transition-all duration-200 transform hover:scale-105 active:scale-95'
         onClick={onClick}
         type='button'
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
       >
         Show Alert Dialog
-      </motion.button>
+      </button>
       <AnimatePresence>
         {visible && (
-          <AlertDialog>
+          <AlertDialog onClose={onClick}>
             {(props: AlertDialogChildrenProps) => (
               <FocusTrap autoFocus restoreFocus>
                 <motion.div animate={{ opacity: 0.5 }} className='absolute inset-0 bg-black' exit={{ opacity: 0 }} initial={{ opacity: 0 }} />

@@ -14,8 +14,8 @@ function FocusTrap(props: FocusTrapProps) {
   }
 
   useLayoutEffect(() => store.readFocusables(), [props])
-  useLayoutEffect(() => (props.autoFocus ? store.focusFirstFocusable() : noop), [props.autoFocus])
   useLayoutEffect(() => (props.restoreFocus ? store.readOriginalFocusedAndReturnFocuser() : noop), [props.restoreFocus])
+  useLayoutEffect(() => (props.autoFocus ? store.focusFirstFocusable() : noop), [props.autoFocus])
 
   return <div {...omit(props, 'autoFocus', 'restoreFocus')} id={store.id} onKeyDown={onKeyDown} ref={ref} />
 }

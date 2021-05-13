@@ -8,11 +8,14 @@ class ComponentStore<T extends HTMLElement = HTMLDivElement> {
   name: ComponentName
   ref: MutableRefObject<T>
 
-  constructor(name: ComponentName, ref: MutableRefObject<T>) {
-    this.id = name + '_' + nanoid()
+  constructor(name: ComponentName, ref: MutableRefObject<T>, update: () => void, id?: string) {
+    this.id = id || name + '_' + nanoid()
     this.name = name
     this.ref = ref
+    this.update = update
   }
+
+  update(): void {}
 
   get element(): T {
     return this.ref.current || document.createElement('div')

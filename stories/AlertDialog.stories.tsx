@@ -5,6 +5,7 @@ import React, { Fragment, useState } from 'react'
 import * as AlertDialog from '../src/components/AlertDialog'
 import * as FocusTrap from '../src/components/FocusTrap'
 import { AlertDialogChildrenProps } from '../src/definitions/props'
+import ArrayUtils from '../src/utils/array.utils'
 
 export const Raw = () => {
   const [visible, setVisible] = useState<boolean>(false)
@@ -50,9 +51,13 @@ export const Styled = () => {
   }
 
   return (
-    <div className='styled max-w-lg flex justify-center items-center rounded-md px-16 py-32 bg-gradient-to-br from-green-400 via-green-500 to-green-600'>
+    <Fragment>
       <button
-        className='px-12 py-6 bg-white text-green-700 font-medium rounded-md focus:ring-2 ring-offset-2 ring-offset-green-500 ring-white  transition-all duration-200 transform hover:scale-105 active:scale-95'
+        className={ArrayUtils.joinStrings(
+          'bg-white px-12 py-6 rounded-md border border-gray-200 font-medium transition-all duration-200',
+          'ring-offset-2 ring-blue-400 focus:ring-2',
+          'hover:bg-gray-100 active:bg-gray-50'
+        )}
         onClick={onClick}
         type='button'
       >
@@ -81,14 +86,22 @@ export const Styled = () => {
                     </div>
                     <div className='flex justify-end space-x-3'>
                       <button
-                        className='border border-gray-200 rounded-md px-6 py-3 text-sm focus:ring-2 ring-offset-1 transition-all duration-200 hover:bg-gray-100 active:bg-gray-50'
+                        className={ArrayUtils.joinStrings(
+                          'bg-white px-6 py-3 rounded-md border border-gray-200 font-medium transition-all duration-200',
+                          'ring-offset-2 ring-blue-400 focus:ring-2',
+                          'hover:bg-gray-100 active:bg-gray-50'
+                        )}
                         onClick={onClick}
                         type='button'
                       >
                         No
                       </button>
                       <button
-                        className='bg-black text-white rounded-md px-6 py-3 text-sm focus:ring-2 ring-offset-1 transition-all duration-200 transform hover:scale-105 active:scale-95'
+                        className={ArrayUtils.joinStrings(
+                          'bg-black px-6 py-3 rounded-md text-white font-medium transition-all duration-200',
+                          'ring-offset-2 ring-blue-400 focus:ring-2',
+                          'hover:bg-gray-700 active:bg-gray-600'
+                        )}
                         onClick={onClick}
                         type='button'
                       >
@@ -102,7 +115,7 @@ export const Styled = () => {
           </AlertDialog.Root>
         )}
       </AnimatePresence>
-    </div>
+    </Fragment>
   )
 }
 

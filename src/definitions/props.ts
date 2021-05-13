@@ -1,19 +1,20 @@
 import { MutableRefObject, ReactNode } from 'react'
+import { CarouselLive } from './enums'
 import { ID } from './types'
 
 export type AccordionProps = {
   children: (props: AccordionChildrenProps) => ReactNode
-} & Omit<HTMLDivProps, 'children' | 'id'>
+} & Omit<HTMLDivProps, 'children'>
 
 export type AccordionChildrenProps = {
+  /**
+   * The expandedSections setter which sets every value except from the index to false.
+   */
+  expandSection: (expanded: boolean, id: ID, isCollapsable: boolean) => void
   /**
    * The stateful map of boolean values which handle the visibility of the section panels.
    */
   expandedSections: Map<ID, boolean>
-  /**
-   * The expandedSections setter which sets every value except from the index to false.
-   */
-  setExpandedSection: (expanded: boolean, id: ID, isCollapsable: boolean) => void
   /**
    * The section header ref setter, necessary to handle the keyboard interactions.
    */
@@ -31,13 +32,17 @@ export type AccordionSectionProps = {
    */
   isExpanded?: boolean
 } & AccordionChildrenProps &
-  Omit<HTMLDivProps, 'children' | 'id' | 'onKeyDown'>
+  Omit<HTMLDivProps, 'children'>
 
 export type AccordionSectionChildrenProps = {
   /**
    * The ID of the content element.
    */
   contentID: ID
+  /**
+   * The expandedSections[index] setter, it behaves like the one in the AccordionSection but the index is implicit.
+   */
+  expand: (expanded: boolean) => void
   /**
    * The expanded state derived from expandedSections[index].
    */
@@ -47,10 +52,6 @@ export type AccordionSectionChildrenProps = {
    */
   headerID: ID
   /**
-   * The expandedSections[index] setter, it behaves like the one in the AccordionSection but the index is implicit.
-   */
-  setExpanded: (expanded: boolean) => void
-  /**
    * The header ref setter, necessary to handle the keyboard interactions.
    */
   setHeaderRef: (ref: MutableRefObject<HTMLButtonElement>) => void
@@ -59,7 +60,7 @@ export type AccordionSectionChildrenProps = {
 export type AccordionSectionPanelProps = Pick<AccordionSectionChildrenProps, 'contentID' | 'headerID'> & Omit<HTMLDivProps, 'aria-labelledby' | 'id' | 'role'>
 export type AccordionSectionHeaderProps = AccordionSectionChildrenProps & Omit<HTMLButtonProps, 'aria-controls' | 'aria-expanded' | 'id' | 'type'>
 
-export type AlertProps = Omit<HTMLDivProps, 'id'>
+export type AlertProps = HTMLDivProps
 
 export type AlertDialogChildrenProps = {
   /**
@@ -77,19 +78,67 @@ export type AlertDialogProps = {
   /**
    * The method which handles the closure of the alert dialog.
    */
-  onClose: () => void
-} & Omit<HTMLDivProps, 'children' | 'id' | 'ref'>
+  onClose: () => any
+} & Omit<HTMLDivProps, 'children' | 'ref'>
 
 export type AlertDialogDescriptionProps = Pick<AlertDialogChildrenProps, 'descriptionID'> & Omit<HTMLSpanProps, 'id'>
 export type AlertDialogTitleProps = Pick<AlertDialogChildrenProps, 'titleID'> & Omit<HTMLSpanProps, 'id'>
 
-export type BreadcrumbProps = {} & Omit<HTMLElementProps, 'id'>
-export type BreadcrumbListProps = {} & Omit<HTMLOListProps, 'id'>
-export type BreadcrumbListItemProps = {} & Omit<HTMLLIProps, 'id'>
+export type BreadcrumbProps = HTMLElementProps
+export type BreadcrumbListProps = HTMLOListProps
+export type BreadcrumbListItemProps = HTMLLIProps
 
 export type BreadcrumbListItemLinkProps = {
-  isCurrent?: boolean
-} & Omit<HTMLAnchorProps, 'id'>
+  isCurrent: boolean
+} & HTMLAnchorProps
+
+export type ButtonProps = HTMLButtonProps
+
+export type CarouselProps = {
+  children: (props: CarouselChildrenProps) => ReactNode
+  label: string
+} & Omit<HTMLElementProps, 'children'>
+
+export type CarouselChildrenProps = {
+  findSlideIndex: (id: ID) => number
+  gotoNextSlide: () => void
+  gotoPreviousSlide: () => void
+  isSlideActive: (id: ID) => boolean
+  live: CarouselLive
+  setLive: (live: CarouselLive) => void
+  setSlideElementRef: (id: ID, ref: MutableRefObject<HTMLDivElement>) => void
+  setSlidesElementRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  slides: number
+  slidesID: ID
+}
+
+export type CarouselSlidesProps = {
+  live: CarouselLive
+  setSlidesElementRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  slidesID: ID
+} & Omit<HTMLDivProps, 'id'>
+
+export type CarouselSlideProps = {
+  findSlideIndex: (id: ID) => number
+  id: ID
+  setSlideElementRef: (id: ID, ref: MutableRefObject<HTMLDivElement>) => void
+  slides: number
+} & Omit<HTMLDivProps, 'id'>
+
+export type CarouselButtonLiveProps = {
+  live: CarouselLive
+  setLive: (live: CarouselLive) => void
+} & ButtonProps
+
+export type CarouselButtonPreviousProps = {
+  gotoPreviousSlide: () => void
+  slidesID: ID
+} & ButtonProps
+
+export type CarouselButtonNextProps = {
+  gotoNextSlide: () => void
+  slidesID: ID
+} & ButtonProps
 
 export type FocusTrapProps = {
   /**
@@ -100,7 +149,7 @@ export type FocusTrapProps = {
    * Setting this to true will automatically restore the focus to the element that lost it before being moved to the trap.
    */
   restoreFocus?: boolean
-} & Omit<HTMLDivProps, 'id' | 'ref'>
+} & Omit<HTMLDivProps, 'ref'>
 
 export type HTMLAnchorProps = React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
 export type HTMLButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
@@ -113,3 +162,7 @@ export type HTMLLIProps = React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIE
 export type HTMLFormProps = React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>
 export type HTMLOListProps = React.DetailedHTMLProps<React.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement>
 export type HTMLSpanProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
+
+export type ToggleButtonProps = {
+  isToggled: boolean
+} & ButtonProps

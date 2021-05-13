@@ -8,14 +8,14 @@ class AccordionStore extends ComponentStore {
   expandedSections: Map<ID, boolean>
   sectionHeaderRefs: Map<ID, MutableRefObject<HTMLButtonElement>>
 
-  constructor(ref: MutableRefObject<HTMLDivElement>) {
-    super(ComponentName.ACCORDION, ref)
+  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, id?: string) {
+    super(ComponentName.ACCORDION, ref, update, id)
 
     this.expandedSections = new Map()
     this.sectionHeaderRefs = new Map()
   }
 
-  expandSection(expanded: boolean, id: ID, isCollapsable: boolean): void {
+  expandSection = (expanded: boolean, id: ID, isCollapsable: boolean): void => {
     if (expanded === false && isCollapsable === false) {
       Logger.debug(this.id, 'expandSection', `The isCollapsable prop is falsy, the section can't be collapsed`)
       return
@@ -25,6 +25,8 @@ class AccordionStore extends ComponentStore {
     this.expandedSections.set(id, expanded)
 
     Logger.debug(this.id, 'expandSection', `Every section has been collapsed, the section ${id} has been ${expanded ? 'expanded' : 'collapsed'}`)
+
+    this.update()
   }
 
   setSectionHeaderRef = (ref: MutableRefObject<HTMLButtonElement>, id: ID): void => {

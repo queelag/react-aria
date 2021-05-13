@@ -9,8 +9,8 @@ class AlertDialogStore extends ComponentStore {
   descriptionElementID: ID
   titleElementID: ID
 
-  constructor(ref: MutableRefObject<HTMLDivElement>) {
-    super(ComponentName.ALERT_DIALOG, ref)
+  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, id?: string) {
+    super(ComponentName.ALERT_DIALOG, ref, update, id)
 
     this.descriptionElementID = IDUtils.prefixed(ComponentName.ALERT_DIALOG_DESCRIPTION)
     this.titleElementID = IDUtils.prefixed(ComponentName.ALERT_DIALOG_TITLE)

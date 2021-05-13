@@ -8,17 +8,15 @@ import * as Alert from '../src/components/Alert'
 export const Raw = () => <Alert.Root>{Chance().paragraph({ sentences: 1 })}</Alert.Root>
 
 export const Styled = () => (
-  <div className='max-w-2xl rounded-md p-16 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600'>
-    <motion.div animate={{ opacity: 1, scale: 1 }} initial={{ opacity: 0, scale: 0.5 }}>
-      <Alert.Root className='flex items-center p-6 space-x-3 rounded-md bg-white'>
-        <InfoRounded className='text-blue-600' style={{ fontSize: 32 }} />
-        <div className='flex flex-col space-y-1'>
-          <span className='font-medium text-lg text-blue-600'>Information</span>
-          <span className='text-sm text-blue-600'>{Chance().paragraph({ sentences: 1 })}</span>
-        </div>
-      </Alert.Root>
-    </motion.div>
-  </div>
+  <motion.div animate={{ opacity: 1, scale: 1 }} initial={{ opacity: 0, scale: 0.5 }}>
+    <Alert.Root className='flex items-center p-6 space-x-3 rounded-md bg-white text-blue-500 shadow-2xl'>
+      <InfoRounded style={{ fontSize: 32 }} />
+      <div className='flex flex-col'>
+        <span className='font-medium text-lg'>Information</span>
+        <span className='text-sm'>{Chance().paragraph({ sentences: 1 })}</span>
+      </div>
+    </Alert.Root>
+  </motion.div>
 )
 
 export default {

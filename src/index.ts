@@ -1,4 +1,6 @@
 export * from './components/Accordion'
 export * from './components/Alert'
 export * from './components/AlertDialog'
+export * from './components/Carousel'
 export * from './components/FocusTrap'
+export * from './definitions/enums'

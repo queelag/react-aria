@@ -1,12 +1,17 @@
 import { omit } from 'lodash'
 import React, { KeyboardEvent, useLayoutEffect, useMemo, useRef } from 'react'
 import { FocusTrapProps } from '../definitions/props'
+import useForceUpdate from '../hooks/use.force.update'
 import noop from '../modules/noop'
 import FocusTrapStore from '../stores/focus.trap.store'
 
+/**
+ * A focus trap is an element which overrides the default tab behaviour, allowing only the elements inside it to be focused.
+ */
 function Root(props: FocusTrapProps) {
+  const update = useForceUpdate()
   const ref = useRef(document.createElement('div'))
-  const store = useMemo(() => new FocusTrapStore(ref), [])
+  const store = useMemo(() => new FocusTrapStore(ref, update, props.id), [])
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     store.handleKeyboardInteractions(event)

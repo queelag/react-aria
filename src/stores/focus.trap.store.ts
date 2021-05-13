@@ -8,8 +8,8 @@ class FocusTrapStore extends ComponentStore {
   focusables: Element[]
   originalFocused: Element
 
-  constructor(ref: MutableRefObject<HTMLDivElement>) {
-    super(ComponentName.FOCUS_TRAP, ref)
+  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, id?: string) {
+    super(ComponentName.FOCUS_TRAP, ref, update, id)
 
     this.focusables = []
     this.originalFocused = document.createElement('div')

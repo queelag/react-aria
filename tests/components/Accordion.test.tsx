@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import { Chance } from 'chance'
 import React, { Fragment } from 'react'
-import { Accordion, AccordionSection, AccordionSectionHeader, AccordionSectionPanel } from '../../src/components/Accordion'
+import * as Accordion from '../../src/components/Accordion'
 import { ComponentName, Key, LoggerLevel } from '../../src/definitions/enums'
 import { AccordionChildrenProps, AccordionSectionChildrenProps } from '../../src/definitions/props'
 import Logger from '../../src/modules/logger'
@@ -25,26 +25,26 @@ describe('Accordion', () => {
   beforeAll(() => {
     renderComponent = () =>
       render(
-        <Accordion data-testid={ComponentName.ACCORDION}>
+        <Accordion.Root data-testid={ComponentName.ACCORDION}>
           {(props: AccordionChildrenProps) => (
             <Fragment>
               {dummies.map((v: Section, k: number) => (
-                <AccordionSection {...props} data-testid={ComponentName.ACCORDION_SECTION} isCollapsable={v.isCollapsable} isExpanded={v.isExpanded} key={k}>
+                <Accordion.Section {...props} data-testid={ComponentName.ACCORDION_SECTION} isCollapsable={v.isCollapsable} isExpanded={v.isExpanded} key={k}>
                   {(props: AccordionSectionChildrenProps) => (
                     <Fragment>
-                      <AccordionSectionHeader {...props} data-testid={ComponentName.ACCORDION_SECTION_HEADER}>
+                      <Accordion.SectionHeader {...props} data-testid={ComponentName.ACCORDION_SECTION_HEADER}>
                         {v.header}
-                      </AccordionSectionHeader>
-                      <AccordionSectionPanel {...props} data-testid={ComponentName.ACCORDION_SECTION_PANEL}>
+                      </Accordion.SectionHeader>
+                      <Accordion.SectionPanel {...props} data-testid={ComponentName.ACCORDION_SECTION_PANEL}>
                         {props.expanded && v.panel}
-                      </AccordionSectionPanel>
+                      </Accordion.SectionPanel>
                     </Fragment>
                   )}
-                </AccordionSection>
+                </Accordion.Section>
               ))}
             </Fragment>
           )}
-        </Accordion>
+        </Accordion.Root>
       )
     Logger.level = LoggerLevel.ERROR
   })

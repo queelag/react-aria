@@ -1,7 +1,7 @@
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React, { useState } from 'react'
-import { FocusTrap } from '../../src/components/FocusTrap'
+import * as FocusTrap from '../../src/components/FocusTrap'
 import { LoggerLevel } from '../../src/definitions/enums'
 import Logger from '../../src/modules/logger'
 
@@ -12,11 +12,11 @@ function Component() {
     <div>
       <button data-testid='BUTTON_1' onClick={() => setVisible(true)} type='button' autoFocus />
       {visible && (
-        <FocusTrap autoFocus restoreFocus>
+        <FocusTrap.Root autoFocus restoreFocus>
           <a data-testid='A' href='#' />
           <input data-testid='INPUT' type='text' />
           <button data-testid='BUTTON_2' onClick={() => setVisible(false)} type='button' />
-        </FocusTrap>
+        </FocusTrap.Root>
       )}
     </div>
   )

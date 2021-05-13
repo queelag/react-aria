@@ -5,7 +5,7 @@ import { AlertDialogDescriptionProps, AlertDialogProps, AlertDialogTitleProps } 
 import AlertDialogStore from '../stores/alert.dialog.store'
 import ArrayUtils from '../utils/array.utils'
 
-function AlertDialog(props: AlertDialogProps) {
+function Root(props: AlertDialogProps) {
   const ref = useRef(document.createElement('div'))
   const store = useMemo(() => new AlertDialogStore(ref), [])
 
@@ -32,12 +32,12 @@ function AlertDialog(props: AlertDialogProps) {
   )
 }
 
-function AlertDialogDescription(props: AlertDialogDescriptionProps) {
+function Description(props: AlertDialogDescriptionProps) {
   return <span {...omit(props, 'descriptionID', 'titleID')} id={props.descriptionID}></span>
 }
 
-function AlertDialogTitle(props: AlertDialogTitleProps) {
+function Title(props: AlertDialogTitleProps) {
   return <span {...omit(props, 'descriptionID', 'titleID')} id={props.titleID}></span>
 }
 
-export { AlertDialog, AlertDialogDescription, AlertDialogTitle }
+export { Root, Description, Title }

@@ -1,7 +1,7 @@
 import { render, RenderResult, screen } from '@testing-library/react'
 import { Chance } from 'chance'
 import React from 'react'
-import { Alert } from '../../src/components/Alert'
+import * as Alert from '../../src/components/Alert'
 import { ComponentName, LoggerLevel } from '../../src/definitions/enums'
 import Logger from '../../src/modules/logger'
 
@@ -14,7 +14,7 @@ describe('Alert', () => {
 
   beforeEach(() => {
     text = Chance().paragraph()
-    body = render(<Alert data-testid={ComponentName.ALERT}>{text}</Alert>)
+    body = render(<Alert.Root data-testid={ComponentName.ALERT}>{text}</Alert.Root>)
     root = screen.getByTestId(ComponentName.ALERT)
   })
 

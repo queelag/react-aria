@@ -4,7 +4,7 @@ import { FocusTrapProps } from '../definitions/props'
 import noop from '../modules/noop'
 import FocusTrapStore from '../stores/focus.trap.store'
 
-function FocusTrap(props: FocusTrapProps) {
+function Root(props: FocusTrapProps) {
   const ref = useRef(document.createElement('div'))
   const store = useMemo(() => new FocusTrapStore(ref), [])
 
@@ -20,4 +20,4 @@ function FocusTrap(props: FocusTrapProps) {
   return <div {...omit(props, 'autoFocus', 'restoreFocus')} id={store.id} onKeyDown={onKeyDown} ref={ref} />
 }
 
-export { FocusTrap }
+export { Root }

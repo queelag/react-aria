@@ -1,8 +1,8 @@
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { AlertDialog, AlertDialogDescription, AlertDialogTitle } from '../../src/components/AlertDialog'
-import { FocusTrap } from '../../src/components/FocusTrap'
+import * as AlertDialog from '../../src/components/AlertDialog'
+import * as FocusTrap from '../../src/components/FocusTrap'
 import { ComponentName, Key, LoggerLevel } from '../../src/definitions/enums'
 import { AlertDialogChildrenProps } from '../../src/definitions/props'
 import Logger from '../../src/modules/logger'
@@ -17,24 +17,24 @@ describe('AlertDialog', () => {
   beforeEach(() => {
     onClose = jest.fn(() => null)
     body = render(
-      <AlertDialog data-testid={ComponentName.ALERT_DIALOG} onClose={onClose}>
+      <AlertDialog.Root data-testid={ComponentName.ALERT_DIALOG} onClose={onClose}>
         {(props: AlertDialogChildrenProps) => (
-          <FocusTrap autoFocus>
-            <AlertDialogTitle {...props} data-testid={ComponentName.ALERT_DIALOG_TITLE}>
+          <FocusTrap.Root autoFocus>
+            <AlertDialog.Title {...props} data-testid={ComponentName.ALERT_DIALOG_TITLE}>
               Title
-            </AlertDialogTitle>
-            <AlertDialogDescription {...props} data-testid={ComponentName.ALERT_DIALOG_DESCRIPTION}>
+            </AlertDialog.Title>
+            <AlertDialog.Description {...props} data-testid={ComponentName.ALERT_DIALOG_DESCRIPTION}>
               Description
-            </AlertDialogDescription>
+            </AlertDialog.Description>
             <button onClick={onClose} type='button'>
               No
             </button>
             <button onClick={onClose} type='button'>
               Yes
             </button>
-          </FocusTrap>
+          </FocusTrap.Root>
         )}
-      </AlertDialog>
+      </AlertDialog.Root>
     )
     root = screen.getByTestId(ComponentName.ALERT_DIALOG)
     description = screen.getByTestId(ComponentName.ALERT_DIALOG_DESCRIPTION)

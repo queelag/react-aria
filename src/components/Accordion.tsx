@@ -11,7 +11,7 @@ import AccordionStore from '../stores/accordion.store'
 /**
  * An accordion is a vertically stacked set of interactive headings that each contain a title, content snippet, or thumbnail representing a section of content. The headings function as controls that enable users to reveal or hide their associated sections of content. Accordions are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.
  */
-function Accordion(props: AccordionProps) {
+function Root(props: AccordionProps) {
   const ref = useRef(document.createElement('div'))
   const store = useMemo(() => new AccordionStore(ref), [])
   const update = useForceUpdate()
@@ -36,7 +36,7 @@ function Accordion(props: AccordionProps) {
 /**
  * The accordion section contains the header and the panel components.
  */
-function AccordionSection(props: AccordionSectionProps) {
+function Section(props: AccordionSectionProps) {
   const id = useID(ComponentName.ACCORDION_SECTION)
   const contentID = useID(ComponentName.ACCORDION_SECTION_PANEL)
   const headerID = useID(ComponentName.ACCORDION_SECTION_HEADER)
@@ -67,7 +67,7 @@ function AccordionSection(props: AccordionSectionProps) {
 /**
  * Label for or thumbnail representing a section of content that also serves as a control for showing, and in some implementations, hiding the section of content.
  */
-function AccordionSectionHeader(props: AccordionSectionHeaderProps) {
+function SectionHeader(props: AccordionSectionHeaderProps) {
   const ref = useRef(document.createElement('button'))
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -97,7 +97,7 @@ function AccordionSectionHeader(props: AccordionSectionHeaderProps) {
 /**
  * Section of content associated with an accordion header.
  */
-function AccordionSectionPanel(props: AccordionSectionPanelProps) {
+function SectionPanel(props: AccordionSectionPanelProps) {
   return (
     <div
       {...omit(props, 'contentID', 'expanded', 'headerID', 'setExpanded', 'setHeaderRef')}
@@ -108,4 +108,4 @@ function AccordionSectionPanel(props: AccordionSectionPanelProps) {
   )
 }
 
-export { Accordion, AccordionSection, AccordionSectionPanel, AccordionSectionHeader }
+export { Root, Section, SectionHeader, SectionPanel }

@@ -1,47 +1,48 @@
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
+import { ID } from '../definitions/types'
 import ComponentStore from '../modules/component.store'
 import Logger from '../modules/logger'
 
 class AccordionStore extends ComponentStore {
-  expandedSections: Map<number, boolean>
-  sectionRefs: Map<number, MutableRefObject<HTMLDivElement>>
+  expandedSections: Map<ID, boolean>
+  sectionHeaderRefs: Map<ID, MutableRefObject<HTMLButtonElement>>
 
   constructor(ref: MutableRefObject<HTMLDivElement>) {
     super(ComponentName.ACCORDION, ref)
 
     this.expandedSections = new Map()
-    this.sectionRefs = new Map()
+    this.sectionHeaderRefs = new Map()
   }
 
-  expandSection(expanded: boolean, index: number, isCollapsable: boolean): void {
+  expandSection(expanded: boolean, id: ID, isCollapsable: boolean): void {
     if (expanded === false && isCollapsable === false) {
       Logger.debug(this.id, 'expandSection', `The isCollapsable prop is falsy, the section can't be collapsed`)
       return
     }
 
     this.expandedSections.clear()
-    this.expandedSections.set(index, expanded)
+    this.expandedSections.set(id, expanded)
 
-    Logger.debug(this.id, 'expandSection', `Every section has been collapsed, the section ${index} has been ${expanded ? 'expanded' : 'collapsed'}`)
+    Logger.debug(this.id, 'expandSection', `Every section has been collapsed, the section ${id} has been ${expanded ? 'expanded' : 'collapsed'}`)
   }
 
-  setSectionRef = (ref: MutableRefObject<HTMLDivElement>, index: number): void => {
-    this.sectionRefs.set(index, ref)
+  setSectionHeaderRef = (ref: MutableRefObject<HTMLButtonElement>, id: ID): void => {
+    this.sectionHeaderRefs.set(id, ref)
   }
 
   handleKeyboardInteractions(e: KeyboardEvent): void {
-    let sections: HTMLDivElement[], focusedSectionIndex: number
+    let sections: HTMLButtonElement[], focusedSectionIndex: number
 
-    sections = [...this.sectionRefs.values()].map((v: MutableRefObject<HTMLDivElement>) => v.current)
+    sections = [...this.sectionHeaderRefs.values()].map((v: MutableRefObject<HTMLButtonElement>) => v.current)
     if (sections.length <= 0) return Logger.error(this.id, 'handleKeyboardInteractions', `There are no sections`)
 
-    focusedSectionIndex = sections.findIndex((v: HTMLDivElement) => document.activeElement === v)
+    focusedSectionIndex = sections.findIndex((v: HTMLButtonElement) => document.activeElement?.id === v.id)
     if (focusedSectionIndex < 0) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the focused section index`)
 
     switch (e.key) {
       case Key.ARROW_DOWN:
-        let next: HTMLDivElement
+        let next: HTMLButtonElement
 
         next = sections[focusedSectionIndex + 1]
         if (!next) return Logger.debug(this.id, 'handleKeyboardInteractions', `Failed to find the next element`)
@@ -51,7 +52,7 @@ class AccordionStore extends ComponentStore {
 
         break
       case Key.ARROW_UP:
-        let previous: HTMLDivElement
+        let previous: HTMLButtonElement
 
         previous = sections[focusedSectionIndex - 1]
         if (!previous) return Logger.debug(this.id, 'handleKeyboardInteractions', `Failed to find the previous element`)
@@ -61,7 +62,7 @@ class AccordionStore extends ComponentStore {
 
         break
       case Key.END:
-        let last: HTMLDivElement
+        let last: HTMLButtonElement
 
         last = sections[sections.length - 1]
         if (!last) return Logger.debug(this.id, 'handleKeyboardInteractions', `Failed to find the last element`)
@@ -71,7 +72,7 @@ class AccordionStore extends ComponentStore {
 
         break
       case Key.HOME:
-        let first: HTMLDivElement
+        let first: HTMLButtonElement
 
         first = sections[0]
         if (!first) return Logger.debug(this.id, 'handleKeyboardInteractions', `Failed to find the first element`)

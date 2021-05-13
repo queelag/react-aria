@@ -9,23 +9,19 @@ export type AccordionChildrenProps = {
   /**
    * The stateful map of boolean values which handle the visibility of the section panels.
    */
-  expandedSections: Map<number, boolean>
+  expandedSections: Map<ID, boolean>
   /**
    * The expandedSections setter which sets every value except from the index to false.
    */
-  setExpandedSection: (expanded: boolean, index: number, isCollapsable: boolean) => void
+  setExpandedSection: (expanded: boolean, id: ID, isCollapsable: boolean) => void
   /**
-   * The section ref setter, necessary to handle the keyboard interactions.
+   * The section header ref setter, necessary to handle the keyboard interactions.
    */
-  setSectionRef: (ref: MutableRefObject<HTMLDivElement>, index: number) => void
+  setSectionHeaderRef: (ref: MutableRefObject<HTMLButtonElement>, id: ID) => void
 }
 
 export type AccordionSectionProps = {
   children: (props: AccordionSectionChildrenProps) => ReactNode
-  /**
-   * The index of this section, it is required to handle the expansion logic.
-   */
-  index: number
   /**
    * Setting this to false will disable the collapse of an expanded section
    */
@@ -54,6 +50,10 @@ export type AccordionSectionChildrenProps = {
    * The expandedSections[index] setter, it behaves like the one in the AccordionSection but the index is implicit.
    */
   setExpanded: (expanded: boolean) => void
+  /**
+   * The header ref setter, necessary to handle the keyboard interactions.
+   */
+  setHeaderRef: (ref: MutableRefObject<HTMLButtonElement>) => void
 }
 
 export type AccordionSectionPanelProps = Pick<AccordionSectionChildrenProps, 'contentID' | 'headerID'> & Omit<HTMLDivProps, 'aria-labelledby' | 'id' | 'role'>

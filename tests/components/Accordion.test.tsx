@@ -25,18 +25,11 @@ describe('Accordion', () => {
   beforeAll(() => {
     renderComponent = () =>
       render(
-        <Accordion data-testid={ComponentName.ACCORDION} size={dummies.length}>
+        <Accordion data-testid={ComponentName.ACCORDION}>
           {(props: AccordionChildrenProps) => (
             <Fragment>
               {dummies.map((v: Section, k: number) => (
-                <AccordionSection
-                  {...props}
-                  data-testid={ComponentName.ACCORDION_SECTION}
-                  index={k}
-                  isCollapsable={v.isCollapsable}
-                  isExpanded={v.isExpanded}
-                  key={k}
-                >
+                <AccordionSection {...props} data-testid={ComponentName.ACCORDION_SECTION} isCollapsable={v.isCollapsable} isExpanded={v.isExpanded} key={k}>
                   {(props: AccordionSectionChildrenProps) => (
                     <Fragment>
                       <AccordionSectionHeader {...props} data-testid={ComponentName.ACCORDION_SECTION_HEADER}>

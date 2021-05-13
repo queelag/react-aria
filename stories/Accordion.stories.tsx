@@ -12,11 +12,11 @@ const sections: { description: string; title: string }[] = new Array(3).fill(0).
 }))
 
 export const Raw = () => (
-  <Accordion size={sections.length}>
+  <Accordion>
     {(props: AccordionChildrenProps) => (
       <Fragment>
         {sections.map((v, k) => (
-          <AccordionSection {...props} index={k} key={k}>
+          <AccordionSection {...props} key={k}>
             {(props: AccordionSectionChildrenProps) => (
               <Fragment>
                 <AccordionSectionHeader {...props}>{v.title}</AccordionSectionHeader>
@@ -33,11 +33,11 @@ export const Raw = () => (
 export const Styled = () => {
   return (
     <div className='max-w-lg rounded-md p-16 bg-gradient-to-br from-red-400 via-red-500 to-red-600'>
-      <Accordion className='flex flex-col rounded-md overflow-hidden bg-white divide-y divide-gray-100' size={sections.length}>
+      <Accordion className='flex flex-col rounded-md overflow-hidden bg-white divide-y divide-gray-100'>
         {(props) => (
           <Fragment>
             {sections.map((v, k) => (
-              <AccordionSection {...props} className='flex flex-col' index={k} key={k}>
+              <AccordionSection {...props} className='flex flex-col' key={k}>
                 {(props) => (
                   <Fragment>
                     <AccordionSectionHeader {...props} className='focus:outline-none focus:bg-gray-200 z-10'>

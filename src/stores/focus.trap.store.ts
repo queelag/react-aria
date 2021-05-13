@@ -41,7 +41,6 @@ class FocusTrapStore extends ComponentStore {
     let first: Element
 
     first = this.focusables[0]
-    console.log(first)
     if (!first) return Logger.error(this.id, 'focusFirstFocusable', `Failed to find the first focusable element`)
 
     DOMUtils.focus(first)

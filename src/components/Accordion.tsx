@@ -1,7 +1,8 @@
 import { omit } from 'lodash'
-import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import React, { KeyboardEvent, MouseEvent, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { ComponentName } from '../definitions/enums'
 import { AccordionProps, AccordionSectionHeaderProps, AccordionSectionPanelProps, AccordionSectionProps } from '../definitions/props'
+import { ID } from '../definitions/types'
 import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import Logger from '../modules/logger'
@@ -20,14 +21,14 @@ function Accordion(props: AccordionProps) {
     props.onKeyDown && props.onKeyDown(event)
   }
 
-  const setExpandedSection = (expanded: boolean, index: number, isCollapsable: boolean) => {
-    store.expandSection(expanded, index, isCollapsable)
+  const setExpandedSection = (expanded: boolean, id: ID, isCollapsable: boolean) => {
+    store.expandSection(expanded, id, isCollapsable)
     update()
   }
 
   return (
     <div {...props} id={store.id} onKeyDown={onKeyDown}>
-      {props.children({ expandedSections: store.expandedSections, setExpandedSection, setSectionRef: store.setSectionRef })}
+      {props.children({ expandedSections: store.expandedSections, setExpandedSection, setSectionHeaderRef: store.setSectionHeaderRef })}
     </div>
   )
 }
@@ -42,12 +43,12 @@ function AccordionSection(props: AccordionSectionProps) {
   const ref = useRef(document.createElement('div'))
 
   const setExpanded = (expanded: boolean) => {
-    props.setExpandedSection(expanded, props.index, typeof props.isCollapsable === 'boolean' ? props.isCollapsable : true)
+    props.setExpandedSection(expanded, id, typeof props.isCollapsable === 'boolean' ? props.isCollapsable : true)
   }
 
-  useEffect(() => {
-    props.setSectionRef(ref, props.index)
-  }, [])
+  const setHeaderRef = (ref: MutableRefObject<HTMLButtonElement>) => {
+    props.setSectionHeaderRef(ref, headerID)
+  }
 
   useEffect(() => {
     if (props.isExpanded === true) {
@@ -57,8 +58,8 @@ function AccordionSection(props: AccordionSectionProps) {
   }, [props.isExpanded])
 
   return (
-    <div {...omit(props, 'expandedSections', 'index', 'isCollapsable', 'isExpanded', 'setExpandedSection', 'setSectionRef')} id={id} ref={ref}>
-      {props.children({ contentID, expanded: props.expandedSections.get(props.index) || false, headerID, setExpanded })}
+    <div {...omit(props, 'expandedSections', 'isCollapsable', 'isExpanded', 'setExpandedSection', 'setSectionHeaderRef')} id={id} ref={ref}>
+      {props.children({ contentID, expanded: props.expandedSections.get(id) || false, headerID, setExpanded, setHeaderRef })}
     </div>
   )
 }
@@ -67,6 +68,8 @@ function AccordionSection(props: AccordionSectionProps) {
  * Label for or thumbnail representing a section of content that also serves as a control for showing, and in some implementations, hiding the section of content.
  */
 function AccordionSectionHeader(props: AccordionSectionHeaderProps) {
+  const ref = useRef(document.createElement('button'))
+
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     props.setExpanded(!props.expanded)
     Logger.debug(props.headerID, 'onClick', `The section has been ${!props.expanded ? 'expanded' : 'collapsed'}`)
@@ -74,13 +77,18 @@ function AccordionSectionHeader(props: AccordionSectionHeaderProps) {
     props.onClick && props.onClick(event)
   }
 
+  useEffect(() => {
+    props.setHeaderRef(ref)
+  }, [])
+
   return (
     <button
-      {...omit(props, 'contentID', 'expanded', 'headerID', 'setExpanded')}
+      {...omit(props, 'contentID', 'expanded', 'headerID', 'setExpanded', 'setHeaderRef')}
       aria-controls={props.contentID}
       aria-expanded={props.expanded}
       id={props.headerID}
       onClick={onClick}
+      ref={ref}
       type='button'
     />
   )
@@ -90,7 +98,14 @@ function AccordionSectionHeader(props: AccordionSectionHeaderProps) {
  * Section of content associated with an accordion header.
  */
 function AccordionSectionPanel(props: AccordionSectionPanelProps) {
-  return <div {...omit(props, 'contentID', 'expanded', 'headerID', 'setExpanded')} aria-labelledby={props.headerID} id={props.contentID} role='region' />
+  return (
+    <div
+      {...omit(props, 'contentID', 'expanded', 'headerID', 'setExpanded', 'setHeaderRef')}
+      aria-labelledby={props.headerID}
+      id={props.contentID}
+      role='region'
+    />
+  )
 }
 
 export { Accordion, AccordionSection, AccordionSectionPanel, AccordionSectionHeader }

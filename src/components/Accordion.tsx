@@ -82,8 +82,8 @@ function SectionHeader(props: AccordionSectionHeaderProps) {
       aria-controls={props.contentID}
       aria-expanded={props.expanded}
       id={props.headerID}
+      innerRef={ref}
       onClick={onClick}
-      ref={ref}
     />
   )
 }

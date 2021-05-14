@@ -1,4 +1,4 @@
-import { MutableRefObject, ReactNode } from 'react'
+import { MutableRefObject, ReactNode, Ref } from 'react'
 import { CarouselLive, CarouselRotationMode } from './enums'
 import { ID } from './types'
 
@@ -95,7 +95,9 @@ export type BreadcrumbListItemLinkProps = {
   isCurrent: boolean
 } & HTMLAnchorProps
 
-export type ButtonProps = HTMLButtonProps
+export type ButtonProps = {
+  innerRef?: Ref<HTMLButtonElement>
+} & HTMLButtonProps
 
 export type CarouselProps = {
   /**
@@ -177,78 +179,35 @@ export type CarouselChildrenProps = {
   slidesID: ID
 }
 
-export type CarouselSlidesProps = {
-  /**
-   * The live determines the behaviour of the carousel.
-   *
-   * Setting it to OFF will enable automatic rotation.
-   * Setting it to ASSERTIVE or POLITE will disable automatic rotation.
-   */
-  live: CarouselLive
-  /**
-   * The temporary live is used during blur/focus events where only the aria-live of the Slides element has to change.
-   */
-  liveTemporary?: CarouselLive
-  /**
-   * The ID of the Slides element.
-   */
-  slidesID: ID
-} & Omit<HTMLDivProps, 'id'>
+export type CarouselButtonLiveProps = Pick<CarouselChildrenProps, 'live' | 'setLive'> & ButtonProps
+export type CarouselButtonNextProps = Pick<CarouselChildrenProps, 'gotoNextSlide' | 'slidesID'> & ButtonProps
+export type CarouselButtonPreviousProps = Pick<CarouselChildrenProps, 'gotoPreviousSlide' | 'slidesID'> & ButtonProps
 
 export type CarouselSlideProps = {
-  /**
-   * The method which takes care of deleting the unmounted slides from the internal map.
-   */
-  deleteSlideElementRef: (index: number) => void
   /**
    * The index of this slide, necessary to handle the visibility and to build the internal map of slides.
    */
   index: number
-  /**
-   * The slide element ref setter, it is used to determine the number of slides.
-   */
-  setSlideElementRef: (index: number, ref: MutableRefObject<HTMLDivElement>) => void
-  /**
-   * The number of slides.
-   */
-  slides: number
+} & Pick<CarouselChildrenProps, 'deleteSlideElementRef' | 'setSlideElementRef' | 'slides'> &
+  HTMLDivProps
+
+export type CarouselSlidesProps = Pick<CarouselChildrenProps, 'live' | 'liveTemporary' | 'slidesID'> & Omit<HTMLDivProps, 'id'>
+
+export type CheckBoxProps = {
+  isChecked: boolean
 } & HTMLDivProps
 
-export type CarouselButtonLiveProps = {
-  /**
-   * The live determines the behaviour of the carousel.
-   *
-   * Setting it to OFF will enable automatic rotation.
-   * Setting it to ASSERTIVE or POLITE will disable automatic rotation.
-   */
-  live: CarouselLive
-  /**
-   * The live setter, also takes care of handling the automatic rotation.
-   */
-  setLive: (live: CarouselLive) => void
-} & ButtonProps
+export type ComboBoxProps = {
+  children: (props: ComboBoxChildrenProps) => ReactNode
+} & Omit<HTMLDivProps, 'children'>
 
-export type CarouselButtonPreviousProps = {
-  /**
-   * The method which based on the activeSlideIndex goes to the previous slide available, if none and the carousel mode is infinite it will go to the last slide.
-   */
-  gotoPreviousSlide: () => void
-  /**
-   * The ID of the Slides element.
-   */
-  slidesID: ID
-} & ButtonProps
+export type ComboBoxChildrenProps = {
+  activeItem: ID
+  expanded: boolean
+  listBoxID: ID
+}
 
-export type CarouselButtonNextProps = {
-  /**
-   * The method which based on the activeSlideIndex goes to the next slide available, if none and the carousel mode is infinite it will go back to the first slide.
-   */
-  gotoNextSlide: () => void
-  /**
-   * The ID of the Slides element.
-   */
-  slidesID: ID
-} & ButtonProps
+export type ComboBoxInputProps = Pick<ComboBoxChildrenProps, 'activeItem' | 'expanded' | 'listBoxID'> & Omit<HTMLInputProps, 'id'>
 
 export type FocusTrapProps = {
   /**

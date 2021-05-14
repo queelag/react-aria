@@ -4,6 +4,11 @@ export enum CarouselLive {
   POLITE = 'polite'
 }
 
+export enum CarouselRotationMode {
+  FINITE = 'FINITE',
+  INFINITE = 'INFINITE'
+}
+
 export enum ComponentName {
   ACCORDION = 'ACCORDION',
   ACCORDION_SECTION = 'ACCORDION_SECTION',

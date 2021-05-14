@@ -21,18 +21,23 @@ import { Root as Button } from './Button'
 function Root(props: CarouselProps) {
   const update = useForceUpdate()
   const ref = useRef(document.createElement('section'))
-  const store = useMemo(() => new CarouselStore(ref, update, props.id, props.automaticRotationDuration, props.live), [])
+  const store = useMemo(() => new CarouselStore(ref, update, props.id, props.activeSlideIndex, props.automaticRotationDuration, props.live), [])
   const slidesID = useID(ComponentName.CAROUSEL_SLIDES)
 
   useEffect(() => {
+    StoreUtils.updateFromProps(store, props, update, 'activeSlideIndex')
+  }, [props.activeSlideIndex])
+
+  useEffect(() => {
     StoreUtils.shouldUpdateKey(store, 'live', props.live) && store.setLive(props.live)
-  }, [props.live])
+    StoreUtils.shouldUpdateKey(store, 'rotationMode', props.rotationMode) && (store.rotationMode = props.rotationMode)
+  }, [props.live, props.rotationMode])
 
   useEffect(() => store.disableAutomaticRotation, [])
 
   return (
     <section
-      {...omit(props, 'automaticRotationDuration', 'label', 'live')}
+      {...omit(props, 'activeSlideIndex', 'automaticRotationDuration', 'label', 'live')}
       aria-label={props.label}
       aria-roledescription='carousel'
       id={store.id}

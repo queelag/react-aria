@@ -4,7 +4,7 @@ import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import { omit } from 'lodash'
 import React, { Fragment } from 'react'
-import { CarouselLive } from '../src'
+import { CarouselLive, CarouselRotationMode } from '../src'
 import * as Carousel from '../src/components/Carousel'
 import { CarouselChildrenProps, CarouselProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
@@ -32,9 +32,11 @@ const RawTemplate: Story<CarouselProps & { slides: any[] }> = (args) => (
 
 export const Raw = RawTemplate.bind({})
 Raw.args = {
+  activeSlideIndex: 0,
   automaticRotationDuration: 2000,
   label: 'Pictures of cats',
   live: CarouselLive.OFF,
+  rotationMode: CarouselRotationMode.INFINITE,
   slides: new Array(5).fill(0).map((v, k: number) => ({ alt: Chance().first(), id: Chance().guid(), src: require(`../assets/cats/${k}.jpg`) }))
 }
 
@@ -99,9 +101,11 @@ const StyledTemplate: Story<CarouselProps & { slides: any[] }> = (args) => (
 
 export const Styled = StyledTemplate.bind({})
 Styled.args = {
+  activeSlideIndex: 0,
   automaticRotationDuration: 2000,
   label: 'Pictures of cats',
   live: CarouselLive.OFF,
+  rotationMode: CarouselRotationMode.INFINITE,
   slides: new Array(5).fill(0).map((v, k: number) => ({ alt: Chance().first(), id: Chance().guid(), src: require(`../assets/cats/${k}.jpg`) }))
 }
 

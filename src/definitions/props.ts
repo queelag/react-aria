@@ -1,5 +1,5 @@
 import { MutableRefObject, ReactNode } from 'react'
-import { CarouselLive } from './enums'
+import { CarouselLive, CarouselRotationMode } from './enums'
 import { ID } from './types'
 
 export type AccordionProps = {
@@ -89,57 +89,164 @@ export type BreadcrumbListProps = HTMLOListProps
 export type BreadcrumbListItemProps = HTMLLIProps
 
 export type BreadcrumbListItemLinkProps = {
+  /**
+   * The isCurrent boolean determines which link is the current one.
+   */
   isCurrent: boolean
 } & HTMLAnchorProps
 
 export type ButtonProps = HTMLButtonProps
 
 export type CarouselProps = {
+  /**
+   * The active slide index determines the slide that is currently visible, can also be used to set a starting slide.
+   */
+  activeSlideIndex?: number
+  /**
+   * The automatic rotation duration is the frequency at which the slides will automatically change.
+   */
   automaticRotationDuration?: number
   children: (props: CarouselChildrenProps) => ReactNode
+  /**
+   * The label is essential to give a context to the carousel.
+   */
   label: string
+  /**
+   * The live determines the behaviour of the carousel.
+   *
+   * Setting it to OFF will enable automatic rotation.
+   * Setting it to ASSERTIVE or POLITE will disable automatic rotation.
+   */
   live?: CarouselLive
+  /**
+   * The rotation mode determines the behaviour of the rotation.
+   *
+   * Setting it to FINITE will make it respect the start and end of the slides.
+   * Setting it to INFINITE will make it overflow, going to the first slide if trying to go next while at the last slide and going to the last slide if trying to go back while at the first slide.
+   */
+  rotationMode?: CarouselRotationMode
 } & Omit<HTMLElementProps, 'children'>
 
 export type CarouselChildrenProps = {
+  /**
+   * The active slide index determines the slide that is currently visible, can also be used to set a starting slide.
+   */
   activeSlideIndex: number
+  /**
+   * The method which takes care of deleting the unmounted slides from the internal map.
+   */
   deleteSlideElementRef: (index: number) => void
+  /**
+   * The method which based on the activeSlideIndex goes to the next slide available, if none and the carousel mode is infinite it will go back to the first slide.
+   */
   gotoNextSlide: () => void
+  /**
+   * The method which based on the activeSlideIndex goes to the previous slide available, if none and the carousel mode is infinite it will go to the last slide.
+   */
   gotoPreviousSlide: () => void
+  /**
+   * The method which given an index will tell you if the slide is active or not.
+   */
   isSlideActive: (index: number) => boolean
+  /**
+   * The live determines the behaviour of the carousel.
+   *
+   * Setting it to OFF will enable automatic rotation.
+   * Setting it to ASSERTIVE or POLITE will disable automatic rotation.
+   */
   live: CarouselLive
+  /**
+   * The temporary live is used during blur/focus events where only the aria-live of the Slides element has to change.
+   */
   liveTemporary?: CarouselLive
+  /**
+   * The live setter, also takes care of handling the automatic rotation.
+   */
   setLive: (live: CarouselLive) => void
+  /**
+   * The slide element ref setter, it is used to determine the number of slides.
+   */
   setSlideElementRef: (index: number, ref: MutableRefObject<HTMLDivElement>) => void
+  /**
+   * The number of slides.
+   */
   slides: number
+  /**
+   * The ID of the Slides element.
+   */
   slidesID: ID
 }
 
 export type CarouselSlidesProps = {
+  /**
+   * The live determines the behaviour of the carousel.
+   *
+   * Setting it to OFF will enable automatic rotation.
+   * Setting it to ASSERTIVE or POLITE will disable automatic rotation.
+   */
   live: CarouselLive
+  /**
+   * The temporary live is used during blur/focus events where only the aria-live of the Slides element has to change.
+   */
   liveTemporary?: CarouselLive
+  /**
+   * The ID of the Slides element.
+   */
   slidesID: ID
 } & Omit<HTMLDivProps, 'id'>
 
 export type CarouselSlideProps = {
+  /**
+   * The method which takes care of deleting the unmounted slides from the internal map.
+   */
   deleteSlideElementRef: (index: number) => void
+  /**
+   * The index of this slide, necessary to handle the visibility and to build the internal map of slides.
+   */
   index: number
+  /**
+   * The slide element ref setter, it is used to determine the number of slides.
+   */
   setSlideElementRef: (index: number, ref: MutableRefObject<HTMLDivElement>) => void
+  /**
+   * The number of slides.
+   */
   slides: number
 } & HTMLDivProps
 
 export type CarouselButtonLiveProps = {
+  /**
+   * The live determines the behaviour of the carousel.
+   *
+   * Setting it to OFF will enable automatic rotation.
+   * Setting it to ASSERTIVE or POLITE will disable automatic rotation.
+   */
   live: CarouselLive
+  /**
+   * The live setter, also takes care of handling the automatic rotation.
+   */
   setLive: (live: CarouselLive) => void
 } & ButtonProps
 
 export type CarouselButtonPreviousProps = {
+  /**
+   * The method which based on the activeSlideIndex goes to the previous slide available, if none and the carousel mode is infinite it will go to the last slide.
+   */
   gotoPreviousSlide: () => void
+  /**
+   * The ID of the Slides element.
+   */
   slidesID: ID
 } & ButtonProps
 
 export type CarouselButtonNextProps = {
+  /**
+   * The method which based on the activeSlideIndex goes to the next slide available, if none and the carousel mode is infinite it will go back to the first slide.
+   */
   gotoNextSlide: () => void
+  /**
+   * The ID of the Slides element.
+   */
   slidesID: ID
 } & ButtonProps
 

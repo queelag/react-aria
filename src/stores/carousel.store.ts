@@ -1,5 +1,5 @@
 import { MutableRefObject } from 'react'
-import { CarouselLive, ComponentName } from '../definitions/enums'
+import { CarouselLive, CarouselRotationMode, ComponentName } from '../definitions/enums'
 import ComponentStore from '../modules/component.store'
 import Logger from '../modules/logger'
 import rc from '../modules/rc'
@@ -11,20 +11,24 @@ class CarouselStore extends ComponentStore<HTMLElement> {
   live: CarouselLive
   liveTemporary?: CarouselLive
   mouseEntered: boolean
+  rotationMode: CarouselRotationMode
   slideElementRefs: Map<number, MutableRefObject<HTMLDivElement>>
 
   constructor(
     ref: MutableRefObject<HTMLElement>,
     update: () => void,
     id?: string,
+    activeSlideIndex: number = 0,
     automaticRotationDuration: number = 2000,
-    live: CarouselLive = CarouselLive.OFF
+    live: CarouselLive = CarouselLive.OFF,
+    rotationMode: CarouselRotationMode = CarouselRotationMode.INFINITE
   ) {
     super(ComponentName.CAROUSEL, ref, update, id)
 
-    this.activeSlideIndex = 0
+    this.activeSlideIndex = activeSlideIndex
     this.automaticRotationDuration = automaticRotationDuration
     this.automaticRotationInterval = 0
+    this.rotationMode = rotationMode
     this.live = live
     this.mouseEntered = false
     this.slideElementRefs = new Map()
@@ -96,7 +100,16 @@ class CarouselStore extends ComponentStore<HTMLElement> {
       return Logger.debug(this.id, 'gotoPreviousSlide', `There aren't enough slides to traverse.`)
     }
 
-    this.setActiveSlide(this.activeSlideIndex > 0 ? this.activeSlideIndex - 1 : this.slideElementRefs.size - 1)
+    switch (this.rotationMode) {
+      case CarouselRotationMode.FINITE:
+        if (this.activeSlideIndex <= 0) {
+          return this.setLive(CarouselLive.POLITE)
+        }
+
+        return this.setActiveSlide(this.activeSlideIndex - 1)
+      case CarouselRotationMode.INFINITE:
+        return this.setActiveSlide(this.activeSlideIndex > 0 ? this.activeSlideIndex - 1 : this.slideElementRefs.size - 1)
+    }
   }
 
   gotoNextSlide = (): void => {
@@ -104,7 +117,16 @@ class CarouselStore extends ComponentStore<HTMLElement> {
       return Logger.debug(this.id, 'gotoNextSlide', `There aren't enough slides to traverse.`)
     }
 
-    this.setActiveSlide(this.activeSlideIndex < this.slideElementRefs.size - 1 ? this.activeSlideIndex + 1 : 0)
+    switch (this.rotationMode) {
+      case CarouselRotationMode.FINITE:
+        if (this.activeSlideIndex >= this.slideElementRefs.size - 1) {
+          return this.setLive(CarouselLive.POLITE)
+        }
+
+        return this.setActiveSlide(this.activeSlideIndex + 1)
+      case CarouselRotationMode.INFINITE:
+        return this.setActiveSlide(this.activeSlideIndex < this.slideElementRefs.size - 1 ? this.activeSlideIndex + 1 : 0)
+    }
   }
 
   disableAutomaticRotation = (): void => {
@@ -148,6 +170,10 @@ class CarouselStore extends ComponentStore<HTMLElement> {
 
   get isLiveOff(): boolean {
     return this.live === CarouselLive.OFF
+  }
+
+  get isRotationModeInfinite(): boolean {
+    return this.rotationMode === CarouselRotationMode.INFINITE
   }
 }
 

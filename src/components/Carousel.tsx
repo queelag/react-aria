@@ -12,6 +12,7 @@ import {
 import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import CarouselStore from '../stores/carousel.store'
+import StoreUtils from '../utils/store.utils'
 import { Root as Button } from './Button'
 
 /**
@@ -20,20 +21,36 @@ import { Root as Button } from './Button'
 function Root(props: CarouselProps) {
   const update = useForceUpdate()
   const ref = useRef(document.createElement('section'))
-  const store = useMemo(() => new CarouselStore(ref, update, props.id), [])
+  const store = useMemo(() => new CarouselStore(ref, update, props.id, props.automaticRotationDuration, props.live), [])
   const slidesID = useID(ComponentName.CAROUSEL_SLIDES)
 
+  useEffect(() => {
+    StoreUtils.shouldUpdateKey(store, 'live', props.live) && store.setLive(props.live)
+  }, [props.live])
+
+  useEffect(() => store.disableAutomaticRotation, [])
+
   return (
-    <section {...props} aria-label={props.label} aria-roledescription='carousel' id={store.id}>
+    <section
+      {...omit(props, 'automaticRotationDuration', 'label', 'live')}
+      aria-label={props.label}
+      aria-roledescription='carousel'
+      id={store.id}
+      onBlur={store.onBlurOrMouseLeave}
+      onFocus={store.onFocusOrMouseEnter}
+      onMouseEnter={store.onFocusOrMouseEnter}
+      onMouseLeave={store.onBlurOrMouseLeave}
+    >
       {props.children({
-        findSlideIndex: store.findSlideIndex,
+        activeSlideIndex: store.activeSlideIndex,
+        deleteSlideElementRef: store.deleteSlideElementRef,
         gotoNextSlide: store.gotoNextSlide,
         gotoPreviousSlide: store.gotoPreviousSlide,
         isSlideActive: store.isSlideActive,
         live: store.live,
+        liveTemporary: store.liveTemporary,
         setLive: store.setLive,
         setSlideElementRef: store.setSlideElementRef,
-        setSlidesElementRef: store.setSlidesElementRef,
         slides: store.slideElementRefs.size,
         slidesID
       })}
@@ -42,34 +59,56 @@ function Root(props: CarouselProps) {
 }
 
 function Slides(props: CarouselSlidesProps) {
-  const ref = useRef(document.createElement('div'))
-
-  useEffect(() => {
-    props.setSlidesElementRef(ref)
-  }, [])
-
   return (
     <div
-      {...omit(props, 'findSlideIndex', 'gotoNextSlide', 'gotoPreviousSlide', 'isSlideActive', 'live', 'setLive', 'setSlideElementRef', 'slides', 'slidesID')}
-      aria-live={props.live}
+      {...omit(
+        props,
+        'activeSlideIndex',
+        'deleteSlideElementRef',
+        'gotoNextSlide',
+        'gotoPreviousSlide',
+        'isSlideActive',
+        'live',
+        'liveTemporary',
+        'setLive',
+        'setSlideElementRef',
+        'slides',
+        'slidesID'
+      )}
+      aria-live={props.liveTemporary || props.live}
       id={props.slidesID}
-      ref={ref}
     />
   )
 }
 
 function Slide(props: CarouselSlideProps) {
+  const id = useID(ComponentName.CAROUSEL_SLIDE, props.id)
   const ref = useRef(document.createElement('div'))
 
   useEffect(() => {
-    props.setSlideElementRef(props.id, ref)
+    props.setSlideElementRef(props.index, ref)
+    return () => props.deleteSlideElementRef(props.index)
   }, [])
 
   return (
     <div
-      {...omit(props, 'findSlideIndex', 'gotoNextSlide', 'gotoPreviousSlide', 'isSlideActive', 'live', 'setLive', 'setSlideElementRef', 'slides', 'slidesID')}
-      aria-label={`${props.findSlideIndex(props.id) + 1} of ${props.slides}`}
+      {...omit(
+        props,
+        'activeSlideIndex',
+        'deleteSlideElementRef',
+        'gotoNextSlide',
+        'gotoPreviousSlide',
+        'isSlideActive',
+        'live',
+        'liveTemporary',
+        'setLive',
+        'setSlideElementRef',
+        'slides',
+        'slidesID'
+      )}
+      aria-label={`${props.index + 1} of ${props.slides}`}
       aria-roledescription='slide'
+      id={id}
       ref={ref}
       role='group'
     />
@@ -101,7 +140,20 @@ function ButtonLive(props: CarouselButtonLiveProps) {
 
   return (
     <Button
-      {...omit(props, 'findSlideIndex', 'gotoNextSlide', 'gotoPreviousSlide', 'isSlideActive', 'live', 'setLive', 'setSlideElementRef', 'slides', 'slidesID')}
+      {...omit(
+        props,
+        'activeSlideIndex',
+        'deleteSlideElementRef',
+        'gotoNextSlide',
+        'gotoPreviousSlide',
+        'isSlideActive',
+        'live',
+        'liveTemporary',
+        'setLive',
+        'setSlideElementRef',
+        'slides',
+        'slidesID'
+      )}
       aria-label={findLabelByLive()}
       id={id}
       onClick={onClick}
@@ -114,7 +166,20 @@ function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
 
   return (
     <Button
-      {...omit(props, 'findSlideIndex', 'gotoNextSlide', 'gotoPreviousSlide', 'isSlideActive', 'live', 'setLive', 'setSlideElementRef', 'slides', 'slidesID')}
+      {...omit(
+        props,
+        'activeSlideIndex',
+        'deleteSlideElementRef',
+        'gotoNextSlide',
+        'gotoPreviousSlide',
+        'isSlideActive',
+        'live',
+        'liveTemporary',
+        'setLive',
+        'setSlideElementRef',
+        'slides',
+        'slidesID'
+      )}
       aria-controls={props.slidesID}
       aria-label='Previous Slide'
       id={id}
@@ -128,7 +193,20 @@ function ButtonNextSlide(props: CarouselButtonNextProps) {
 
   return (
     <Button
-      {...omit(props, 'findSlideIndex', 'gotoNextSlide', 'gotoPreviousSlide', 'isSlideActive', 'live', 'setLive', 'setSlideElementRef', 'slides', 'slidesID')}
+      {...omit(
+        props,
+        'activeSlideIndex',
+        'deleteSlideElementRef',
+        'gotoNextSlide',
+        'gotoPreviousSlide',
+        'isSlideActive',
+        'live',
+        'liveTemporary',
+        'setLive',
+        'setSlideElementRef',
+        'slides',
+        'slidesID'
+      )}
       aria-controls={props.slidesID}
       aria-label='Next Slide'
       id={id}

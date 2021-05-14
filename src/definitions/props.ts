@@ -95,35 +95,38 @@ export type BreadcrumbListItemLinkProps = {
 export type ButtonProps = HTMLButtonProps
 
 export type CarouselProps = {
+  automaticRotationDuration?: number
   children: (props: CarouselChildrenProps) => ReactNode
   label: string
+  live?: CarouselLive
 } & Omit<HTMLElementProps, 'children'>
 
 export type CarouselChildrenProps = {
-  findSlideIndex: (id: ID) => number
+  activeSlideIndex: number
+  deleteSlideElementRef: (index: number) => void
   gotoNextSlide: () => void
   gotoPreviousSlide: () => void
-  isSlideActive: (id: ID) => boolean
+  isSlideActive: (index: number) => boolean
   live: CarouselLive
+  liveTemporary?: CarouselLive
   setLive: (live: CarouselLive) => void
-  setSlideElementRef: (id: ID, ref: MutableRefObject<HTMLDivElement>) => void
-  setSlidesElementRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  setSlideElementRef: (index: number, ref: MutableRefObject<HTMLDivElement>) => void
   slides: number
   slidesID: ID
 }
 
 export type CarouselSlidesProps = {
   live: CarouselLive
-  setSlidesElementRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  liveTemporary?: CarouselLive
   slidesID: ID
 } & Omit<HTMLDivProps, 'id'>
 
 export type CarouselSlideProps = {
-  findSlideIndex: (id: ID) => number
-  id: ID
-  setSlideElementRef: (id: ID, ref: MutableRefObject<HTMLDivElement>) => void
+  deleteSlideElementRef: (index: number) => void
+  index: number
+  setSlideElementRef: (index: number, ref: MutableRefObject<HTMLDivElement>) => void
   slides: number
-} & Omit<HTMLDivProps, 'id'>
+} & HTMLDivProps
 
 export type CarouselButtonLiveProps = {
   live: CarouselLive

@@ -15,7 +15,7 @@ class ComboBoxStore extends ComponentStore {
   listBoxItemsRef: Map<number, MutableRefObject<HTMLLIElement>>
   listBoxRef: MutableRefObject<HTMLUListElement>
 
-  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, id?: ID) {
+  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, onCollapse: () => any, id?: ID) {
     super(ComponentName.COMBO_BOX, ref, update, id)
 
     this.expanded = false
@@ -25,7 +25,10 @@ class ComboBoxStore extends ComponentStore {
     this.listBoxID = IDUtils.prefixed(ComponentName.COMBO_BOX_LIST_BOX)
     this.listBoxItemsRef = new Map()
     this.listBoxRef = { current: document.createElement('ul') }
+    this.onCollapse = onCollapse
   }
+
+  onCollapse(): void {}
 
   handleKeyboardInteractions = (event: KeyboardEvent<HTMLDivElement>, onEscape: () => any): void => {
     switch (event.key) {
@@ -66,10 +69,8 @@ class ComboBoxStore extends ComponentStore {
     Logger.debug(id, caller, `The combobox has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
     if (this.isCollapsed) {
-      // ReactUtils.setInputValue(this.inputRef.current, '')
-      // Logger.debug(this.id, 'setExpanded', `The input value has been emptied.`)
-
       this.setFocusedListBoxItemIndex(-1)
+      this.onCollapse()
     }
 
     if (this.isExpanded) {

@@ -14,6 +14,7 @@ import {
 import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import ComboBoxStore from '../stores/combo.box.store'
+import StoreUtils from '../utils/store.utils'
 
 const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
   'autocomplete',
@@ -34,13 +35,17 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
 function Root(props: ComboBoxProps) {
   const update = useForceUpdate()
   const ref = useRef(document.createElement('div'))
-  const store = useMemo(() => new ComboBoxStore(ref, update, props.id), [])
+  const store = useMemo(() => new ComboBoxStore(ref, update, props.onCollapse, props.id), [])
   const popper = usePopper(store.groupRef.current, store.listBoxRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     store.handleKeyboardInteractions(event, props.onEscape)
     props.onKeyDown && props.onKeyDown(event)
   }
+
+  useEffect(() => {
+    StoreUtils.shouldUpdateKey(store, 'onCollapse', props.onCollapse) && (store.onCollapse = props.onCollapse)
+  }, [props.onCollapse])
 
   return (
     <div

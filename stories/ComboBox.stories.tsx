@@ -22,13 +22,17 @@ const RawTemplate: Story<ComboBoxProps & { options: string[] }> = (args) => {
     setValue(option)
   }
 
+  const onCollapse = () => {
+    setFilter('')
+  }
+
   const onEscape = () => {
     setFilter('')
     setValue('')
   }
 
   return (
-    <ComboBox.Root {...omit(args, 'options')} onEscape={onEscape} autocomplete>
+    <ComboBox.Root {...omit(args, 'options')} onCollapse={onCollapse} onEscape={onEscape} autocomplete>
       {(props: ComboBoxChildrenProps) => (
         <Fragment>
           <ComboBox.Group {...props} className='border border-black'>
@@ -73,6 +77,10 @@ const StyledTemplate: Story<ComboBoxProps & { options: string[] }> = (args) => {
     setValue(option)
   }
 
+  const onCollapse = () => {
+    setFilter('')
+  }
+
   const onEscape = () => {
     setFilter('')
     setValue('')
@@ -81,6 +89,7 @@ const StyledTemplate: Story<ComboBoxProps & { options: string[] }> = (args) => {
   return (
     <ComboBox.Root
       {...omit(args, 'options')}
+      onCollapse={onCollapse}
       onEscape={onEscape}
       popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 16] } }] }}
       autocomplete

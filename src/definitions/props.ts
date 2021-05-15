@@ -201,6 +201,7 @@ export type ComboBoxProps = {
   autocomplete?: boolean
   children: (props: ComboBoxChildrenProps) => ReactNode
   listBoxLabel: string
+  onCollapse: () => any
   onEscape: () => any
   popperOptions: PopperOptions<unknown>
 } & Omit<HTMLDivProps, 'children'>

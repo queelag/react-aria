@@ -6,7 +6,6 @@ import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import Logger from '../modules/logger'
 import AccordionStore from '../stores/accordion.store'
-import { Root as Button } from './Button'
 
 /**
  * An accordion is a vertically stacked set of interactive headings that each contain a title, content snippet, or thumbnail representing a section of content. The headings function as controls that enable users to reveal or hide their associated sections of content. Accordions are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.
@@ -77,13 +76,14 @@ function SectionHeader(props: AccordionSectionHeaderProps) {
   }, [])
 
   return (
-    <Button
+    <button
       {...omit(props, 'contentID', 'expand', 'expanded', 'headerID', 'setHeaderRef')}
       aria-controls={props.contentID}
       aria-expanded={props.expanded}
       id={props.headerID}
-      innerRef={ref}
+      ref={ref}
       onClick={onClick}
+      type='button'
     />
   )
 }

@@ -1,6 +1,6 @@
 import { MutableRefObject, ReactNode, Ref } from 'react'
 import { CarouselLive, CarouselRotationMode } from './enums'
-import { ID } from './types'
+import { ID, PopperData, PopperOptions } from './types'
 
 export type AccordionProps = {
   children: (props: AccordionChildrenProps) => ReactNode
@@ -179,9 +179,9 @@ export type CarouselChildrenProps = {
   slidesID: ID
 }
 
-export type CarouselButtonLiveProps = Pick<CarouselChildrenProps, 'live' | 'setLive'> & ButtonProps
-export type CarouselButtonNextProps = Pick<CarouselChildrenProps, 'gotoNextSlide' | 'slidesID'> & ButtonProps
-export type CarouselButtonPreviousProps = Pick<CarouselChildrenProps, 'gotoPreviousSlide' | 'slidesID'> & ButtonProps
+export type CarouselButtonLiveProps = Pick<CarouselChildrenProps, 'live' | 'setLive'> & HTMLButtonProps
+export type CarouselButtonNextProps = Pick<CarouselChildrenProps, 'gotoNextSlide' | 'slidesID'> & HTMLButtonProps
+export type CarouselButtonPreviousProps = Pick<CarouselChildrenProps, 'gotoPreviousSlide' | 'slidesID'> & HTMLButtonProps
 
 export type CarouselSlideProps = {
   /**
@@ -198,16 +198,42 @@ export type CheckBoxProps = {
 } & HTMLDivProps
 
 export type ComboBoxProps = {
+  autocomplete?: boolean
   children: (props: ComboBoxChildrenProps) => ReactNode
+  listBoxLabel: string
+  onEscape: () => any
+  popperOptions: PopperOptions<unknown>
 } & Omit<HTMLDivProps, 'children'>
 
 export type ComboBoxChildrenProps = {
-  activeItem: ID
+  deleteListBoxItemRef: (index: number) => void
   expanded: boolean
+  focusedListBoxItemID?: ID
+  isListBoxItemFocused: (index: number) => boolean
   listBoxID: ID
-}
+  popper: PopperData
+  setExpanded: (expanded: boolean, id: ID, caller: string) => void
+  setGroupRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  setInputRef: (ref: MutableRefObject<HTMLInputElement>) => void
+  setListBoxItemRef: (index: number, ref: MutableRefObject<HTMLLIElement>) => void
+  setListBoxRef: (ref: MutableRefObject<HTMLUListElement>) => void
+} & Pick<ComboBoxProps, 'autocomplete' | 'listBoxLabel'>
 
-export type ComboBoxInputProps = Pick<ComboBoxChildrenProps, 'activeItem' | 'expanded' | 'listBoxID'> & Omit<HTMLInputProps, 'id'>
+export type ComboBoxButtonProps = Pick<ComboBoxChildrenProps, 'expanded' | 'setExpanded'> & HTMLButtonProps
+export type ComboBoxGroupProps = Pick<ComboBoxChildrenProps, 'setGroupRef'> & HTMLDivProps
+
+export type ComboBoxInputProps = Pick<
+  ComboBoxChildrenProps,
+  'autocomplete' | 'expanded' | 'focusedListBoxItemID' | 'listBoxID' | 'setExpanded' | 'setInputRef'
+> &
+  HTMLInputProps
+
+export type ComboBoxListBoxProps = Pick<ComboBoxChildrenProps, 'listBoxID' | 'listBoxLabel' | 'popper' | 'setListBoxRef'> & Omit<HTMLUListProps, 'id'>
+
+export type ComboBoxListBoxItemProps = {
+  index: number
+} & Pick<ComboBoxChildrenProps, 'deleteListBoxItemRef' | 'isListBoxItemFocused' | 'setExpanded' | 'setListBoxItemRef'> &
+  HTMLLIProps
 
 export type FocusTrapProps = {
   /**
@@ -231,7 +257,8 @@ export type HTMLLIProps = React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIE
 export type HTMLFormProps = React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>
 export type HTMLOListProps = React.DetailedHTMLProps<React.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement>
 export type HTMLSpanProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
+export type HTMLUListProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>
 
 export type ToggleButtonProps = {
   isToggled: boolean
-} & ButtonProps
+} & HTMLButtonProps

@@ -3,7 +3,6 @@ import React, { KeyboardEvent, useRef } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { CheckBoxProps } from '../definitions/props'
 import useID from '../hooks/use.id'
-import ArrayUtils from '../utils/array.utils'
 
 function Root(props: CheckBoxProps) {
   const id = useID(ComponentName.CHECK_BOX, props.id)
@@ -26,11 +25,11 @@ function Root(props: CheckBoxProps) {
     <div
       {...omit(props, 'isChecked')}
       aria-checked={props.isChecked}
-      className={ArrayUtils.joinStrings('cursor-pointer', props.className)}
       id={id}
       onKeyDown={onKeyDown}
       ref={ref}
       role='checkbox'
+      style={{ ...props.style, cursor: 'pointer' }}
       tabIndex={0}
     />
   )

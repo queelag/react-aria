@@ -6,7 +6,7 @@ import useID from '../hooks/use.id'
 
 function Root(props: ButtonProps) {
   const id = useID(ComponentName.BUTTON, props.id)
-  return <button {...omit(props, 'label')} id={id} ref={props.innerRef} type='button' />
+  return <button {...omit(props, 'innerRef')} id={id} ref={props.innerRef} type='button' />
 }
 
 export { Root }

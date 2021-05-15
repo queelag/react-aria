@@ -1,5 +1,5 @@
 import { omit } from 'lodash'
-import React, { KeyboardEvent, useLayoutEffect, useMemo, useRef } from 'react'
+import React, { KeyboardEvent, useEffect, useMemo, useRef } from 'react'
 import { FocusTrapProps } from '../definitions/props'
 import useForceUpdate from '../hooks/use.force.update'
 import noop from '../modules/noop'
@@ -18,9 +18,9 @@ function Root(props: FocusTrapProps) {
     props.onKeyDown && props.onKeyDown(event)
   }
 
-  useLayoutEffect(() => store.readFocusables(), [props])
-  useLayoutEffect(() => (props.restoreFocus ? store.readOriginalFocusedAndReturnFocuser() : noop), [props.restoreFocus])
-  useLayoutEffect(() => (props.autoFocus ? store.focusFirstFocusable() : noop), [props.autoFocus])
+  useEffect(() => store.readFocusables(), [props])
+  useEffect(() => (props.restoreFocus ? store.readOriginalFocusedAndReturnFocuser() : noop), [props.restoreFocus])
+  useEffect(() => (props.autoFocus ? store.focusFirstFocusable() : noop), [props.autoFocus])
 
   return <div {...omit(props, 'autoFocus', 'restoreFocus')} id={store.id} onKeyDown={onKeyDown} ref={ref} />
 }

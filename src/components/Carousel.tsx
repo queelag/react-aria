@@ -5,6 +5,7 @@ import {
   CarouselButtonLiveProps,
   CarouselButtonNextProps,
   CarouselButtonPreviousProps,
+  CarouselChildrenProps,
   CarouselProps,
   CarouselSlideProps,
   CarouselSlidesProps
@@ -13,7 +14,20 @@ import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import CarouselStore from '../stores/carousel.store'
 import StoreUtils from '../utils/store.utils'
-import { Root as Button } from './Button'
+
+const ROOT_CHILDREN_PROPS_KEYS: (keyof CarouselChildrenProps)[] = [
+  'activeSlideIndex',
+  'deleteSlideElementRef',
+  'gotoNextSlide',
+  'gotoPreviousSlide',
+  'isSlideActive',
+  'live',
+  'liveTemporary',
+  'setLive',
+  'setSlideElementRef',
+  'slides',
+  'slidesID'
+]
 
 /**
  * A carousel presents a set of items, referred to as slides, by sequentially displaying a subset of one or more slides. Typically, one slide is displayed at a time, and users can activate a next or previous slide control that hides the current slide and "rotates" the next or previous slide into view. In some implementations, rotation automatically starts when the page loads, and it may also automatically stop once all the slides have been displayed. While a slide may contain any type of content, image carousels where each slide contains nothing more than a single image are common.
@@ -64,26 +78,7 @@ function Root(props: CarouselProps) {
 }
 
 function Slides(props: CarouselSlidesProps) {
-  return (
-    <div
-      {...omit(
-        props,
-        'activeSlideIndex',
-        'deleteSlideElementRef',
-        'gotoNextSlide',
-        'gotoPreviousSlide',
-        'isSlideActive',
-        'live',
-        'liveTemporary',
-        'setLive',
-        'setSlideElementRef',
-        'slides',
-        'slidesID'
-      )}
-      aria-live={props.liveTemporary || props.live}
-      id={props.slidesID}
-    />
-  )
+  return <div {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-live={props.liveTemporary || props.live} id={props.slidesID} />
 }
 
 function Slide(props: CarouselSlideProps) {
@@ -97,20 +92,7 @@ function Slide(props: CarouselSlideProps) {
 
   return (
     <div
-      {...omit(
-        props,
-        'activeSlideIndex',
-        'deleteSlideElementRef',
-        'gotoNextSlide',
-        'gotoPreviousSlide',
-        'isSlideActive',
-        'live',
-        'liveTemporary',
-        'setLive',
-        'setSlideElementRef',
-        'slides',
-        'slidesID'
-      )}
+      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-label={`${props.index + 1} of ${props.slides}`}
       aria-roledescription='slide'
       id={id}
@@ -143,52 +125,20 @@ function ButtonLive(props: CarouselButtonLiveProps) {
     }
   }
 
-  return (
-    <Button
-      {...omit(
-        props,
-        'activeSlideIndex',
-        'deleteSlideElementRef',
-        'gotoNextSlide',
-        'gotoPreviousSlide',
-        'isSlideActive',
-        'live',
-        'liveTemporary',
-        'setLive',
-        'setSlideElementRef',
-        'slides',
-        'slidesID'
-      )}
-      aria-label={findLabelByLive()}
-      id={id}
-      onClick={onClick}
-    />
-  )
+  return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label={findLabelByLive()} id={id} onClick={onClick} type='button' />
 }
 
 function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
   const id = useID(ComponentName.CAROUSEL_BUTTON_PREVIOUS_SLIDE, props.id)
 
   return (
-    <Button
-      {...omit(
-        props,
-        'activeSlideIndex',
-        'deleteSlideElementRef',
-        'gotoNextSlide',
-        'gotoPreviousSlide',
-        'isSlideActive',
-        'live',
-        'liveTemporary',
-        'setLive',
-        'setSlideElementRef',
-        'slides',
-        'slidesID'
-      )}
+    <button
+      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-controls={props.slidesID}
       aria-label='Previous Slide'
       id={id}
       onClick={props.gotoPreviousSlide}
+      type='button'
     />
   )
 }
@@ -197,25 +147,13 @@ function ButtonNextSlide(props: CarouselButtonNextProps) {
   const id = useID(ComponentName.CAROUSEL_BUTTON_NEXT_SLIDE, props.id)
 
   return (
-    <Button
-      {...omit(
-        props,
-        'activeSlideIndex',
-        'deleteSlideElementRef',
-        'gotoNextSlide',
-        'gotoPreviousSlide',
-        'isSlideActive',
-        'live',
-        'liveTemporary',
-        'setLive',
-        'setSlideElementRef',
-        'slides',
-        'slidesID'
-      )}
+    <button
+      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-controls={props.slidesID}
       aria-label='Next Slide'
       id={id}
       onClick={props.gotoNextSlide}
+      type='button'
     />
   )
 }

@@ -35,4 +35,5 @@ function Root(props: CheckBoxProps) {
   )
 }
 
-export { Root }
+const CheckBox = { Root }
+export { CheckBox }

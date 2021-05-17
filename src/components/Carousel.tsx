@@ -34,8 +34,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof CarouselChildrenProps)[] = [
  */
 function Root(props: CarouselProps) {
   const update = useForceUpdate()
-  const ref = useRef(document.createElement('section'))
-  const store = useMemo(() => new CarouselStore(ref, update, props.id, props.activeSlideIndex, props.automaticRotationDuration, props.live), [])
+  const store = useMemo(() => new CarouselStore(update, props.id, props.activeSlideIndex, props.automaticRotationDuration, props.live), [])
   const slidesID = useID(ComponentName.CAROUSEL_SLIDES)
 
   useEffect(() => {
@@ -158,4 +157,5 @@ function ButtonNextSlide(props: CarouselButtonNextProps) {
   )
 }
 
-export { Root, Slides, Slide, ButtonLive, ButtonPreviousSlide, ButtonNextSlide }
+const Carousel = { Root, Slides, Slide, ButtonLive, ButtonPreviousSlide, ButtonNextSlide }
+export { Carousel }

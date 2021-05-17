@@ -1,5 +1,5 @@
-import { MutableRefObject, ReactNode, Ref } from 'react'
-import { CarouselLive, CarouselRotationMode } from './enums'
+import { MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
+import { CarouselLive, CarouselRotationMode, DisclosureStatus } from './enums'
 import { ID, PopperData, PopperOptions } from './types'
 
 export type AccordionProps = {
@@ -62,27 +62,10 @@ export type AccordionSectionHeaderProps = AccordionSectionChildrenProps & Omit<H
 
 export type AlertProps = HTMLDivProps
 
-export type AlertDialogChildrenProps = {
-  /**
-   * The ID of the description element.
-   */
-  descriptionID: ID
-  /**
-   * The ID of the title element.
-   */
-  titleID: ID
-}
-
-export type AlertDialogProps = {
-  children: (props: AlertDialogChildrenProps) => ReactNode
-  /**
-   * The method which handles the closure of the alert dialog.
-   */
-  onClose: () => any
-} & Omit<HTMLDivProps, 'children' | 'ref'>
-
-export type AlertDialogDescriptionProps = Pick<AlertDialogChildrenProps, 'descriptionID'> & Omit<HTMLSpanProps, 'id'>
-export type AlertDialogTitleProps = Pick<AlertDialogChildrenProps, 'titleID'> & Omit<HTMLSpanProps, 'id'>
+export type AlertDialogChildrenProps = DialogChildrenProps
+export type AlertDialogProps = DialogProps
+export type AlertDialogDescriptionProps = DialogDescriptionProps
+export type AlertDialogTitleProps = DialogTitleProps
 
 export type BreadcrumbProps = HTMLElementProps
 export type BreadcrumbListProps = HTMLOListProps
@@ -236,6 +219,46 @@ export type ComboBoxListBoxItemProps = {
 } & Pick<ComboBoxChildrenProps, 'deleteListBoxItemRef' | 'isListBoxItemFocused' | 'setExpanded' | 'setListBoxItemRef'> &
   HTMLLIProps
 
+export type DialogProps = {
+  children: (props: DialogChildrenProps) => ReactNode
+  hasDescription?: boolean
+  hasTitle?: boolean
+  /**
+   * The method which handles the closure of the dialog.
+   */
+  onClose: () => any
+} & Omit<HTMLDivProps, 'children'>
+
+export type DialogChildrenProps = {
+  /**
+   * The ID of the description element.
+   */
+  descriptionID: ID
+  /**
+   * The ID of the title element.
+   */
+  titleID: ID
+}
+
+export type DialogDescriptionProps = Pick<DialogChildrenProps, 'descriptionID'> & Omit<HTMLSpanProps, 'id'>
+export type DialogTitleProps = Pick<DialogChildrenProps, 'titleID'> & Omit<HTMLSpanProps, 'id'>
+
+export type DisclosureProps = HTMLDListProps
+
+export type DisclosureSectionProps = {
+  children: (props: DisclosureSectionChildrenProps) => ReactFragment
+}
+
+export type DisclosureSectionChildrenProps = {
+  panelID: ID
+  setStatus: (status: DisclosureStatus) => void
+  status: DisclosureStatus
+}
+
+export type DisclosureSectionHeaderProps = HTMLElementProps
+export type DisclosureSectionHeaderButtonProps = DisclosureSectionChildrenProps & HTMLButtonProps
+export type DisclosureSectionPanelProps = Pick<DisclosureSectionChildrenProps, 'panelID'> & Omit<HTMLElementProps, 'id'>
+
 export type FocusTrapProps = {
   /**
    * Setting this to true will automatically focus the first inside element inside the trap.
@@ -250,6 +273,7 @@ export type FocusTrapProps = {
 export type HTMLAnchorProps = React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
 export type HTMLButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
 export type HTMLDivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+export type HTMLDListProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDListElement>, HTMLDListElement>
 export type HTMLElementProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
 export type HTMLImageProps = React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
 export type HTMLInputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>

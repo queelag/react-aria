@@ -15,8 +15,8 @@ class ComboBoxStore extends ComponentStore {
   listBoxItemsRef: Map<number, MutableRefObject<HTMLLIElement>>
   listBoxRef: MutableRefObject<HTMLUListElement>
 
-  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, onCollapse: () => any, id?: ID) {
-    super(ComponentName.COMBO_BOX, ref, update, id)
+  constructor(update: () => void, onCollapse: () => any, id?: ID) {
+    super(ComponentName.COMBO_BOX, update, id)
 
     this.expanded = false
     this.focusedListBoxItemIndex = -1

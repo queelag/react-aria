@@ -12,4 +12,5 @@ function Root(props: ToggleButtonProps) {
   return <button {...omit(props, 'isToggled')} aria-pressed={props.isToggled} id={id} type='button' />
 }
 
-export { Root }
+const ToggleButton = { Root }
+export { ToggleButton }

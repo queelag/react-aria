@@ -1,4 +1,4 @@
-import { KeyboardEvent, MutableRefObject } from 'react'
+import { KeyboardEvent } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { ID } from '../definitions/types'
 import ComponentStore from '../modules/component.store'
@@ -9,8 +9,8 @@ class AlertDialogStore extends ComponentStore {
   descriptionElementID: ID
   titleElementID: ID
 
-  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, id?: string) {
-    super(ComponentName.ALERT_DIALOG, ref, update, id)
+  constructor(update: () => void, id?: string) {
+    super(ComponentName.ALERT_DIALOG, update, id)
 
     this.descriptionElementID = IDUtils.prefixed(ComponentName.ALERT_DIALOG_DESCRIPTION)
     this.titleElementID = IDUtils.prefixed(ComponentName.ALERT_DIALOG_TITLE)

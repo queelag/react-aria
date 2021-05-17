@@ -2,8 +2,8 @@ import { Meta } from '@storybook/react'
 import { Chance } from 'chance'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { Fragment, useState } from 'react'
-import * as AlertDialog from '../src/components/AlertDialog'
-import * as FocusTrap from '../src/components/FocusTrap'
+import { AlertDialog } from '../src/components/AlertDialog'
+import { FocusTrap } from '../src/components/FocusTrap'
 import { AlertDialogChildrenProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 
@@ -20,7 +20,7 @@ export const Raw = () => {
         Show Alert Dialog
       </button>
       {visible && (
-        <AlertDialog.Root className='bg-black bg-opacity-50' onClose={onClick}>
+        <AlertDialog.Root className='bg-black bg-opacity-50' onClose={onClick} hasDescription hasTitle>
           {(props: AlertDialogChildrenProps) => (
             <FocusTrap.Root className='w-64 flex flex-col bg-white'>
               <AlertDialog.Title {...props} className='font-bold'>
@@ -65,7 +65,7 @@ export const Styled = () => {
       </button>
       <AnimatePresence>
         {visible && (
-          <AlertDialog.Root onClose={onClick}>
+          <AlertDialog.Root onClose={onClick} hasDescription hasTitle>
             {(props: AlertDialogChildrenProps) => (
               <FocusTrap.Root autoFocus restoreFocus>
                 <motion.div animate={{ opacity: 0.5 }} className='absolute inset-0 bg-black' exit={{ opacity: 0 }} initial={{ opacity: 0 }} />

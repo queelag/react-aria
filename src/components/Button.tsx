@@ -9,4 +9,5 @@ function Root(props: ButtonProps) {
   return <button {...omit(props, 'innerRef')} id={id} ref={props.innerRef} type='button' />
 }
 
-export { Root }
+const Button = { Root }
+export { Button }

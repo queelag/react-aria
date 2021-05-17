@@ -36,4 +36,5 @@ function ListItemLink(props: BreadcrumbListItemLinkProps) {
   return <a {...omit(props, 'isCurrent')} aria-current={props.isCurrent ? 'page' : undefined} id={id} />
 }
 
-export { Root, List, ListItem, ListItemLink }
+const Breadcrumb = { Root, List, ListItem, ListItemLink }
+export { Breadcrumb }

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { omit } from 'lodash'
 import React, { Fragment } from 'react'
 import { CarouselLive, CarouselRotationMode } from '../src'
-import * as Carousel from '../src/components/Carousel'
+import { Carousel } from '../src/components/Carousel'
 import { CarouselChildrenProps, CarouselProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 

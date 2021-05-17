@@ -8,8 +8,8 @@ class AccordionStore extends ComponentStore {
   expandedSections: Map<ID, boolean>
   sectionHeaderRefs: Map<ID, MutableRefObject<HTMLButtonElement>>
 
-  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, id?: string) {
-    super(ComponentName.ACCORDION, ref, update, id)
+  constructor(update: () => void, id?: string) {
+    super(ComponentName.ACCORDION, update, id)
 
     this.expandedSections = new Map()
     this.sectionHeaderRefs = new Map()

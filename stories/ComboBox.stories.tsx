@@ -4,7 +4,7 @@ import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import { omit } from 'lodash'
 import React, { ChangeEvent, Fragment, useState } from 'react'
-import * as ComboBox from '../src/components/ComboBox'
+import { ComboBox } from '../src/components/ComboBox'
 import { ComboBoxChildrenProps, ComboBoxProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 

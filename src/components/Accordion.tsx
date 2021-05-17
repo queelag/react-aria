@@ -12,8 +12,7 @@ import AccordionStore from '../stores/accordion.store'
  */
 function Root(props: AccordionProps) {
   const update = useForceUpdate()
-  const ref = useRef(document.createElement('div'))
-  const store = useMemo(() => new AccordionStore(ref, update, props.id), [])
+  const store = useMemo(() => new AccordionStore(update, props.id), [])
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     store.handleKeyboardInteractions(event)
@@ -97,4 +96,5 @@ function SectionPanel(props: AccordionSectionPanelProps) {
   )
 }
 
-export { Root, Section, SectionHeader, SectionPanel }
+const Accordion = { Root, Section, SectionHeader, SectionPanel }
+export { Accordion }

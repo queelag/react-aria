@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/react'
 import { Chance } from 'chance'
 import React from 'react'
-import * as Breadcrumb from '../src/components/Breadcrumb'
+import { Breadcrumb } from '../src/components/Breadcrumb'
 
 const links: string[] = new Array(5).fill(0).map(() => Chance().sentence({ words: 2 }))
 

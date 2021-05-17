@@ -4,7 +4,7 @@ import ComponentStore from '../modules/component.store'
 import Logger from '../modules/logger'
 import rc from '../modules/rc'
 
-class CarouselStore extends ComponentStore<HTMLElement> {
+class CarouselStore extends ComponentStore {
   activeSlideIndex: number
   automaticRotationDuration: number
   automaticRotationInterval: number
@@ -15,7 +15,6 @@ class CarouselStore extends ComponentStore<HTMLElement> {
   slideElementRefs: Map<number, MutableRefObject<HTMLDivElement>>
 
   constructor(
-    ref: MutableRefObject<HTMLElement>,
     update: () => void,
     id?: string,
     activeSlideIndex: number = 0,
@@ -23,7 +22,7 @@ class CarouselStore extends ComponentStore<HTMLElement> {
     live: CarouselLive = CarouselLive.OFF,
     rotationMode: CarouselRotationMode = CarouselRotationMode.INFINITE
   ) {
-    super(ComponentName.CAROUSEL, ref, update, id)
+    super(ComponentName.CAROUSEL, update, id)
 
     this.activeSlideIndex = activeSlideIndex
     this.automaticRotationDuration = automaticRotationDuration

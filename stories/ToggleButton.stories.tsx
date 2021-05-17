@@ -1,7 +1,7 @@
 import { VolumeMuteRounded, VolumeUpRounded } from '@material-ui/icons'
 import { Meta } from '@storybook/react'
 import React, { useState } from 'react'
-import * as ToggleButton from '../src/components/ToggleButton'
+import { ToggleButton } from '../src/components/ToggleButton'
 import ArrayUtils from '../src/utils/array.utils'
 
 export const Raw = () => {

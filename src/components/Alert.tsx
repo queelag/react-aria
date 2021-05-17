@@ -11,4 +11,5 @@ function Root(props: AlertProps) {
   return <div {...props} id={id} role='alert' />
 }
 
-export { Root }
+const Alert = { Root }
+export { Alert }

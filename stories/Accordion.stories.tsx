@@ -3,7 +3,7 @@ import { Meta } from '@storybook/react'
 import Chance from 'chance'
 import { motion } from 'framer-motion'
 import React, { Fragment } from 'react'
-import * as Accordion from '../src/components/Accordion'
+import { Accordion } from '../src/components/Accordion'
 import { AccordionChildrenProps, AccordionSectionChildrenProps } from '../src/definitions/props'
 
 const sections: { description: string; title: string }[] = new Array(3).fill(0).map((v) => ({

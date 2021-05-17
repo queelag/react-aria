@@ -1,10 +1,10 @@
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
-import ComponentStore from '../modules/component.store'
+import ComponentRefStore from '../modules/component.ref.store'
 import Logger from '../modules/logger'
 import DOMUtils from '../utils/dom.utils'
 
-class FocusTrapStore extends ComponentStore {
+class FocusTrapStore extends ComponentRefStore {
   focusables: Element[]
   originalFocused: Element
 

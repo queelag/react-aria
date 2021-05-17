@@ -34,8 +34,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
 
 function Root(props: ComboBoxProps) {
   const update = useForceUpdate()
-  const ref = useRef(document.createElement('div'))
-  const store = useMemo(() => new ComboBoxStore(ref, update, props.onCollapse, props.id), [])
+  const store = useMemo(() => new ComboBoxStore(update, props.onCollapse, props.id), [])
   const popper = usePopper(store.groupRef.current, store.listBoxRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -48,13 +47,7 @@ function Root(props: ComboBoxProps) {
   }, [props.onCollapse])
 
   return (
-    <div
-      {...omit(props, 'autocomplete', 'listBoxLabel', 'popperOptions')}
-      id={store.id}
-      onKeyDown={onKeyDown}
-      ref={ref}
-      style={{ ...props.style, position: 'relative' }}
-    >
+    <div {...omit(props, 'autocomplete', 'listBoxLabel', 'popperOptions')} id={store.id} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
       {props.children({
         autocomplete: props.autocomplete,
         deleteListBoxItemRef: store.deleteListBoxItemRef,
@@ -192,4 +185,5 @@ function ListBoxItem(props: ComboBoxListBoxItemProps) {
   )
 }
 
-export { Root, Group, Input, Button, ListBox, ListBoxItem }
+const ComboBox = { Root, Group, Input, Button, ListBox, ListBoxItem }
+export { ComboBox }

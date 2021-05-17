@@ -1,7 +1,7 @@
 import { CheckRounded } from '@material-ui/icons'
 import { Meta } from '@storybook/react'
 import React, { useState } from 'react'
-import * as CheckBox from '../src/components/CheckBox'
+import { CheckBox } from '../src/components/CheckBox'
 import ArrayUtils from '../src/utils/array.utils'
 
 export const Raw = () => {

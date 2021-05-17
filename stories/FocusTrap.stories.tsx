@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import * as FocusTrap from '../src/components/FocusTrap'
+import { FocusTrap } from '../src/components/FocusTrap'
 import { FocusTrapProps } from '../src/definitions/props'
 
 const Template: Story<FocusTrapProps> = (args) => (

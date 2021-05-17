@@ -1,7 +1,9 @@
-import React, { MouseEvent, useMemo } from 'react'
+import { omit } from 'lodash'
+import React, { Fragment, MouseEvent, useMemo } from 'react'
 import { ComponentName, DisclosureStatus } from '../definitions/enums'
 import {
   DisclosureProps,
+  DisclosureSectionChildrenProps,
   DisclosureSectionHeaderButtonProps,
   DisclosureSectionHeaderProps,
   DisclosureSectionPanelProps,
@@ -10,6 +12,8 @@ import {
 import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import DisclosureSectionStore from '../stores/disclosure.section.store'
+
+const DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS: (keyof DisclosureSectionChildrenProps)[] = ['panelID', 'setStatus', 'status']
 
 function Root(props: DisclosureProps) {
   const id = useID(ComponentName.DISCLOSURE, props.id)
@@ -21,7 +25,7 @@ function Section(props: DisclosureSectionProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new DisclosureSectionStore(update), [])
 
-  return <div {...props}>{props.children({ status: store.status, panelID: store.panelID, setStatus: store.setStatus })}</div>
+  return <Fragment>{props.children({ status: store.status, panelID: store.panelID, setStatus: store.setStatus })}</Fragment>
 }
 
 function SectionHeader(props: DisclosureSectionHeaderProps) {
@@ -37,11 +41,19 @@ function SectionHeaderButton(props: DisclosureSectionHeaderButtonProps) {
     props.onClick && props.onClick(event)
   }
 
-  return <button {...props} aria-controls={props.panelID} aria-expanded={props.status === DisclosureStatus.EXPANDED} id={id} onClick={onClick} />
+  return (
+    <button
+      {...omit(props, DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)}
+      aria-controls={props.panelID}
+      aria-expanded={props.status === DisclosureStatus.EXPANDED}
+      id={id}
+      onClick={onClick}
+    />
+  )
 }
 
 function SectionPanel(props: DisclosureSectionPanelProps) {
-  return <dd {...props} id={props.panelID} />
+  return <dd {...omit(props, DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)} id={props.panelID} />
 }
 
 const Disclosure = { Root, Section, SectionHeader, SectionHeaderButton, SectionPanel }

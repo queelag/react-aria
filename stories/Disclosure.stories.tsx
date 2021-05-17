@@ -6,6 +6,7 @@ import React, { Fragment } from 'react'
 import { Disclosure } from '../src/components/Disclosure'
 import { DisclosureStatus } from '../src/definitions/enums'
 import { DisclosureSectionChildrenProps } from '../src/definitions/props'
+import ArrayUtils from '../src/utils/array.utils'
 
 const sections: { description: string; title: string }[] = new Array(6).fill(0).map((v) => ({
   description: Chance().paragraph({ sentences: 1 }),
@@ -15,7 +16,7 @@ const sections: { description: string; title: string }[] = new Array(6).fill(0).
 export const Raw = () => (
   <Disclosure.Root>
     {sections.map((v, k) => (
-      <Disclosure.Section>
+      <Disclosure.Section key={k}>
         {(props: DisclosureSectionChildrenProps) => (
           <Fragment>
             <Disclosure.SectionHeader {...props}>
@@ -30,13 +31,20 @@ export const Raw = () => (
 )
 
 export const Styled = () => (
-  <Disclosure.Root className='flex flex-col rounded-md bg-white border border-gray-200 divide-y divide-gray-200'>
+  <Disclosure.Root className='flex flex-col rounded-md bg-white border border-gray-200'>
     {sections.map((v, k) => (
       <Disclosure.Section key={k}>
         {(props: DisclosureSectionChildrenProps) => (
           <Fragment>
-            <Disclosure.SectionHeader {...props}>
-              <Disclosure.SectionHeaderButton {...props} className='w-full flex justify-between items-center p-6 space-x-6 focus:bg-gray-50'>
+            <Disclosure.SectionHeader>
+              <Disclosure.SectionHeaderButton
+                {...props}
+                className={ArrayUtils.joinStrings(
+                  'w-full flex justify-between items-center p-6 space-x-6 transition-all duration-200',
+                  'hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-50',
+                  k > 0 && 'border-t border-gray-200'
+                )}
+              >
                 <span className='font-medium'>{v.title}</span>
                 <motion.div animate={{ rotate: props.status === DisclosureStatus.EXPANDED ? 180 : 0 }}>
                   <KeyboardArrowDownRounded />
@@ -46,7 +54,7 @@ export const Styled = () => (
             <Disclosure.SectionPanel {...props}>
               <motion.div
                 animate={{ height: props.status === DisclosureStatus.EXPANDED ? 'auto' : 0 }}
-                className='overflow-hidden bg-gray-100'
+                className='overflow-hidden bg-gray-50'
                 initial={{ height: 0 }}
                 transition={{ type: 'linear' }}
               >

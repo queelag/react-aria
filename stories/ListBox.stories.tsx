@@ -44,7 +44,7 @@ const RawTemplate: Story<ListBoxProps> = (args) => {
 }
 
 export const Raw = RawTemplate.bind({})
-Raw.args = { collapsable: false, selectMode: ListBoxSelectMode.MULTIPLE }
+Raw.args = { collapsable: false, selectMode: ListBoxSelectMode.SINGLE }
 
 const StyledTemplate: Story<ListBoxProps> = (args) => {
   const [value, setValue] = useState<string>('')
@@ -69,6 +69,7 @@ const StyledTemplate: Story<ListBoxProps> = (args) => {
             {...props}
             className={ArrayUtils.joinStrings(
               'w-full border border-gray-200 rounded-md divide-y divide-gray-200 outline-none transition-all duration-200',
+              'focus:ring-2 ring-offset-2 ring-blue-400',
               props.collapsable && !props.expanded && 'opacity-0 pointer-events-none'
             )}
           >
@@ -96,7 +97,7 @@ const StyledTemplate: Story<ListBoxProps> = (args) => {
 }
 
 export const Styled = StyledTemplate.bind({})
-Styled.args = { collapsable: true, selectMode: ListBoxSelectMode.MULTIPLE }
+Styled.args = { collapsable: false, selectMode: ListBoxSelectMode.SINGLE }
 
 export default {
   component: ListBox.Root,

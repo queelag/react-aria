@@ -142,8 +142,15 @@ class ListBoxStore extends ComponentStore {
     this.expanded = expanded
     Logger.debug(id, context, `The list box has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
-    this.isExpanded && this.listRef.current.focus()
-    Logger.debug(this.id, 'setExpanded', `The list has been focused.`)
+    if (this.isCollapsed) {
+      this.buttonRef.current.focus()
+      Logger.debug(id, context, `The button has been focused.`)
+    }
+
+    if (this.isExpanded) {
+      this.listRef.current.focus()
+      Logger.debug(id, context, `The list has been focused.`)
+    }
 
     this.update()
   }

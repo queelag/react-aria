@@ -63,6 +63,11 @@ function Button(props: ListBoxButtonProps) {
     props.onClick && props.onClick(event)
   }
 
+  const onMouseDown = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    props.onMouseDown && props.onMouseDown(event)
+  }
+
   useEffect(() => props.setButtonRef(ref), [])
 
   return (
@@ -72,6 +77,7 @@ function Button(props: ListBoxButtonProps) {
       aria-haspopup={props.collapsable ? 'listbox' : undefined}
       id={id}
       onClick={onClick}
+      onMouseDown={onMouseDown}
       ref={ref}
       type='button'
     />

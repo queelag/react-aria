@@ -46,12 +46,21 @@ export enum ComponentName {
   DISCLOSURE_SECTION_HEADER_BUTTON = 'DISCLOSURE_SECTION_HEADER_BUTTON',
   DISCLOSURE_SECTION_PANEL = 'DISCLOSURE_SECTION_PANEL',
   FOCUS_TRAP = 'FOCUS_TRAP',
+  LIST_BOX = 'LIST_BOX',
+  LIST_BOX_BUTTON = 'LIST_BOX_BUTTON',
+  LIST_BOX_LIST = 'LIST_BOX_LIST',
+  LIST_BOX_LIST_ITEM = 'LIST_BOX_LIST_ITEM',
   TOGGLE_BUTTON = 'TOGGLE_BUTTON'
 }
 
 export enum DisclosureStatus {
   COLLAPSED = 'COLLAPSED',
   EXPANDED = 'EXPANDED'
+}
+
+export enum ListBoxSelectMode {
+  MULTIPLE = 'MULTIPLE',
+  SINGLE = 'SINGLE'
 }
 
 export enum LoggerLevel {
@@ -62,6 +71,7 @@ export enum LoggerLevel {
 }
 
 export enum Key {
+  A = 'a',
   ARROW_DOWN = 'ArrowDown',
   ARROW_UP = 'ArrowUp',
   END = 'End',

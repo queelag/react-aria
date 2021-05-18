@@ -1,5 +1,5 @@
 import { MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
-import { CarouselLive, CarouselRotationMode, DisclosureStatus } from './enums'
+import { CarouselLive, CarouselRotationMode, DisclosureStatus, ListBoxSelectMode } from './enums'
 import { ID, PopperData, PopperOptions } from './types'
 
 export type AccordionProps = {
@@ -269,6 +269,39 @@ export type FocusTrapProps = {
    */
   restoreFocus?: boolean
 } & Omit<HTMLDivProps, 'ref'>
+
+export type ListBoxProps = {
+  children: (props: ListBoxChildrenProps) => ReactNode
+  collapsable?: boolean
+  popperOptions?: PopperOptions<any>
+  selectMode?: ListBoxSelectMode
+} & Omit<HTMLDivProps, 'children'>
+
+export type ListBoxChildrenProps = {
+  collapsable?: boolean
+  deleteListItemRef: (index: number) => void
+  expanded: boolean
+  focusedListItemID: ID
+  isListItemFocused: (index: number) => boolean
+  isListItemSelected: (index: number) => boolean
+  popper: PopperData
+  selectMode: ListBoxSelectMode
+  setButtonRef: (ref: MutableRefObject<HTMLButtonElement>) => void
+  setExpanded: (expanded: boolean, id: ID, context: string) => void
+  setListItemRef: (index: number, ref: MutableRefObject<HTMLLIElement>) => void
+  setListRef: (ref: MutableRefObject<HTMLUListElement>) => void
+  setFocusedListItemIndex: (index: number) => void
+  setSelectedListItemIndex: (selected: boolean, index: number) => void
+}
+
+export type ListBoxButtonProps = Pick<ListBoxChildrenProps, 'collapsable' | 'expanded' | 'setButtonRef' | 'setExpanded'> & HTMLButtonProps
+export type ListBoxListProps = Pick<ListBoxChildrenProps, 'collapsable' | 'focusedListItemID' | 'popper' | 'selectMode' | 'setExpanded' | 'setListRef'> &
+  HTMLUListProps
+
+export type ListBoxListItemProps = {
+  index: number
+} & Pick<ListBoxChildrenProps, 'deleteListItemRef' | 'isListItemSelected' | 'setFocusedListItemIndex' | 'setListItemRef' | 'setSelectedListItemIndex'> &
+  HTMLLIProps
 
 export type HTMLAnchorProps = React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
 export type HTMLButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>

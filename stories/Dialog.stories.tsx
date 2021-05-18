@@ -2,9 +2,9 @@ import { Meta } from '@storybook/react'
 import { Chance } from 'chance'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { Fragment, useState } from 'react'
-import { AlertDialog } from '../src/components/AlertDialog'
+import { Dialog } from '../src/components/Dialog'
 import { FocusTrap } from '../src/components/FocusTrap'
-import { AlertDialogChildrenProps } from '../src/definitions/props'
+import { DialogChildrenProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 
 export const Raw = () => {
@@ -17,16 +17,16 @@ export const Raw = () => {
   return (
     <Fragment>
       <button className='border border-black focus:ring-2' onClick={onClick} type='button'>
-        Show Alert Dialog
+        Show Dialog
       </button>
       {visible && (
-        <AlertDialog.Root className='bg-black bg-opacity-50' onClose={onClick} hasDescription hasTitle>
-          {(props: AlertDialogChildrenProps) => (
+        <Dialog.Root className='bg-black bg-opacity-50' onClose={onClick} hasDescription hasTitle>
+          {(props: DialogChildrenProps) => (
             <FocusTrap.Root className='w-64 flex flex-col bg-white'>
-              <AlertDialog.Title {...props} className='font-bold'>
+              <Dialog.Title {...props} className='font-bold'>
                 {Chance().sentence({ words: 2 })}
-              </AlertDialog.Title>
-              <AlertDialog.Description {...props}>{Chance().paragraph({ sentences: 1 })}</AlertDialog.Description>
+              </Dialog.Title>
+              <Dialog.Description {...props}>{Chance().paragraph({ sentences: 1 })}</Dialog.Description>
               <div className='flex justify-end'>
                 <button className='border border-black focus:ring-2' onClick={onClick} type='button'>
                   No
@@ -37,7 +37,7 @@ export const Raw = () => {
               </div>
             </FocusTrap.Root>
           )}
-        </AlertDialog.Root>
+        </Dialog.Root>
       )}
     </Fragment>
   )
@@ -61,12 +61,12 @@ export const Styled = () => {
         onClick={onClick}
         type='button'
       >
-        Show Alert Dialog
+        Show Dialog
       </button>
       <AnimatePresence>
         {visible && (
-          <AlertDialog.Root onClose={onClick} hasDescription hasTitle>
-            {(props: AlertDialogChildrenProps) => (
+          <Dialog.Root onClose={onClick} hasDescription hasTitle>
+            {(props: DialogChildrenProps) => (
               <FocusTrap.Root autoFocus restoreFocus>
                 <motion.div animate={{ opacity: 0.5 }} className='absolute inset-0 bg-black' exit={{ opacity: 0 }} initial={{ opacity: 0 }} />
                 <div className='absolute inset-0 flex justify-center items-start py-16 z-10'>
@@ -77,12 +77,12 @@ export const Styled = () => {
                     initial={{ opacity: 0, scale: 0.5 }}
                   >
                     <div className='flex flex-col'>
-                      <AlertDialog.Title {...props} className='font-medium text-lg'>
+                      <Dialog.Title {...props} className='font-medium text-lg'>
                         {Chance().sentence({ words: 2 })}
-                      </AlertDialog.Title>
-                      <AlertDialog.Description {...props} className='text-sm'>
+                      </Dialog.Title>
+                      <Dialog.Description {...props} className='text-sm'>
                         {Chance().paragraph({ sentences: 1 })}
-                      </AlertDialog.Description>
+                      </Dialog.Description>
                     </div>
                     <div className='flex justify-end space-x-3'>
                       <button
@@ -112,7 +112,7 @@ export const Styled = () => {
                 </div>
               </FocusTrap.Root>
             )}
-          </AlertDialog.Root>
+          </Dialog.Root>
         )}
       </AnimatePresence>
     </Fragment>
@@ -120,7 +120,7 @@ export const Styled = () => {
 }
 
 export default {
-  component: AlertDialog.Root,
-  subcomponents: { Title: AlertDialog.Title, Description: AlertDialog.Description },
-  title: 'Components/AlertDialog'
+  component: Dialog.Root,
+  subcomponents: { Title: Dialog.Title, Description: Dialog.Description },
+  title: 'Components/Dialog'
 } as Meta

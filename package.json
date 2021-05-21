@@ -52,7 +52,7 @@
   },
   "scripts": {
     "build": "rm -rf declarations && rm -rf dist && yarn tsc && yarn dts",
-    "test": "yarn jest",
+    "test": "yarn jest --coverage",
     "dts": "yarn api-extractor run --local",
     "tarball": "yarn version && cp package.json dist/. && cd dist && yarn pack",
     "deploy": "yarn test && MODE=PRODUCTION yarn build && yarn tarball && yarn publish dist/*.tgz --access public && git push",

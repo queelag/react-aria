@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { AlertDialog } from '../../src/components/AlertDialog'
+import { Dialog } from '../../src/components/Dialog'
 import { FocusTrap } from '../../src/components/FocusTrap'
 import { ComponentName, Key, LoggerLevel } from '../../src/definitions/enums'
-import { AlertDialogChildrenProps } from '../../src/definitions/props'
+import { DialogChildrenProps } from '../../src/definitions/props'
 import Logger from '../../src/modules/logger'
 
-describe('AlertDialog', () => {
+describe('Dialog', () => {
   let onClose: () => void, root: HTMLElement, description: HTMLElement, title: HTMLElement, buttons: [HTMLElement, HTMLElement]
 
   beforeAll(() => {
@@ -17,15 +17,15 @@ describe('AlertDialog', () => {
   beforeEach(() => {
     onClose = jest.fn(() => null)
     render(
-      <AlertDialog.Root data-testid={ComponentName.ALERT_DIALOG} onClose={onClose} hasDescription hasTitle>
-        {(props: AlertDialogChildrenProps) => (
+      <Dialog.Root data-testid={ComponentName.DIALOG} onClose={onClose} hasDescription hasTitle>
+        {(props: DialogChildrenProps) => (
           <FocusTrap.Root autoFocus>
-            <AlertDialog.Title {...props} data-testid={ComponentName.ALERT_DIALOG_TITLE}>
+            <Dialog.Title {...props} data-testid={ComponentName.DIALOG_TITLE}>
               Title
-            </AlertDialog.Title>
-            <AlertDialog.Description {...props} data-testid={ComponentName.ALERT_DIALOG_DESCRIPTION}>
+            </Dialog.Title>
+            <Dialog.Description {...props} data-testid={ComponentName.DIALOG_DESCRIPTION}>
               Description
-            </AlertDialog.Description>
+            </Dialog.Description>
             <button onClick={onClose} type='button'>
               No
             </button>
@@ -34,16 +34,16 @@ describe('AlertDialog', () => {
             </button>
           </FocusTrap.Root>
         )}
-      </AlertDialog.Root>
+      </Dialog.Root>
     )
-    root = screen.getByTestId(ComponentName.ALERT_DIALOG)
-    description = screen.getByTestId(ComponentName.ALERT_DIALOG_DESCRIPTION)
-    title = screen.getByTestId(ComponentName.ALERT_DIALOG_TITLE)
+    root = screen.getByTestId(ComponentName.DIALOG)
+    description = screen.getByTestId(ComponentName.DIALOG_DESCRIPTION)
+    title = screen.getByTestId(ComponentName.DIALOG_TITLE)
     buttons = [screen.getByText('No'), screen.getByText('Yes')]
   })
 
-  it('has the alertdialog role', () => {
-    expect(root.getAttribute('role')).toBe('alertdialog')
+  it('has the dialog role', () => {
+    expect(root.getAttribute('role')).toBe('dialog')
   })
 
   it('has the correct aria attributes', () => {

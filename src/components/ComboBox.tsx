@@ -103,7 +103,6 @@ function Input(props: ComboBoxInputProps) {
       aria-autocomplete={props.autocomplete ? 'list' : 'none'}
       aria-controls={props.listBoxID}
       aria-expanded={props.expanded}
-      aria-haspopup='true'
       id={id}
       onBlur={onBlur}
       onChange={onChange}
@@ -111,6 +110,7 @@ function Input(props: ComboBoxInputProps) {
       ref={ref}
       role='combobox'
       type='text'
+      aria-haspopup
     />
   )
 }

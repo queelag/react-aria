@@ -1,12 +1,12 @@
-import { render, RenderResult, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { Chance } from 'chance'
 import React from 'react'
-import * as Breadcrumb from '../../src/components/Breadcrumb'
+import { Breadcrumb } from '../../src/components/Breadcrumb'
 import { ComponentName, LoggerLevel } from '../../src/definitions/enums'
 import Logger from '../../src/modules/logger'
 
 describe('Breadcrumb', () => {
-  let links: string[], body: RenderResult, root: HTMLElement, listItemLinks: HTMLElement[]
+  let links: string[], root: HTMLElement, listItemLinks: HTMLElement[]
 
   beforeAll(() => {
     Logger.level = LoggerLevel.ERROR
@@ -14,7 +14,7 @@ describe('Breadcrumb', () => {
 
   beforeEach(() => {
     links = new Array(5).fill(0).map(() => Chance().sentence({ words: 2 }))
-    body = render(
+    render(
       <Breadcrumb.Root data-testid={ComponentName.BREADCRUMB}>
         <Breadcrumb.List data-testid={ComponentName.BREADCRUMB_LIST}>
           {links.map((v: string, k: number) => (

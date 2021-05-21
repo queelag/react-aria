@@ -1,7 +1,7 @@
-import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React, { useState } from 'react'
-import * as FocusTrap from '../../src/components/FocusTrap'
+import { FocusTrap } from '../../src/components/FocusTrap'
 import { LoggerLevel } from '../../src/definitions/enums'
 import Logger from '../../src/modules/logger'
 
@@ -23,14 +23,14 @@ function Component() {
 }
 
 describe('FocusTrap', () => {
-  let body: RenderResult, button: HTMLElement
+  let button: HTMLElement
 
   beforeAll(() => {
     Logger.level = LoggerLevel.ERROR
   })
 
   beforeEach(() => {
-    body = render(<Component />)
+    render(<Component />)
     button = screen.getByTestId('BUTTON_1')
   })
 

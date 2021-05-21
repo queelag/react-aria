@@ -1,7 +1,7 @@
-import { cleanup, fireEvent, render, RenderResult, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { Chance } from 'chance'
 import React, { Fragment } from 'react'
-import * as Accordion from '../../src/components/Accordion'
+import { Accordion } from '../../src/components/Accordion'
 import { ComponentName, Key, LoggerLevel } from '../../src/definitions/enums'
 import { AccordionChildrenProps, AccordionSectionChildrenProps } from '../../src/definitions/props'
 import Logger from '../../src/modules/logger'
@@ -14,13 +14,7 @@ type Section = {
 }
 
 describe('Accordion', () => {
-  let dummies: Section[],
-    renderComponent: Function,
-    body: RenderResult,
-    root: HTMLElement,
-    sections: HTMLElement[],
-    sectionHeaders: HTMLElement[],
-    sectionPanels: HTMLElement[]
+  let dummies: Section[], renderComponent: Function, root: HTMLElement, sections: HTMLElement[], sectionHeaders: HTMLElement[], sectionPanels: HTMLElement[]
 
   beforeAll(() => {
     renderComponent = () =>
@@ -51,7 +45,7 @@ describe('Accordion', () => {
 
   beforeEach(() => {
     dummies = new Array(3).fill(0).map(() => ({ header: Chance().sentence(), panel: Chance().paragraph() }))
-    body = renderComponent()
+    renderComponent()
     root = screen.getByTestId(ComponentName.ACCORDION)
     sections = screen.getAllByTestId(ComponentName.ACCORDION_SECTION)
     sectionHeaders = screen.getAllByTestId(ComponentName.ACCORDION_SECTION_HEADER)

@@ -1,5 +1,5 @@
 import { omit } from 'lodash'
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { FocusEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { CarouselLive, ComponentName } from '../definitions/enums'
 import {
   CarouselButtonLiveProps,
@@ -37,6 +37,26 @@ function Root(props: CarouselProps) {
   const store = useMemo(() => new CarouselStore(update, props.id, props.activeSlideIndex, props.automaticRotationDuration, props.live), [])
   const slidesID = useID(ComponentName.CAROUSEL_SLIDES)
 
+  const onBlur = (event: FocusEvent<HTMLDivElement>) => {
+    store.handleBlurEvent()
+    props.onBlur && props.onBlur(event)
+  }
+
+  const onFocus = (event: FocusEvent<HTMLDivElement>) => {
+    store.handleFocusEvent()
+    props.onFocus && props.onFocus(event)
+  }
+
+  const onMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
+    store.handleFocusEvent()
+    props.onMouseEnter && props.onMouseEnter(event)
+  }
+
+  const onMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
+    store.handleBlurEvent()
+    props.onMouseLeave && props.onMouseLeave(event)
+  }
+
   useEffect(() => {
     StoreUtils.updateFromProps(store, props, update, 'activeSlideIndex')
   }, [props.activeSlideIndex])
@@ -50,14 +70,14 @@ function Root(props: CarouselProps) {
 
   return (
     <section
-      {...omit(props, 'activeSlideIndex', 'automaticRotationDuration', 'label', 'live')}
+      {...omit(props, 'activeSlideIndex', 'automaticRotationDuration', 'label', 'live', 'rotationMode')}
       aria-label={props.label}
       aria-roledescription='carousel'
       id={store.id}
-      onBlur={store.onBlurOrMouseLeave}
-      onFocus={store.onFocusOrMouseEnter}
-      onMouseEnter={store.onFocusOrMouseEnter}
-      onMouseLeave={store.onBlurOrMouseLeave}
+      onBlur={onBlur}
+      onFocus={onFocus}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {props.children({
         activeSlideIndex: store.activeSlideIndex,
@@ -114,14 +134,17 @@ function ButtonLive(props: CarouselButtonLiveProps) {
     }
   }
 
-  const onClick = () => {
+  const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     switch (props.live) {
       case CarouselLive.ASSERTIVE:
       case CarouselLive.POLITE:
-        return props.setLive(CarouselLive.OFF)
+        props.setLive(CarouselLive.OFF)
+        break
       case CarouselLive.OFF:
-        return props.setLive(CarouselLive.POLITE)
+        props.setLive(CarouselLive.POLITE)
+        break
     }
+    props.onClick && props.onClick(event)
   }
 
   return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label={findLabelByLive()} id={id} onClick={onClick} type='button' />
@@ -130,31 +153,25 @@ function ButtonLive(props: CarouselButtonLiveProps) {
 function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
   const id = useID(ComponentName.CAROUSEL_BUTTON_PREVIOUS_SLIDE, props.id)
 
+  const onClick = (event: MouseEvent<HTMLButtonElement>) => {
+    props.gotoPreviousSlide()
+    props.onClick && props.onClick(event)
+  }
+
   return (
-    <button
-      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
-      aria-controls={props.slidesID}
-      aria-label='Previous Slide'
-      id={id}
-      onClick={props.gotoPreviousSlide}
-      type='button'
-    />
+    <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-controls={props.slidesID} aria-label='Previous Slide' id={id} onClick={onClick} type='button' />
   )
 }
 
 function ButtonNextSlide(props: CarouselButtonNextProps) {
   const id = useID(ComponentName.CAROUSEL_BUTTON_NEXT_SLIDE, props.id)
 
-  return (
-    <button
-      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
-      aria-controls={props.slidesID}
-      aria-label='Next Slide'
-      id={id}
-      onClick={props.gotoNextSlide}
-      type='button'
-    />
-  )
+  const onClick = (event: MouseEvent<HTMLButtonElement>) => {
+    props.gotoNextSlide()
+    props.onClick && props.onClick(event)
+  }
+
+  return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-controls={props.slidesID} aria-label='Next Slide' id={id} onClick={onClick} type='button' />
 }
 
 const Carousel = { Root, Slides, Slide, ButtonLive, ButtonPreviousSlide, ButtonNextSlide }

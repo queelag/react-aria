@@ -186,7 +186,7 @@ export type ComboBoxProps = {
   listBoxLabel: string
   onCollapse: () => any
   onEscape: () => any
-  popperOptions: PopperOptions<unknown>
+  popperOptions?: PopperOptions<unknown>
 } & Omit<HTMLDivProps, 'children'>
 
 export type ComboBoxChildrenProps = {

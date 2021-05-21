@@ -3,6 +3,7 @@ import React, { KeyboardEvent, useRef } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { CheckBoxProps } from '../definitions/props'
 import useID from '../hooks/use.id'
+import Logger from '../modules/logger'
 
 function Root(props: CheckBoxProps) {
   const id = useID(ComponentName.CHECK_BOX, props.id)
@@ -12,6 +13,8 @@ function Root(props: CheckBoxProps) {
     switch (event.key) {
       case Key.SPACE:
         ref.current.click()
+        Logger.debug(id, 'handleKeyboardInteractions', `The click event has been triggered.`)
+
         break
     }
   }

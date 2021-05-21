@@ -35,14 +35,14 @@ class CarouselStore extends ComponentStore {
     this.toggleAutomaticRotation()
   }
 
-  onFocusOrMouseEnter = (): void => {
+  handleFocusEvent = (): void => {
     switch (this.live) {
       case CarouselLive.ASSERTIVE:
       case CarouselLive.POLITE:
-        return Logger.debug(this.id, 'onFocusOrMouseEnter', `The live is already set to ${this.live}.`)
+        return Logger.debug(this.id, 'handleFocusEvent', `The live is already set to ${this.live}.`)
       case CarouselLive.OFF:
         this.liveTemporary = CarouselLive.POLITE
-        Logger.debug(this.id, 'onFocusOrMouseEnter', `The temporary live has been set to polite.`)
+        Logger.debug(this.id, 'handleFocusEvent', `The temporary live has been set to polite.`)
 
         this.disableAutomaticRotation()
         this.update()
@@ -51,13 +51,13 @@ class CarouselStore extends ComponentStore {
     }
   }
 
-  onBlurOrMouseLeave = (): void => {
+  handleBlurEvent = (): void => {
     if (this.isLiveOff) {
       this.enableAutomaticRotation()
     }
 
     this.liveTemporary = undefined
-    Logger.debug(this.id, 'onFocusOrMouseEnter', `The temporary live has been unset.`)
+    Logger.debug(this.id, 'handleBlurEvent', `The temporary live has been unset.`)
 
     this.update()
   }

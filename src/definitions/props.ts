@@ -320,6 +320,7 @@ export type HTMLUListProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLUL
 export type MenuProps = {
   autoOpen?: boolean
   children: (props: MenuChildrenProps) => ReactNode
+  itemMenuHideDelay?: number
   label: string
 } & Omit<HTMLUListProps, 'children'>
 
@@ -421,6 +422,49 @@ export type MenuButtonListItemAnchorProps = {
 } & Pick<MenuButtonChildrenProps, 'deleteListItemAnchorRef' | 'setExpanded' | 'setListItemAnchorRef'> &
   HTMLAnchorProps
 
+export type MeterProps = {
+  maximum: number
+  minimum: number
+  value: number
+}
+
+export type RadioGroupProps = {
+  children: (props: RadioGroupChildrenProps) => ReactNode
+} & Omit<HTMLDivProps, 'children'>
+
+export type RadioGroupChildrenProps = {
+  checkedItemIndex: number
+  deleteItemRef: (index: number) => void
+  isItemChecked: (index: number) => boolean
+  setItemRef: (index: number, ref: MutableRefObject<HTMLDivElement>) => void
+  setCheckedItemIndex: (index: number) => void
+}
+
+export type RadioGroupItemProps = {
+  index: number
+} & RadioGroupChildrenProps &
+  HTMLDivProps
+
 export type ToggleButtonProps = {
   isToggled: boolean
 } & HTMLButtonProps
+
+export type TooltipProps = {
+  children: (props: TooltipChildrenProps) => ReactNode
+  hideDelay?: number
+  popperOptions?: PopperOptions<any>
+} & Omit<HTMLDivProps, 'children'>
+
+export type TooltipChildrenProps = {
+  elementID: ID
+  hideDelay: number
+  popper: PopperData
+  rootID: ID
+  setElementRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  setTriggerRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  setVisible: (visible: boolean) => void
+  visible: boolean
+}
+
+export type TooltipElementProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'rootID' | 'setElementRef' | 'popper' | 'setVisible'> & Omit<HTMLDivProps, 'id'>
+export type TooltipTriggerProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'hideDelay' | 'rootID' | 'setTriggerRef' | 'setVisible'> & HTMLDivProps

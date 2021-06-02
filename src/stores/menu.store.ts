@@ -2,14 +2,13 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { ID } from '../definitions/types'
 import ComponentStore from '../modules/component.store'
-import Debounce from '../modules/debounce'
 import Logger from '../modules/logger'
-import noop from '../modules/noop'
 
 class MenuStore extends ComponentStore {
   expandedItemIndex: number
   focusedItemIndex: number
   itemAnchorsRef: Map<number, MutableRefObject<HTMLAnchorElement>>
+  itemMenuHideDelay: number
   itemMenusRef: Map<ID, MutableRefObject<HTMLUListElement>>
   itemMenuItemAnchorsRef: Map<number, Map<number, MutableRefObject<HTMLAnchorElement>>>
 
@@ -19,12 +18,24 @@ class MenuStore extends ComponentStore {
     this.expandedItemIndex = -1
     this.focusedItemIndex = 0
     this.itemAnchorsRef = new Map()
+    this.itemMenuHideDelay = 200
     this.itemMenusRef = new Map()
     this.itemMenuItemAnchorsRef = new Map()
   }
 
   handleKeyboardInteractions(event: KeyboardEvent): void {
     let previous: MutableRefObject<HTMLAnchorElement>, next: MutableRefObject<HTMLAnchorElement>, first: MutableRefObject<HTMLAnchorElement>
+
+    switch (event.key) {
+      case Key.ARROW_DOWN:
+      case Key.ARROW_LEFT:
+      case Key.ARROW_RIGHT:
+      case Key.ARROW_UP:
+        event.preventDefault()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented.`)
+
+        break
+    }
 
     switch (event.key) {
       case Key.ARROW_DOWN:
@@ -184,23 +195,10 @@ class MenuStore extends ComponentStore {
   }
 
   setExpandedItemIndex = (index: number, delay: number = 1000): void => {
-    let fn: () => void
+    this.expandedItemIndex = index
+    Logger.debug(this.id, 'setExpandedItemIndex', `The expanded item index has been set to ${index}.`)
 
-    fn = () => {
-      this.expandedItemIndex = index
-      Logger.debug(this.id, 'setExpandedItemIndex', `The expanded item index has been set to ${index}.`)
-
-      this.update()
-    }
-
-    if (index < 0) {
-      Debounce.handle(this.id, fn, delay)
-    }
-
-    if (index >= 0) {
-      Debounce.handle(this.id, noop, 0)
-      fn()
-    }
+    this.update()
   }
 
   setFocusedItemIndex = (index: number): void => {

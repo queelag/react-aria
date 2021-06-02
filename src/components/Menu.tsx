@@ -54,7 +54,7 @@ function Root(props: MenuProps) {
   const store = useMemo(() => new MenuStore(update, props.id), [])
 
   const onBlur = (event: FocusEvent<HTMLUListElement>) => {
-    store.setExpandedItemIndex(-1)
+    Debounce.handle(store.id, () => store.setExpandedItemIndex(-1), store.itemMenuHideDelay)
     props.onBlur && props.onBlur(event)
   }
 
@@ -74,13 +74,13 @@ function Root(props: MenuProps) {
   }
 
   const onMouseLeave = (event: MouseEvent<HTMLUListElement>) => {
-    store.setExpandedItemIndex(-1)
+    Debounce.handle(store.id, () => store.setExpandedItemIndex(-1), store.itemMenuHideDelay)
     props.onMouseLeave && props.onMouseLeave(event)
   }
 
   return (
     <ul
-      {...omit(props, 'label')}
+      {...omit(props, 'itemMenuHideDelay', 'label')}
       aria-label={props.label}
       id={store.id}
       onBlur={onBlur}

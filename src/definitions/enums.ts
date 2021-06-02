@@ -50,6 +50,12 @@ export enum ComponentName {
   LIST_BOX_BUTTON = 'LIST_BOX_BUTTON',
   LIST_BOX_LIST = 'LIST_BOX_LIST',
   LIST_BOX_LIST_ITEM = 'LIST_BOX_LIST_ITEM',
+  MENU = 'MENU',
+  MENU_ITEM = 'MENU_ITEM',
+  MENU_ITEM_ANCHOR = 'MENU_ITEM_ANCHOR',
+  MENU_ITEM_MENU = 'MENU_ITEM_MENU',
+  MENU_ITEM_MENU_ITEM = 'MENU_ITEM_MENU_ITEM',
+  MENU_ITEM_MENU_ITEM_ANCHOR = 'MENU_ITEM_MENU_ITEM_ANCHOR',
   TOGGLE_BUTTON = 'TOGGLE_BUTTON'
 }
 
@@ -73,6 +79,8 @@ export enum LoggerLevel {
 export enum Key {
   A = 'a',
   ARROW_DOWN = 'ArrowDown',
+  ARROW_LEFT = 'ArrowLeft',
+  ARROW_RIGHT = 'ArrowRight',
   ARROW_UP = 'ArrowUp',
   END = 'End',
   ENTER = 'Enter',

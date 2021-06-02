@@ -317,6 +317,83 @@ export type HTMLOListProps = React.DetailedHTMLProps<React.OlHTMLAttributes<HTML
 export type HTMLSpanProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
 export type HTMLUListProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>
 
+export type MenuProps = {
+  autoOpen?: boolean
+  children: (props: MenuChildrenProps) => ReactNode
+  label: string
+} & Omit<HTMLUListProps, 'children'>
+
+export type MenuChildrenProps = {
+  deleteItemAnchorRef: (index: number) => void
+  deleteItemMenuRef: (id: ID) => void
+  deleteItemMenuItemAnchorRef: (parentIndex: number, index: number) => void
+  findItemMenuRef: (id: ID) => MutableRefObject<HTMLUListElement>
+  expandedItemIndex: number
+  focusItemAnchor: (index: number) => void
+  focusedItemIndex: number
+  isItemExpanded: (index: number) => boolean
+  setExpandedItemIndex: (index: number, delay?: number) => void
+  setFocusedItemIndex: (index: number) => void
+  setItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
+  setItemMenuRef: (id: ID, ref: MutableRefObject<HTMLUListElement>) => void
+  setItemMenuItemAnchorRef: (parentIndex: number, index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
+} & Pick<MenuProps, 'autoOpen'>
+
+export type MenuItemProps = {
+  children: (props: MenuItemChildrenProps) => ReactNode
+  index: number
+  popperOptions?: PopperOptions<any>
+} & MenuChildrenProps &
+  Omit<HTMLLIProps, 'children'>
+
+export type MenuItemChildrenProps = {
+  deleteItemMenuItemAnchorRef: (index: number) => void
+  expanded: boolean
+  parentID: ID
+  parentIndex: number
+  popper: PopperData
+  setItemMenuItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
+} & Pick<
+  MenuChildrenProps,
+  | 'autoOpen'
+  | 'deleteItemAnchorRef'
+  | 'deleteItemMenuRef'
+  | 'expandedItemIndex'
+  | 'focusItemAnchor'
+  | 'focusedItemIndex'
+  | 'setExpandedItemIndex'
+  | 'setItemAnchorRef'
+  | 'setItemMenuRef'
+>
+
+export type MenuItemAnchorProps = {
+  children: string
+} & Pick<
+  MenuItemChildrenProps,
+  | 'autoOpen'
+  | 'deleteItemAnchorRef'
+  | 'expanded'
+  | 'expandedItemIndex'
+  | 'focusItemAnchor'
+  | 'focusedItemIndex'
+  | 'parentIndex'
+  | 'setExpandedItemIndex'
+  | 'setItemAnchorRef'
+> &
+  Omit<HTMLAnchorProps, 'children'>
+
+export type MenuItemMenuProps = {
+  parentID: ID
+} & Pick<MenuItemChildrenProps, 'deleteItemMenuRef' | 'expanded' | 'parentID' | 'popper' | 'setItemMenuRef'> &
+  HTMLUListProps
+
+export type MenuItemMenuItemAnchorProps = {
+  index: number
+} & Pick<MenuItemChildrenProps, 'deleteItemMenuItemAnchorRef' | 'parentIndex' | 'setExpandedItemIndex' | 'setItemMenuItemAnchorRef'> &
+  HTMLAnchorProps
+
+export type MenuItemMenuItemProps = {} & HTMLLIProps
+
 export type ToggleButtonProps = {
   isToggled: boolean
 } & HTMLButtonProps

@@ -392,7 +392,34 @@ export type MenuItemMenuItemAnchorProps = {
 } & Pick<MenuItemChildrenProps, 'deleteItemMenuItemAnchorRef' | 'parentIndex' | 'setExpandedItemIndex' | 'setItemMenuItemAnchorRef'> &
   HTMLAnchorProps
 
-export type MenuItemMenuItemProps = {} & HTMLLIProps
+export type MenuItemMenuItemProps = HTMLLIProps
+
+export type MenuButtonProps = {
+  children: (props: MenuButtonChildrenProps) => ReactNode
+  popperOptions?: PopperOptions<any>
+} & Omit<HTMLDivProps, 'children'>
+
+export type MenuButtonChildrenProps = {
+  buttonID: ID
+  deleteListItemAnchorRef: (index: number) => void
+  expanded: boolean
+  listID: ID
+  popper: PopperData
+  setButtonRef: (ref: MutableRefObject<HTMLButtonElement>) => void
+  setExpanded: (expanded: boolean) => void
+  setListRef: (ref: MutableRefObject<HTMLUListElement>) => void
+  setListItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
+}
+
+export type MenuButtonButtonProps = {} & Pick<MenuButtonChildrenProps, 'buttonID' | 'expanded' | 'listID' | 'setButtonRef' | 'setExpanded'> &
+  Omit<HTMLButtonProps, 'id'>
+export type MenuButtonListProps = {} & Pick<MenuButtonChildrenProps, 'buttonID' | 'listID' | 'popper' | 'setListRef'> & Omit<HTMLUListProps, 'id'>
+export type MenuButtonListItemProps = {} & HTMLLIProps
+
+export type MenuButtonListItemAnchorProps = {
+  index: number
+} & Pick<MenuButtonChildrenProps, 'deleteListItemAnchorRef' | 'setExpanded' | 'setListItemAnchorRef'> &
+  HTMLAnchorProps
 
 export type ToggleButtonProps = {
   isToggled: boolean

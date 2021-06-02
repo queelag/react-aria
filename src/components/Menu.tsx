@@ -22,6 +22,7 @@ const MENU_CHILDREN_PROPS_KEYS: (keyof MenuChildrenProps)[] = [
   'deleteItemAnchorRef',
   'deleteItemMenuRef',
   'deleteItemMenuItemAnchorRef',
+  'expandedItemIndex',
   'findItemMenuRef',
   'focusedItemIndex',
   'isItemExpanded',
@@ -37,6 +38,8 @@ const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
   'deleteItemMenuRef',
   'deleteItemMenuItemAnchorRef',
   'expanded',
+  'expandedItemIndex',
+  'focusItemAnchor',
   'focusedItemIndex',
   'parentID',
   'parentIndex',
@@ -88,7 +91,7 @@ function Root(props: MenuProps) {
       role='menubar'
     >
       {props.children({
-        autoOpen: typeof props.autoOpen === 'boolean' ? props.autoOpen : false,
+        autoOpen: typeof props.autoOpen === 'boolean' ? props.autoOpen : true,
         deleteItemAnchorRef: store.deleteItemAnchorRef,
         deleteItemMenuRef: store.deleteItemMenuRef,
         deleteItemMenuItemAnchorRef: store.deleteItemMenuItemAnchorRef,
@@ -121,7 +124,7 @@ function Item(props: MenuItemProps) {
   }
 
   return (
-    <li {...omit(props, MENU_CHILDREN_PROPS_KEYS)} id={id} ref={ref} role='none' style={{ ...props.style, position: 'relative' }}>
+    <li {...omit(props, MENU_CHILDREN_PROPS_KEYS, 'index', 'popperOptions')} id={id} ref={ref} role='none' style={{ ...props.style, position: 'relative' }}>
       {props.children({
         autoOpen: props.autoOpen,
         deleteItemAnchorRef: props.deleteItemAnchorRef,
@@ -222,7 +225,7 @@ function ItemMenuItemAnchor(props: MenuItemMenuItemAnchorProps) {
     return () => props.deleteItemMenuItemAnchorRef(props.index)
   }, [])
 
-  return <a {...omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS)} id={id} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
+  return <a {...omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS, 'index')} id={id} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
 }
 
 const Menu = { Root, Item, ItemAnchor, ItemMenu, ItemMenuItem, ItemMenuItemAnchor }

@@ -1,4 +1,4 @@
-import { MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
+import { MouseEvent, MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
 import { CarouselLive, CarouselRotationMode, DisclosureStatus, ListBoxSelectMode } from './enums'
 import { ID, PopperData, PopperOptions } from './types'
 
@@ -643,16 +643,28 @@ export type MenuButtonListItemAnchorProps = {
   HTMLAnchorProps
 
 export type MeterProps = {
+  children: (props: MeterChildrenProps) => ReactNode
   /**
-   * The maximum value that the Meter can have, the value will be automatically capped to this.
+   * The maximum value that the Meter can have, the value will be automatically lower or equal to this.
    */
   maximum: number
   /**
-   * The minimum value that the Meter can have, the value will be automatically capped to this.
+   * The minimum value that the Meter can have, the value will be automatically higher or equal to this.
    */
   minimum: number
   /**
    * The current value of the Meter.
+   */
+  value: number
+} & Omit<HTMLDivProps, 'children'>
+
+export type MeterChildrenProps = {
+  /**
+   * The percentual of the current value limited by maximum and minimum.
+   */
+  percentual: number
+  /**
+   * The current value limited by maximum and minimum.
    */
   value: number
 }
@@ -691,6 +703,33 @@ export type RadioGroupItemProps = {
   index: number
 } & RadioGroupChildrenProps &
   HTMLDivProps
+
+export type SliderProps = {
+  children: (props: SliderChildrenProps) => ReactNode
+  /**
+   * The maximum value that the Slider can have, the value will be automatically lower or equal to this.
+   */
+  maximum: number
+  /**
+   * The minimum value that the Slider can have, the value will be automatically higher or equal to this.
+   */
+  minimum: number
+  onChangeValue: (value: number) => any
+  /**
+   * The current value of the Slider.
+   */
+  value: number
+} & Omit<HTMLDivProps, 'children'>
+
+export type SliderChildrenProps = {
+  handleMouseInteractions: (event: MouseEvent<HTMLDivElement>, minimum: number, maximum: number, value: number) => number
+  /**
+   * The current value limited by maximum and minimum.
+   */
+  value: number
+} & Pick<SliderProps, 'maximum' | 'minimum' | 'onChangeValue'>
+
+export type SliderThumbProps = {} & SliderChildrenProps & HTMLDivProps
 
 export type ToggleButtonProps = {
   /**

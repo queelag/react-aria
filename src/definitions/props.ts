@@ -1,4 +1,4 @@
-import { MouseEvent, MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
+import { MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
 import { CarouselLive, CarouselRotationMode, DisclosureStatus, ListBoxSelectMode } from './enums'
 import { ID, PopperData, PopperOptions } from './types'
 
@@ -715,6 +715,7 @@ export type SliderProps = {
    */
   minimum: number
   onChangeValue: (value: number) => any
+  stepSize?: number
   /**
    * The current value of the Slider.
    */
@@ -722,12 +723,12 @@ export type SliderProps = {
 } & Omit<HTMLDivProps, 'children'>
 
 export type SliderChildrenProps = {
-  handleMouseInteractions: (event: MouseEvent<HTMLDivElement>, minimum: number, maximum: number, value: number) => number
+  percentual: number
   /**
    * The current value limited by maximum and minimum.
    */
   value: number
-} & Pick<SliderProps, 'maximum' | 'minimum' | 'onChangeValue'>
+} & Pick<SliderProps, 'maximum' | 'minimum'>
 
 export type SliderThumbProps = {} & SliderChildrenProps & HTMLDivProps
 

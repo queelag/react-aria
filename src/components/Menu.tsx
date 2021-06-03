@@ -49,6 +49,9 @@ const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
   'setItemMenuItemAnchorRef'
 ]
 
+/**
+ * A menu is a widget that offers a list of choices to the user, such as a set of actions or functions. Menu widgets behave like native operating system menus, such as the menus that pull down from the menubars commonly found at the top of many desktop application windows.
+ */
 function Root(props: MenuProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new MenuStore(update, props.id), [])
@@ -228,5 +231,4 @@ function ItemMenuItemAnchor(props: MenuItemMenuItemAnchorProps) {
   return <a {...omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS, 'index')} id={id} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
 }
 
-const Menu = { Root, Item, ItemAnchor, ItemMenu, ItemMenuItem, ItemMenuItemAnchor }
-export { Menu }
+export { Root, Item, ItemAnchor, ItemMenu, ItemMenuItem, ItemMenuItemAnchor }

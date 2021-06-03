@@ -174,5 +174,4 @@ function ButtonNextSlide(props: CarouselButtonNextProps) {
   return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-controls={props.slidesID} aria-label='Next Slide' id={id} onClick={onClick} type='button' />
 }
 
-const Carousel = { Root, Slides, Slide, ButtonLive, ButtonPreviousSlide, ButtonNextSlide }
-export { Carousel }
+export { Root, Slides, Slide, ButtonLive, ButtonPreviousSlide, ButtonNextSlide }

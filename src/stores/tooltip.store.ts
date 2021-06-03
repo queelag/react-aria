@@ -25,7 +25,11 @@ class TooltipStore extends ComponentStore {
   handleKeyboardInteractions = (event: KeyboardEvent): void => {
     switch (event.key) {
       case Key.ESCAPE:
+        event.preventDefault()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented.`)
+
         this.setVisible(false)
+
         break
     }
   }

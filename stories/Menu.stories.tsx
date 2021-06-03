@@ -1,60 +1,31 @@
-import { Meta } from '@storybook/react'
+import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
-import React, { Fragment } from 'react'
-import { Menu } from '../src/components/Menu'
-import { MenuChildrenProps, MenuItemChildrenProps } from '../src/definitions/props'
+import React, { Fragment, useState } from 'react'
+import * as Component from '../src/components/Menu'
+import { MenuChildrenProps, MenuItemChildrenProps, MenuProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 
-const items = [
-  {
-    items: new Array(3).fill(0).map(() => Chance().first()),
-    title: 'Names'
-  },
-  {
-    items: new Array(5).fill(0).map(() => Chance().country({ full: true })),
-    title: 'Countries'
-  },
-  {
-    items: new Array(4).fill(0).map(() => Chance().animal()),
-    title: 'Animals'
-  }
-]
+const Template: Story<MenuProps> = (args: MenuProps) => {
+  const [items] = useState([
+    {
+      items: new Array(3).fill(0).map(() => Chance().first()),
+      title: 'Names'
+    },
+    {
+      items: new Array(5).fill(0).map(() => Chance().country({ full: true })),
+      title: 'Countries'
+    },
+    {
+      items: new Array(4).fill(0).map(() => Chance().animal()),
+      title: 'Animals'
+    }
+  ])
 
-export const Raw = () => {
   return (
-    <Menu.Root className='flex space-x-2' label='Random Stuff'>
+    <Component.Root {...args} className='flex space-x-px' label='Random Stuff'>
       {(props: MenuChildrenProps) =>
         items.map((v, k) => (
-          <Menu.Item {...props} index={k} key={k} popperOptions={{ placement: 'bottom-start' }}>
-            {(props: MenuItemChildrenProps) => (
-              <Fragment>
-                <Menu.ItemAnchor {...props} className='cursor-pointer'>
-                  {v.title}
-                </Menu.ItemAnchor>
-                <Menu.ItemMenu {...props} className={ArrayUtils.joinStrings(!props.expanded && 'opacity-0')}>
-                  {v.items.map((v, k) => (
-                    <Menu.ItemMenuItem {...props} key={k}>
-                      <Menu.ItemMenuItemAnchor {...props} className='whitespace-nowrap cursor-pointer' index={k}>
-                        {v}
-                      </Menu.ItemMenuItemAnchor>
-                    </Menu.ItemMenuItem>
-                  ))}
-                </Menu.ItemMenu>
-              </Fragment>
-            )}
-          </Menu.Item>
-        ))
-      }
-    </Menu.Root>
-  )
-}
-
-export const Styled = () => {
-  return (
-    <Menu.Root className='flex space-x-px' label='Random Stuff'>
-      {(props: MenuChildrenProps) =>
-        items.map((v, k) => (
-          <Menu.Item
+          <Component.Item
             {...props}
             className='flex'
             index={k}
@@ -63,7 +34,7 @@ export const Styled = () => {
           >
             {(props: MenuItemChildrenProps) => (
               <Fragment>
-                <Menu.ItemAnchor
+                <Component.ItemAnchor
                   {...props}
                   className={ArrayUtils.joinStrings(
                     'bg-gray-100 p-6 cursor-pointer outline-none transition-all duration-200',
@@ -73,8 +44,8 @@ export const Styled = () => {
                   )}
                 >
                   {v.title}
-                </Menu.ItemAnchor>
-                <Menu.ItemMenu
+                </Component.ItemAnchor>
+                <Component.ItemMenu
                   {...props}
                   className={ArrayUtils.joinStrings(
                     'border border-gray-200 divide-y divide-gray-200 rounded-md',
@@ -83,8 +54,8 @@ export const Styled = () => {
                   )}
                 >
                   {v.items.map((v, k) => (
-                    <Menu.ItemMenuItem {...props} className='flex' key={k}>
-                      <Menu.ItemMenuItemAnchor
+                    <Component.ItemMenuItem {...props} className='flex' key={k}>
+                      <Component.ItemMenuItemAnchor
                         {...props}
                         className={ArrayUtils.joinStrings(
                           'w-64 p-6 whitespace-nowrap cursor-pointer outline-none transition-all duration-200',
@@ -93,27 +64,30 @@ export const Styled = () => {
                         index={k}
                       >
                         {v}
-                      </Menu.ItemMenuItemAnchor>
-                    </Menu.ItemMenuItem>
+                      </Component.ItemMenuItemAnchor>
+                    </Component.ItemMenuItem>
                   ))}
-                </Menu.ItemMenu>
+                </Component.ItemMenu>
               </Fragment>
             )}
-          </Menu.Item>
+          </Component.Item>
         ))
       }
-    </Menu.Root>
+    </Component.Root>
   )
 }
 
+export const Menu = Template.bind({})
+Menu.args = { autoOpen: true, itemMenuHideDelay: 200 }
+
 export default {
-  component: Menu.Root,
+  component: Component.Root,
   subcomponents: {
-    Item: Menu.Item,
-    ItemAnchor: Menu.ItemAnchor,
-    ItemMenu: Menu.ItemMenu,
-    ItemMenuItem: Menu.ItemMenuItem,
-    ItemMenuItemAnchor: Menu.ItemMenuItemAnchor
+    Item: Component.Item,
+    ItemAnchor: Component.ItemAnchor,
+    ItemMenu: Component.ItemMenu,
+    ItemMenuItem: Component.ItemMenuItem,
+    ItemMenuItemAnchor: Component.ItemMenuItemAnchor
   },
   title: 'Components/Menu'
 } as Meta

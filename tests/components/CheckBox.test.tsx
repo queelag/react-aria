@@ -7,7 +7,7 @@ import Logger from '../../src/modules/logger'
 function Component() {
   const [checked, setChecked] = useState<boolean>(false)
 
-  return <CheckBox.Root data-testid={ComponentName.CHECK_BOX} isChecked={checked} onClick={() => setChecked(!checked)} />
+  return <CheckBox.Root data-testid={ComponentName.CHECK_BOX} checked={checked} onClick={() => setChecked(!checked)} />
 }
 
 describe('CheckBox', () => {
@@ -28,7 +28,7 @@ describe('CheckBox', () => {
     expect(root.getAttribute('tabindex')).toBe('0')
   })
 
-  it('handles the isChecked value changes', () => {
+  it('handles the checked value changes', () => {
     fireEvent.click(root)
     expect(root.getAttribute('aria-checked')).toBe('true')
     fireEvent.click(root)

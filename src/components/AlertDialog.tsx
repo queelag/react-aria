@@ -19,8 +19,11 @@ function Root(props: AlertDialogProps) {
   const handleKeyboardInteractions = (event: KeyboardEvent) => {
     switch (event.key) {
       case Key.ESCAPE:
+        event.preventDefault()
+        Logger.debug(id, 'handleKeyboardInteractions', `The default event has been prevented.`)
+
         props.onClose()
-        Logger.debug(id, 'handleKeyboardEvents', event.key, 'The alert dialog has been closed')
+        Logger.debug(id, 'handleKeyboardEvents', event.key, 'The alert dialog has been closed.')
 
         break
     }
@@ -48,19 +51,12 @@ function Root(props: AlertDialogProps) {
   )
 }
 
-/**
- * The alert dialog title.
- */
 function Title(props: AlertDialogTitleProps) {
   return <span {...omit(props, ALERT_DIALOG_CHILDREN_PROPS_KEYS)} id={props.titleID}></span>
 }
 
-/**
- * The alert dialog description.
- */
 function Description(props: AlertDialogDescriptionProps) {
   return <span {...omit(props, ALERT_DIALOG_CHILDREN_PROPS_KEYS)} id={props.descriptionID}></span>
 }
 
-const AlertDialog = { Root, Title, Description }
-export { AlertDialog }
+export { Root, Title, Description }

@@ -28,9 +28,14 @@ class MenuStore extends ComponentStore {
 
     switch (event.key) {
       case Key.ARROW_DOWN:
+      case Key.ARROW_UP:
       case Key.ARROW_LEFT:
       case Key.ARROW_RIGHT:
-      case Key.ARROW_UP:
+      case Key.HOME:
+      case Key.END:
+      case Key.ESCAPE:
+      case Key.ENTER:
+      case Key.SPACE:
         event.preventDefault()
         Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented.`)
 

@@ -5,6 +5,9 @@ import { CheckBoxProps } from '../definitions/props'
 import useID from '../hooks/use.id'
 import Logger from '../modules/logger'
 
+/**
+ * The most common type of checkbox, it allows the user to toggle between two choices -- checked and not checked.
+ */
 function Root(props: CheckBoxProps) {
   const id = useID(ComponentName.CHECK_BOX, props.id)
   const ref = useRef(document.createElement('div'))
@@ -12,6 +15,9 @@ function Root(props: CheckBoxProps) {
   const handleKeyboardInteractions = (event: KeyboardEvent<HTMLDivElement>) => {
     switch (event.key) {
       case Key.SPACE:
+        event.preventDefault()
+        Logger.debug(id, 'handleKeyboardInteractions', `The default event has been prevented.`)
+
         ref.current.click()
         Logger.debug(id, 'handleKeyboardInteractions', `The click event has been triggered.`)
 
@@ -26,8 +32,8 @@ function Root(props: CheckBoxProps) {
 
   return (
     <div
-      {...omit(props, 'isChecked')}
-      aria-checked={props.isChecked}
+      {...omit(props, 'checked')}
+      aria-checked={props.checked}
       id={id}
       onKeyDown={onKeyDown}
       ref={ref}
@@ -38,5 +44,4 @@ function Root(props: CheckBoxProps) {
   )
 }
 
-const CheckBox = { Root }
-export { CheckBox }
+export { Root }

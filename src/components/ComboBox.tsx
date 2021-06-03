@@ -32,6 +32,9 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
   'setListBoxRef'
 ]
 
+/**
+ * A combobox is an input widget with an associated popup that enables users to select a value for the combobox from a collection of possible values. In some implementations, the popup presents allowed values, while in other implementations, the popup presents suggested values, and users may either select one of the suggestions or type a value.
+ */
 function Root(props: ComboBoxProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new ComboBoxStore(update, props.onCollapse, props.id), [])
@@ -185,5 +188,4 @@ function ListBoxItem(props: ComboBoxListBoxItemProps) {
   )
 }
 
-const ComboBox = { Root, Group, Input, Button, ListBox, ListBoxItem }
-export { ComboBox }
+export { Root, Group, Input, Button, ListBox, ListBoxItem }

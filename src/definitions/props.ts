@@ -177,29 +177,80 @@ export type CarouselSlideProps = {
 export type CarouselSlidesProps = Pick<CarouselChildrenProps, 'live' | 'liveTemporary' | 'slidesID'> & Omit<HTMLDivProps, 'id'>
 
 export type CheckBoxProps = {
-  isChecked: boolean
+  /**
+   * Determines whether the CheckBox is checked or not.
+   */
+  checked: boolean
 } & HTMLDivProps
 
 export type ComboBoxProps = {
+  /**
+   * Required if your ComboBox implementation has some kind of autocomplete logic.
+   */
   autocomplete?: boolean
   children: (props: ComboBoxChildrenProps) => ReactNode
+  /**
+   * The label of the ListBox element, required for aria purposes.
+   */
   listBoxLabel: string
+  /**
+   * The callback of the collapse event.
+   */
   onCollapse: () => any
+  /**
+   * The callback of the escape event, trigger by the keyboard.
+   */
   onEscape: () => any
+  /**
+   * Freely configurable popper options as they are.
+   */
   popperOptions?: PopperOptions<unknown>
 } & Omit<HTMLDivProps, 'children'>
 
 export type ComboBoxChildrenProps = {
+  /**
+   * The method which takes care of deleting the unmounted ListBoxItem components from the internal map.
+   */
   deleteListBoxItemRef: (index: number) => void
+  /**
+   * Indicates whether the ComboBox is expanded or collapsed.
+   */
   expanded: boolean
+  /**
+   * The ID of the focused ListBoxItem.
+   */
   focusedListBoxItemID?: ID
+  /**
+   * The method which tells you if a ListBoxItem with a certain index is focused or not.
+   */
   isListBoxItemFocused: (index: number) => boolean
+  /**
+   * The ID of the ListBox element.
+   */
   listBoxID: ID
+  /**
+   * The popper data.
+   */
   popper: PopperData
+  /**
+   * The method which sets the expanded value.
+   */
   setExpanded: (expanded: boolean, id: ID, caller: string) => void
+  /**
+   * The method which sets the ref of the Group element.
+   */
   setGroupRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  /**
+   * The method which sets the ref of the Input element.
+   */
   setInputRef: (ref: MutableRefObject<HTMLInputElement>) => void
+  /**
+   * The method which sets the ref of the ListBoxItem ref.
+   */
   setListBoxItemRef: (index: number, ref: MutableRefObject<HTMLLIElement>) => void
+  /**
+   * The method which sets the ref of the ListBox element.
+   */
   setListBoxRef: (ref: MutableRefObject<HTMLUListElement>) => void
 } & Pick<ComboBoxProps, 'autocomplete' | 'listBoxLabel'>
 
@@ -215,13 +266,22 @@ export type ComboBoxInputProps = Pick<
 export type ComboBoxListBoxProps = Pick<ComboBoxChildrenProps, 'listBoxID' | 'listBoxLabel' | 'popper' | 'setListBoxRef'> & Omit<HTMLUListProps, 'id'>
 
 export type ComboBoxListBoxItemProps = {
+  /**
+   * The index of the ListBoxItem element.
+   */
   index: number
 } & Pick<ComboBoxChildrenProps, 'deleteListBoxItemRef' | 'isListBoxItemFocused' | 'setExpanded' | 'setListBoxItemRef'> &
   HTMLLIProps
 
 export type DialogProps = {
   children: (props: DialogChildrenProps) => ReactNode
+  /**
+   * Required if your Dialog has a description.
+   */
   hasDescription?: boolean
+  /**
+   * Required if your Dialog has a title.
+   */
   hasTitle?: boolean
   /**
    * The method which handles the closure of the dialog.
@@ -250,8 +310,17 @@ export type DisclosureSectionProps = {
 }
 
 export type DisclosureSectionChildrenProps = {
+  /**
+   * The ID of the Panel element.
+   */
   panelID: ID
+  /**
+   * The method which sets the status of the DisclosureSection.
+   */
   setStatus: (status: DisclosureStatus) => void
+  /**
+   * Indicates whether the DisclosureSection is expanded or collapsed.
+   */
   status: DisclosureStatus
 }
 
@@ -272,33 +341,79 @@ export type FocusTrapProps = {
 
 export type ListBoxProps = {
   children: (props: ListBoxChildrenProps) => ReactNode
+  /**
+   * Determines if the ListBox is collapsable or not, useful for creating Select components.
+   */
   collapsable?: boolean
+  /**
+   * The popper options.
+   */
   popperOptions?: PopperOptions<any>
+  /**
+   * The select mode, can be either SINGLE or MULTIPLE, it is SINGLE by default.
+   */
   selectMode?: ListBoxSelectMode
 } & Omit<HTMLDivProps, 'children'>
 
 export type ListBoxChildrenProps = {
-  collapsable?: boolean
+  /**
+   * The method which takes care of deleting the unmounted ListItem ref from the internal map.
+   */
   deleteListItemRef: (index: number) => void
+  /**
+   * Indicates whether the ListBox is expanded or collapsed.
+   */
   expanded: boolean
+  /**
+   * The ID of the focused ListItem element.
+   */
   focusedListItemID: ID
+  /**
+   * The method which tells you if a ListItem is focused or not.
+   */
   isListItemFocused: (index: number) => boolean
+  /**
+   * The method which tells you if a ListItem is selected or not.
+   */
   isListItemSelected: (index: number) => boolean
+  /**
+   * The popper data.
+   */
   popper: PopperData
-  selectMode: ListBoxSelectMode
+  /**
+   * The method which sets the ref of the Button element.
+   */
   setButtonRef: (ref: MutableRefObject<HTMLButtonElement>) => void
+  /**
+   * The method which sets the expanded value.
+   */
   setExpanded: (expanded: boolean, id: ID, context: string) => void
+  /**
+   * The method which sets the ref of a ListItem element.
+   */
   setListItemRef: (index: number, ref: MutableRefObject<HTMLLIElement>) => void
+  /**
+   * The method which sets the ref of the List element.
+   */
   setListRef: (ref: MutableRefObject<HTMLUListElement>) => void
+  /**
+   * The method which sets the index of the focused ListItem element.
+   */
   setFocusedListItemIndex: (index: number) => void
+  /**
+   * The method which sets the index of the selected ListItem element.
+   */
   setSelectedListItemIndex: (selected: boolean, index: number) => void
-}
+} & Pick<ListBoxProps, 'collapsable' | 'selectMode'>
 
 export type ListBoxButtonProps = Pick<ListBoxChildrenProps, 'collapsable' | 'expanded' | 'setButtonRef' | 'setExpanded'> & HTMLButtonProps
 export type ListBoxListProps = Pick<ListBoxChildrenProps, 'collapsable' | 'focusedListItemID' | 'popper' | 'selectMode' | 'setExpanded' | 'setListRef'> &
   HTMLUListProps
 
 export type ListBoxListItemProps = {
+  /**
+   * The index of the ListItem element.
+   */
   index: number
 } & Pick<ListBoxChildrenProps, 'deleteListItemRef' | 'isListItemSelected' | 'setFocusedListItemIndex' | 'setListItemRef' | 'setSelectedListItemIndex'> &
   HTMLLIProps
@@ -318,41 +433,113 @@ export type HTMLSpanProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpa
 export type HTMLUListProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>
 
 export type MenuProps = {
+  /**
+   * Determines the behavior of the Menu, setting this to true will open the MenuItems on hover while setting it to false will require a click.
+   */
   autoOpen?: boolean
   children: (props: MenuChildrenProps) => ReactNode
+  /**
+   * The hide events are debounced with a delay to allow the user to move the mouse around without instantly closing the ItemMenu.
+   */
   itemMenuHideDelay?: number
+  /**
+   * The label of the Menu element.
+   */
   label: string
 } & Omit<HTMLUListProps, 'children'>
 
 export type MenuChildrenProps = {
+  /**
+   * The method which takes care of deleting the ref of the ItemAnchor element when unmounted.
+   */
   deleteItemAnchorRef: (index: number) => void
+  /**
+   * The method which takes care of deleting the ref of the ItemMenu element when unmounted.
+   */
   deleteItemMenuRef: (id: ID) => void
+  /**
+   * The method which takes care of deleting the ref of the ItemMenuItemAnchor element when unmounted.
+   */
   deleteItemMenuItemAnchorRef: (parentIndex: number, index: number) => void
+  /**
+   * The method which finds the ref of the ItemMenu through its ID.
+   */
   findItemMenuRef: (id: ID) => MutableRefObject<HTMLUListElement>
+  /**
+   * The index of the expanded Item element.
+   */
   expandedItemIndex: number
+  /**
+   * The method which focuses the ItemAnchor element.
+   */
   focusItemAnchor: (index: number) => void
+  /**
+   * The index of the focused Item element.
+   */
   focusedItemIndex: number
+  /**
+   * The method which tells you if an Item is expanded or collapsed.
+   */
   isItemExpanded: (index: number) => boolean
+  /**
+   * The method which sets the index of the expanded Item element.
+   */
   setExpandedItemIndex: (index: number, delay?: number) => void
+  /**
+   * The method which sets the index of the focused Item element.
+   */
   setFocusedItemIndex: (index: number) => void
+  /**
+   * The method which sets the ref of the ItemAnchor element.
+   */
   setItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
+  /**
+   * The method which sets the ref of the ItemMenu element.
+   */
   setItemMenuRef: (id: ID, ref: MutableRefObject<HTMLUListElement>) => void
+  /**
+   * The method which sets the ref of the ItemMenuItemAnchor element.
+   */
   setItemMenuItemAnchorRef: (parentIndex: number, index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
 } & Pick<MenuProps, 'autoOpen'>
 
 export type MenuItemProps = {
   children: (props: MenuItemChildrenProps) => ReactNode
+  /**
+   * The index of the Item element.
+   */
   index: number
+  /**
+   * The popper options.
+   */
   popperOptions?: PopperOptions<any>
 } & MenuChildrenProps &
   Omit<HTMLLIProps, 'children'>
 
 export type MenuItemChildrenProps = {
+  /**
+   * The method which takes care of deleting the ref of the ItemMenuItemAnchor element when unmounted.
+   */
   deleteItemMenuItemAnchorRef: (index: number) => void
+  /**
+   * Indicates whether the Item is expanded or collapsed.
+   */
   expanded: boolean
+  /**
+   * The ID of the parent element.
+   */
   parentID: ID
+  /**
+   * The index of the parent element.
+   */
   parentIndex: number
+  /**
+   * The popper data.
+   */
   popper: PopperData
+  /**
+   * The method which sets the ref of the ItemMenuItemAnchor element.
+   */
   setItemMenuItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
 } & Pick<
   MenuChildrenProps,
@@ -383,12 +570,12 @@ export type MenuItemAnchorProps = {
 > &
   Omit<HTMLAnchorProps, 'children'>
 
-export type MenuItemMenuProps = {
-  parentID: ID
-} & Pick<MenuItemChildrenProps, 'deleteItemMenuRef' | 'expanded' | 'parentID' | 'popper' | 'setItemMenuRef'> &
-  HTMLUListProps
+export type MenuItemMenuProps = {} & Pick<MenuItemChildrenProps, 'deleteItemMenuRef' | 'expanded' | 'parentID' | 'popper' | 'setItemMenuRef'> & HTMLUListProps
 
 export type MenuItemMenuItemAnchorProps = {
+  /**
+   * The index of the ItemMenuItemAnchor element.
+   */
   index: number
 } & Pick<MenuItemChildrenProps, 'deleteItemMenuItemAnchorRef' | 'parentIndex' | 'setExpandedItemIndex' | 'setItemMenuItemAnchorRef'> &
   HTMLAnchorProps
@@ -397,18 +584,48 @@ export type MenuItemMenuItemProps = HTMLLIProps
 
 export type MenuButtonProps = {
   children: (props: MenuButtonChildrenProps) => ReactNode
+  /**
+   * The popper options.
+   */
   popperOptions?: PopperOptions<any>
 } & Omit<HTMLDivProps, 'children'>
 
 export type MenuButtonChildrenProps = {
+  /**
+   * The ID of the Button element.
+   */
   buttonID: ID
+  /**
+   * The method which takes care of deleting the ref of the ListItemAnchor element when unmounted.
+   */
   deleteListItemAnchorRef: (index: number) => void
+  /**
+   * Indicates whether the Menu is expanded or collapsed.
+   */
   expanded: boolean
+  /**
+   * The ID of the List element.
+   */
   listID: ID
+  /**
+   * The popper data.
+   */
   popper: PopperData
+  /**
+   * The method which sets the ref of the Button element.
+   */
   setButtonRef: (ref: MutableRefObject<HTMLButtonElement>) => void
+  /**
+   * The method which sets the expanded value.
+   */
   setExpanded: (expanded: boolean) => void
+  /**
+   * The method which sets the ref of the List element.
+   */
   setListRef: (ref: MutableRefObject<HTMLUListElement>) => void
+  /**
+   * The method which sets the ref of the ListItemAnchor element.
+   */
   setListItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
 }
 
@@ -418,13 +635,25 @@ export type MenuButtonListProps = {} & Pick<MenuButtonChildrenProps, 'buttonID' 
 export type MenuButtonListItemProps = {} & HTMLLIProps
 
 export type MenuButtonListItemAnchorProps = {
+  /**
+   * The index of the ListItemAnchor element.
+   */
   index: number
 } & Pick<MenuButtonChildrenProps, 'deleteListItemAnchorRef' | 'setExpanded' | 'setListItemAnchorRef'> &
   HTMLAnchorProps
 
 export type MeterProps = {
+  /**
+   * The maximum value that the Meter can have, the value will be automatically capped to this.
+   */
   maximum: number
+  /**
+   * The minimum value that the Meter can have, the value will be automatically capped to this.
+   */
   minimum: number
+  /**
+   * The current value of the Meter.
+   */
   value: number
 }
 
@@ -433,38 +662,86 @@ export type RadioGroupProps = {
 } & Omit<HTMLDivProps, 'children'>
 
 export type RadioGroupChildrenProps = {
+  /**
+   * The index of the checked Item element.
+   */
   checkedItemIndex: number
+  /**
+   * The method which takes care of deleting the ref of an Item element when unmounted.
+   */
   deleteItemRef: (index: number) => void
+  /**
+   * The method which tells you whether an Item element is checked or not.
+   */
   isItemChecked: (index: number) => boolean
+  /**
+   * The method which sets the ref of an Item element.
+   */
   setItemRef: (index: number, ref: MutableRefObject<HTMLDivElement>) => void
+  /**
+   * The method which sets index of the checked Item element.
+   */
   setCheckedItemIndex: (index: number) => void
 }
 
 export type RadioGroupItemProps = {
+  /**
+   * The index of the Item element.
+   */
   index: number
 } & RadioGroupChildrenProps &
   HTMLDivProps
 
 export type ToggleButtonProps = {
-  isToggled: boolean
+  /**
+   * Determines whether the Button is toggled or not.
+   */
+  toggled: boolean
 } & HTMLButtonProps
 
 export type TooltipProps = {
   children: (props: TooltipChildrenProps) => ReactNode
+  /**
+   * The hide events are debounced with a delay to allow the user to move the mouse around without instantly closing the Tooltip.
+   */
   hideDelay?: number
+  /**
+   * The popper options.
+   */
   popperOptions?: PopperOptions<any>
 } & Omit<HTMLDivProps, 'children'>
 
 export type TooltipChildrenProps = {
+  /**
+   * The ID of the Element element.
+   */
   elementID: ID
-  hideDelay: number
+  /**
+   * The popper data.
+   */
   popper: PopperData
+  /**
+   * The ID of the Root element.
+   */
   rootID: ID
+  /**
+   * The method which sets the ref of the Element element.
+   */
   setElementRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  /**
+   * The method which sets the ref of the Trigger element.
+   */
   setTriggerRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  /**
+   * The method which sets the visible value.
+   */
   setVisible: (visible: boolean) => void
+  /**
+   * Indicates whether the Tooltip is visible or hidden.
+   */
   visible: boolean
-}
+} & Pick<TooltipProps, 'hideDelay'>
 
 export type TooltipElementProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'rootID' | 'setElementRef' | 'popper' | 'setVisible'> & Omit<HTMLDivProps, 'id'>
+
 export type TooltipTriggerProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'hideDelay' | 'rootID' | 'setTriggerRef' | 'setVisible'> & HTMLDivProps

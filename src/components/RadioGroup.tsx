@@ -8,6 +8,9 @@ import RadioGroupStore from '../stores/radio.group.store'
 
 const RADIO_GROUP_CHILDREN_PROPS_KEYS: (keyof RadioGroupChildrenProps)[] = ['deleteItemRef', 'isItemChecked', 'setCheckedItemIndex', 'setItemRef']
 
+/**
+ * A radio group is a set of checkable buttons, known as radio buttons, where no more than one of the buttons can be checked at a time. Some implementations may initialize the set with all buttons in the unchecked state in order to force the user to check one of the buttons before moving past a certain point in the workflow.
+ */
 function Root(props: RadioGroupProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new RadioGroupStore(update, props.id), [])
@@ -57,5 +60,4 @@ function Item(props: RadioGroupItemProps) {
   )
 }
 
-const RadioGroup = { Root, Item }
-export { RadioGroup }
+export { Root, Item }

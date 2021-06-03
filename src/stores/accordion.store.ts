@@ -33,7 +33,7 @@ class AccordionStore extends ComponentStore {
     this.sectionHeaderRefs.set(id, ref)
   }
 
-  handleKeyboardInteractions(e: KeyboardEvent): void {
+  handleKeyboardInteractions(event: KeyboardEvent): void {
     let sections: HTMLButtonElement[], focusedSectionIndex: number
 
     sections = [...this.sectionHeaderRefs.values()].map((v: MutableRefObject<HTMLButtonElement>) => v.current)
@@ -42,7 +42,18 @@ class AccordionStore extends ComponentStore {
     focusedSectionIndex = sections.findIndex((v: HTMLButtonElement) => document.activeElement?.id === v.id)
     if (focusedSectionIndex < 0) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the focused section index`)
 
-    switch (e.key) {
+    switch (event.key) {
+      case Key.ARROW_DOWN:
+      case Key.ARROW_UP:
+      case Key.END:
+      case Key.HOME:
+        event.preventDefault()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+
+        break
+    }
+
+    switch (event.key) {
       case Key.ARROW_DOWN:
         let next: HTMLButtonElement
 
@@ -50,7 +61,7 @@ class AccordionStore extends ComponentStore {
         if (!next) return Logger.debug(this.id, 'handleKeyboardInteractions', `Failed to find the next element`)
 
         next.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', e.key, `The next element has been focused`)
+        Logger.debug(this.id, 'handleKeyboardInteractions', event.key, `The next element has been focused`)
 
         break
       case Key.ARROW_UP:
@@ -60,7 +71,7 @@ class AccordionStore extends ComponentStore {
         if (!previous) return Logger.debug(this.id, 'handleKeyboardInteractions', `Failed to find the previous element`)
 
         previous.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', e.key, `The previous element has been focused`)
+        Logger.debug(this.id, 'handleKeyboardInteractions', event.key, `The previous element has been focused`)
 
         break
       case Key.END:
@@ -70,7 +81,7 @@ class AccordionStore extends ComponentStore {
         if (!last) return Logger.debug(this.id, 'handleKeyboardInteractions', `Failed to find the last element`)
 
         last.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', e.key, `The last element has been focused`)
+        Logger.debug(this.id, 'handleKeyboardInteractions', event.key, `The last element has been focused`)
 
         break
       case Key.HOME:
@@ -80,7 +91,7 @@ class AccordionStore extends ComponentStore {
         if (!first) return Logger.debug(this.id, 'handleKeyboardInteractions', `Failed to find the first element`)
 
         first.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', e.key, `The first element has been focused`)
+        Logger.debug(this.id, 'handleKeyboardInteractions', event.key, `The first element has been focused`)
 
         break
     }

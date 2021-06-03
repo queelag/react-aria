@@ -15,6 +15,9 @@ import DisclosureSectionStore from '../stores/disclosure.section.store'
 
 const DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS: (keyof DisclosureSectionChildrenProps)[] = ['panelID', 'setStatus', 'status']
 
+/**
+ * A disclosure is a button that controls visibility of a section of content. When the controlled content is hidden, it is often styled as a typical push button with a right-pointing arrow or triangle to hint that activating the button will display additional content. When the content is visible, the arrow or triangle typically points down.
+ */
 function Root(props: DisclosureProps) {
   const id = useID(ComponentName.DISCLOSURE, props.id)
 
@@ -56,5 +59,4 @@ function SectionPanel(props: DisclosureSectionPanelProps) {
   return <dd {...omit(props, DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)} id={props.panelID} />
 }
 
-const Disclosure = { Root, Section, SectionHeader, SectionHeaderButton, SectionPanel }
-export { Disclosure }
+export { Root, Section, SectionHeader, SectionHeaderButton, SectionPanel }

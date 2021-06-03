@@ -1,33 +1,19 @@
 import { RadioButtonCheckedRounded, RadioButtonUncheckedRounded } from '@material-ui/icons'
-import { Meta } from '@storybook/react'
+import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
-import React from 'react'
-import { RadioGroup } from '../src/components/RadioGroup'
-import { RadioGroupChildrenProps } from '../src/definitions/props'
+import React, { useState } from 'react'
+import * as Component from '../src/components/RadioGroup'
+import { RadioGroupChildrenProps, RadioGroupProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 
-const options = new Array(5).fill(0).map(() => Chance().animal())
+const Template: Story<RadioGroupProps> = (args: RadioGroupProps) => {
+  const [options] = useState(new Array(3).fill(0).map(() => Chance().animal()))
 
-export const Raw = () => {
   return (
-    <RadioGroup.Root>
+    <Component.Root {...args} className='w-72 space-y-2'>
       {(props: RadioGroupChildrenProps) =>
         options.map((v: string, k: number) => (
-          <RadioGroup.Item {...props} className={ArrayUtils.joinStrings(props.isItemChecked(k) && 'bg-blue-100')} index={k} key={k}>
-            {v}
-          </RadioGroup.Item>
-        ))
-      }
-    </RadioGroup.Root>
-  )
-}
-
-export const Styled = () => {
-  return (
-    <RadioGroup.Root className='w-72 space-y-2'>
-      {(props: RadioGroupChildrenProps) =>
-        options.map((v: string, k: number) => (
-          <RadioGroup.Item
+          <Component.Item
             {...props}
             className={ArrayUtils.joinStrings(
               'p-6 space-x-6 rounded-md border border-gray-200 cursor-pointer outline-none',
@@ -39,15 +25,19 @@ export const Styled = () => {
           >
             {props.isItemChecked(k) ? <RadioButtonCheckedRounded /> : <RadioButtonUncheckedRounded />}
             <span>{v}</span>
-          </RadioGroup.Item>
+          </Component.Item>
         ))
       }
-    </RadioGroup.Root>
+    </Component.Root>
   )
 }
 
+export const RadioGroup = Template.bind({})
+RadioGroup.args = {}
+RadioGroup.storyName = 'RadioGroup'
+
 export default {
-  component: RadioGroup.Root,
-  subcomponents: { Item: RadioGroup.Item },
+  component: Component.Root,
+  subcomponents: { Item: Component.Item },
   title: 'Components/RadioGroup'
 } as Meta

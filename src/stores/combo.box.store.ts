@@ -33,6 +33,17 @@ class ComboBoxStore extends ComponentStore {
   handleKeyboardInteractions = (event: KeyboardEvent<HTMLDivElement>, onEscape: () => any): void => {
     switch (event.key) {
       case Key.ARROW_DOWN:
+      case Key.ARROW_UP:
+      case Key.ENTER:
+      case Key.ESCAPE:
+        event.preventDefault()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+
+        break
+    }
+
+    switch (event.key) {
+      case Key.ARROW_DOWN:
         this.isCollapsed && this.setExpanded(true, this.id, 'handleKeyboardInteractions')
         this.setFocusedListBoxItemIndex(this.focusedListBoxItemIndex < this.listBoxItemsRef.size - 1 ? this.focusedListBoxItemIndex + 1 : 0)
 

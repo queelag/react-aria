@@ -1,49 +1,13 @@
-import { Meta } from '@storybook/react'
+import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { Fragment, useState } from 'react'
-import { Dialog } from '../src/components/Dialog'
-import { FocusTrap } from '../src/components/FocusTrap'
-import { DialogChildrenProps } from '../src/definitions/props'
+import * as Component from '../src/components/Dialog'
+import * as FocusTrap from '../src/components/FocusTrap'
+import { DialogChildrenProps, DialogProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 
-export const Raw = () => {
-  const [visible, setVisible] = useState<boolean>(false)
-
-  const onClick = () => {
-    setVisible(!visible)
-  }
-
-  return (
-    <Fragment>
-      <button className='border border-black focus:ring-2' onClick={onClick} type='button'>
-        Show Dialog
-      </button>
-      {visible && (
-        <Dialog.Root className='bg-black bg-opacity-50' onClose={onClick} hasDescription hasTitle>
-          {(props: DialogChildrenProps) => (
-            <FocusTrap.Root className='w-64 flex flex-col bg-white'>
-              <Dialog.Title {...props} className='font-bold'>
-                {Chance().sentence({ words: 2 })}
-              </Dialog.Title>
-              <Dialog.Description {...props}>{Chance().paragraph({ sentences: 1 })}</Dialog.Description>
-              <div className='flex justify-end'>
-                <button className='border border-black focus:ring-2' onClick={onClick} type='button'>
-                  No
-                </button>
-                <button className='bg-black text-white focus:ring-2' onClick={onClick} type='button'>
-                  Yes
-                </button>
-              </div>
-            </FocusTrap.Root>
-          )}
-        </Dialog.Root>
-      )}
-    </Fragment>
-  )
-}
-
-export const Styled = () => {
+const Template: Story<DialogProps> = (args: DialogProps) => {
   const [visible, setVisible] = useState<boolean>(false)
 
   const onClick = () => {
@@ -65,11 +29,11 @@ export const Styled = () => {
       </button>
       <AnimatePresence>
         {visible && (
-          <Dialog.Root onClose={onClick} hasDescription hasTitle>
+          <Component.Root {...args} onClose={onClick} hasDescription hasTitle>
             {(props: DialogChildrenProps) => (
               <FocusTrap.Root autoFocus restoreFocus>
-                <motion.div animate={{ opacity: 0.5 }} className='absolute inset-0 bg-black' exit={{ opacity: 0 }} initial={{ opacity: 0 }} />
-                <div className='absolute inset-0 flex justify-center items-start py-16 z-10'>
+                <motion.div animate={{ opacity: 0.5 }} className='absolute inset-0 bg-black z-10' exit={{ opacity: 0 }} initial={{ opacity: 0 }} />
+                <div className='absolute inset-0 flex justify-center items-start py-16 z-20'>
                   <motion.div
                     animate={{ opacity: 1, scale: 1 }}
                     className='w-96 flex flex-col bg-white p-6 space-y-6 rounded-md'
@@ -77,12 +41,12 @@ export const Styled = () => {
                     initial={{ opacity: 0, scale: 0.5 }}
                   >
                     <div className='flex flex-col'>
-                      <Dialog.Title {...props} className='font-medium text-lg'>
+                      <Component.Title {...props} className='font-medium text-lg'>
                         {Chance().sentence({ words: 2 })}
-                      </Dialog.Title>
-                      <Dialog.Description {...props} className='text-sm'>
+                      </Component.Title>
+                      <Component.Description {...props} className='text-sm'>
                         {Chance().paragraph({ sentences: 1 })}
-                      </Dialog.Description>
+                      </Component.Description>
                     </div>
                     <div className='flex justify-end space-x-3'>
                       <button
@@ -112,15 +76,18 @@ export const Styled = () => {
                 </div>
               </FocusTrap.Root>
             )}
-          </Dialog.Root>
+          </Component.Root>
         )}
       </AnimatePresence>
     </Fragment>
   )
 }
 
+export const Dialog = Template.bind({})
+Dialog.args = { hasDescription: true, hasTitle: true }
+
 export default {
-  component: Dialog.Root,
-  subcomponents: { Title: Dialog.Title, Description: Dialog.Description },
+  component: Component.Root,
+  subcomponents: { Title: Component.Title, Description: Component.Description },
   title: 'Components/Dialog'
 } as Meta

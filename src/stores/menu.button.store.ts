@@ -27,6 +27,20 @@ class MenuButtonStore extends ComponentStore {
   handleKeyboardInteractions = (event: KeyboardEvent): void => {
     switch (event.key) {
       case Key.ARROW_DOWN:
+      case Key.ARROW_UP:
+      case Key.HOME:
+      case Key.END:
+      case Key.ENTER:
+      case Key.SPACE:
+      case Key.ESCAPE:
+        event.preventDefault()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+
+        break
+    }
+
+    switch (event.key) {
+      case Key.ARROW_DOWN:
         let next: MutableRefObject<HTMLAnchorElement> | undefined
 
         if (this.isCollapsed) {
@@ -97,9 +111,6 @@ class MenuButtonStore extends ComponentStore {
       case Key.ENTER:
       case Key.SPACE:
         let active: MutableRefObject<HTMLAnchorElement> | undefined
-
-        event.preventDefault()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented.`)
 
         active = this.listItemAnchorsRef.get(this.focusedListItemAnchorIndex)
         if (!active) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the active list item anchor ref.`)

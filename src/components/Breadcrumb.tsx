@@ -12,29 +12,19 @@ function Root(props: BreadcrumbProps) {
   return <nav {...props} aria-label='Breadcrumb' id={id} />
 }
 
-/**
- * The list of links which is structured using an ordered list.
- */
 function List(props: BreadcrumbListProps) {
   const id = useID(ComponentName.BREADCRUMB_LIST, props.id)
   return <ol {...props} id={id} />
 }
 
-/**
- * Every link is encapsulated by a list item.
- */
 function ListItem(props: BreadcrumbListItemProps) {
   const id = useID(ComponentName.BREADCRUMB_LIST_ITEM, props.id)
   return <li {...props} id={id} />
 }
 
-/**
- * The breadcrumb list item link, the aria-current="page" attribute is applied to the last link in the set to indicate that it represents the current page.
- */
 function ListItemLink(props: BreadcrumbListItemLinkProps) {
   const id = useID(ComponentName.BREADCRUMB_LIST_ITEM_LINK, props.id)
   return <a {...omit(props, 'isCurrent')} aria-current={props.isCurrent ? 'page' : undefined} id={id} />
 }
 
-const Breadcrumb = { Root, List, ListItem, ListItemLink }
-export { Breadcrumb }
+export { Root, List, ListItem, ListItemLink }

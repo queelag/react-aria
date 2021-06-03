@@ -1,27 +1,17 @@
 import { CheckRounded } from '@material-ui/icons'
-import { Meta } from '@storybook/react'
+import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
-import { CheckBox } from '../src/components/CheckBox'
+import * as Component from '../src/components/CheckBox'
+import { CheckBoxProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 
-export const Raw = () => {
-  const [checked, setChecked] = useState<boolean>(false)
+const Template: Story<CheckBoxProps> = (args: CheckBoxProps) => {
+  const [checked, setChecked] = useState<boolean>(args.checked)
 
   return (
-    <CheckBox.Root isChecked={checked} onClick={() => setChecked(!checked)}>
-      <div className='w-6 h-6 flex justify-center items-center border border-black p-1'>{checked && 'v'}</div>
-      <span>{checked ? 'Checked' : 'Not Checked'}</span>
-    </CheckBox.Root>
-  )
-}
-
-export const Styled = () => {
-  const [checked, setChecked] = useState<boolean>(false)
-
-  return (
-    <CheckBox.Root
+    <Component.Root
       className='flex items-center space-x-4 rounded-md focus:ring-2 ring-offset-2 ring-blue-400 outline-none'
-      isChecked={checked}
+      checked={checked}
       onClick={() => setChecked(!checked)}
     >
       <div
@@ -34,11 +24,15 @@ export const Styled = () => {
         {checked && <CheckRounded />}
       </div>
       <span className='font-medium'>{checked ? 'Checked' : 'Not Checked'}</span>
-    </CheckBox.Root>
+    </Component.Root>
   )
 }
 
+export const CheckBox = Template.bind({})
+CheckBox.args = { checked: false }
+CheckBox.storyName = 'CheckBox'
+
 export default {
-  component: CheckBox.Root,
+  component: Component.Root,
   title: 'Components/CheckBox'
 } as Meta

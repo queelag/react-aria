@@ -29,9 +29,22 @@ class ListBoxStore extends ComponentStore {
   handleKeyboardInteractions = (event: KeyboardEvent<HTMLDivElement>): void => {
     switch (event.key) {
       case Key.A:
-        if (event.ctrlKey && this.isSelectModeMultiple) {
-          event.preventDefault()
+      case Key.ARROW_DOWN:
+      case Key.ARROW_UP:
+      case Key.ENTER:
+      case Key.SPACE:
+      case Key.ESCAPE:
+      case Key.HOME:
+      case Key.END:
+        event.preventDefault()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
 
+        break
+    }
+
+    switch (event.key) {
+      case Key.A:
+        if (event.ctrlKey && this.isSelectModeMultiple) {
           this.selectedListItemIndexes = [...this.listItemsRef.values()].map((v, k: number) => k)
           Logger.debug(this.id, 'handleKeyboardInteractions', `Every list item has been selected.`)
 

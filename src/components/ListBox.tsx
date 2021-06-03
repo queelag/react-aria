@@ -22,6 +22,9 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
   'setSelectedListItemIndex'
 ]
 
+/**
+ * A listbox widget presents a list of options and allows a user to select one or more of them. A listbox that allows a single option to be chosen is a single-select listbox; one that allows multiple options to be selected is a multi-select listbox.
+ */
 function Root(props: ListBoxProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new ListBoxStore(update, props.id, props.selectMode), [])
@@ -146,5 +149,4 @@ function ListItem(props: ListBoxListItemProps) {
   )
 }
 
-const ListBox = { Root, Button, List, ListItem }
-export { ListBox }
+export { Root, Button, List, ListItem }

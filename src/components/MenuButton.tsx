@@ -24,6 +24,9 @@ const MENU_BUTTON_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
   'setListRef'
 ]
 
+/**
+ * A menu button is a button that opens a menu. It is often styled as a typical push button with a downward pointing arrow or triangle to hint that activating the button will display a menu.
+ */
 function Root(props: MenuButtonProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new MenuButtonStore(update, props.id), [])
@@ -118,5 +121,4 @@ function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
   return <a {...omit(props, MENU_BUTTON_CHILDREN_PROPS_KEYS, 'index')} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
 }
 
-const MenuButton = { Root, Button, List, ListItem, ListItemAnchor }
-export { MenuButton }
+export { Root, Button, List, ListItem, ListItemAnchor }

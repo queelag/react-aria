@@ -26,9 +26,6 @@ function Root(props: AccordionProps) {
   )
 }
 
-/**
- * The accordion section contains the header and the panel components.
- */
 function Section(props: AccordionSectionProps) {
   const id = useID(ComponentName.ACCORDION_SECTION, props.id)
   const contentID = useID(ComponentName.ACCORDION_SECTION_PANEL)
@@ -57,9 +54,6 @@ function Section(props: AccordionSectionProps) {
   )
 }
 
-/**
- * Label for or thumbnail representing a section of content that also serves as a control for showing, and in some implementations, hiding the section of content.
- */
 function SectionHeader(props: AccordionSectionHeaderProps) {
   const ref = useRef(document.createElement('button'))
 
@@ -87,14 +81,10 @@ function SectionHeader(props: AccordionSectionHeaderProps) {
   )
 }
 
-/**
- * Section of content associated with an accordion header.
- */
 function SectionPanel(props: AccordionSectionPanelProps) {
   return (
     <div {...omit(props, 'contentID', 'expand', 'expanded', 'headerID', 'setHeaderRef')} aria-labelledby={props.headerID} id={props.contentID} role='region' />
   )
 }
 
-const Accordion = { Root, Section, SectionHeader, SectionPanel }
-export { Accordion }
+export { Root, Section, SectionHeader, SectionPanel }

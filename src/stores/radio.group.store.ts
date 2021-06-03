@@ -19,6 +19,18 @@ class RadioGroupStore extends ComponentStore {
     switch (event.key) {
       case Key.ARROW_DOWN:
       case Key.ARROW_RIGHT:
+      case Key.ARROW_UP:
+      case Key.ARROW_LEFT:
+      case Key.SPACE:
+        event.preventDefault()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+
+        break
+    }
+
+    switch (event.key) {
+      case Key.ARROW_DOWN:
+      case Key.ARROW_RIGHT:
         this.setCheckedItemIndex(this.focusedItemIndex < this.itemsRef.size - 1 ? this.focusedItemIndex + 1 : 0)
         this.focusItem(this.checkedItemIndex)
         break

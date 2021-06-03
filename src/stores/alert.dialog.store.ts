@@ -19,8 +19,11 @@ class AlertDialogStore extends ComponentStore {
   handleKeyboardInteractions(event: KeyboardEvent, onClose: () => void): void {
     switch (event.key) {
       case Key.ESCAPE:
+        event.preventDefault()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented.`)
+
         onClose()
-        Logger.debug(this.id, 'handleKeyboardEvents', event.key, 'The alert dialog has been closed')
+        Logger.debug(this.id, 'handleKeyboardInteractions', event.key, 'The alert dialog has been closed')
 
         break
     }

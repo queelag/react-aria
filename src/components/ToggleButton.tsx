@@ -9,8 +9,7 @@ import useID from '../hooks/use.id'
  */
 function Root(props: ToggleButtonProps) {
   const id = useID(ComponentName.TOGGLE_BUTTON, props.id)
-  return <button {...omit(props, 'isToggled')} aria-pressed={props.isToggled} id={id} type='button' />
+  return <button {...omit(props, 'toggled')} aria-pressed={props.toggled} id={id} type='button' />
 }
 
-const ToggleButton = { Root }
-export { ToggleButton }
+export { Root }

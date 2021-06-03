@@ -1,49 +1,13 @@
-import { Meta } from '@storybook/react'
+import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { Fragment, useState } from 'react'
-import { AlertDialog } from '../src/components/AlertDialog'
-import { FocusTrap } from '../src/components/FocusTrap'
-import { AlertDialogChildrenProps } from '../src/definitions/props'
+import * as Component from '../src/components/AlertDialog'
+import * as FocusTrap from '../src/components/FocusTrap'
+import { AlertDialogChildrenProps, AlertDialogProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 
-export const Raw = () => {
-  const [visible, setVisible] = useState<boolean>(false)
-
-  const onClick = () => {
-    setVisible(!visible)
-  }
-
-  return (
-    <Fragment>
-      <button className='border border-black focus:ring-2' onClick={onClick} type='button'>
-        Show Alert Dialog
-      </button>
-      {visible && (
-        <AlertDialog.Root className='bg-black bg-opacity-50' onClose={onClick} hasDescription hasTitle>
-          {(props: AlertDialogChildrenProps) => (
-            <FocusTrap.Root className='w-64 flex flex-col bg-white'>
-              <AlertDialog.Title {...props} className='font-bold'>
-                {Chance().sentence({ words: 2 })}
-              </AlertDialog.Title>
-              <AlertDialog.Description {...props}>{Chance().paragraph({ sentences: 1 })}</AlertDialog.Description>
-              <div className='flex justify-end'>
-                <button className='border border-black focus:ring-2' onClick={onClick} type='button'>
-                  No
-                </button>
-                <button className='bg-black text-white focus:ring-2' onClick={onClick} type='button'>
-                  Yes
-                </button>
-              </div>
-            </FocusTrap.Root>
-          )}
-        </AlertDialog.Root>
-      )}
-    </Fragment>
-  )
-}
-
-export const Styled = () => {
+const Template: Story<AlertDialogProps> = (args: AlertDialogProps) => {
   const [visible, setVisible] = useState<boolean>(false)
 
   const onClick = () => {
@@ -65,11 +29,11 @@ export const Styled = () => {
       </button>
       <AnimatePresence>
         {visible && (
-          <AlertDialog.Root onClose={onClick} hasDescription hasTitle>
+          <Component.Root {...args} onClose={onClick} hasDescription hasTitle>
             {(props: AlertDialogChildrenProps) => (
               <FocusTrap.Root autoFocus restoreFocus>
-                <motion.div animate={{ opacity: 0.5 }} className='absolute inset-0 bg-black' exit={{ opacity: 0 }} initial={{ opacity: 0 }} />
-                <div className='absolute inset-0 flex justify-center items-start py-16 z-10'>
+                <motion.div animate={{ opacity: 0.5 }} className='absolute inset-0 bg-black z-10' exit={{ opacity: 0 }} initial={{ opacity: 0 }} />
+                <div className='absolute inset-0 flex justify-center items-start py-16 z-20'>
                   <motion.div
                     animate={{ opacity: 1, scale: 1 }}
                     className='w-96 flex flex-col bg-white p-6 space-y-6 rounded-md'
@@ -77,12 +41,12 @@ export const Styled = () => {
                     initial={{ opacity: 0, scale: 0.5 }}
                   >
                     <div className='flex flex-col'>
-                      <AlertDialog.Title {...props} className='font-medium text-lg'>
+                      <Component.Title {...props} className='font-medium text-lg'>
                         {Chance().sentence({ words: 2 })}
-                      </AlertDialog.Title>
-                      <AlertDialog.Description {...props} className='text-sm'>
+                      </Component.Title>
+                      <Component.Description {...props} className='text-sm'>
                         {Chance().paragraph({ sentences: 1 })}
-                      </AlertDialog.Description>
+                      </Component.Description>
                     </div>
                     <div className='flex justify-end space-x-3'>
                       <button
@@ -112,15 +76,19 @@ export const Styled = () => {
                 </div>
               </FocusTrap.Root>
             )}
-          </AlertDialog.Root>
+          </Component.Root>
         )}
       </AnimatePresence>
     </Fragment>
   )
 }
 
+export const AlertDialog = Template.bind({})
+AlertDialog.args = { hasDescription: true, hasTitle: true }
+AlertDialog.storyName = 'AlertDialog'
+
 export default {
-  component: AlertDialog.Root,
-  subcomponents: { Title: AlertDialog.Title, Description: AlertDialog.Description },
+  component: Component.Root,
+  subcomponents: { Title: Component.Title, Description: Component.Description },
   title: 'Components/AlertDialog'
 } as Meta

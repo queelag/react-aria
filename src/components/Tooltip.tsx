@@ -20,6 +20,9 @@ const TOOLTIP_CHILDREN_PROPS_KEYS: (keyof TooltipChildrenProps)[] = [
   'visible'
 ]
 
+/**
+ * A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it. It typically appears after a small delay and disappears when Escape is pressed or on mouse out.
+ */
 function Root(props: TooltipProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new TooltipStore(update, props.hideDelay, props.id), [])
@@ -94,7 +97,7 @@ function Trigger(props: TooltipTriggerProps) {
   }
 
   const onMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
-    Debounce.handle(props.rootID, () => props.setVisible(false), props.hideDelay)
+    Debounce.handle(props.rootID, () => props.setVisible(false), props.hideDelay || 0)
     props.onMouseLeave && props.onMouseLeave(event)
   }
 
@@ -115,5 +118,4 @@ function Trigger(props: TooltipTriggerProps) {
   )
 }
 
-const Tooltip = { Root, Element, Trigger }
-export { Tooltip }
+export { Root, Element, Trigger }

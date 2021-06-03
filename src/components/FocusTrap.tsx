@@ -25,5 +25,4 @@ function Root(props: FocusTrapProps) {
   return <div {...omit(props, 'autoFocus', 'restoreFocus')} id={store.id} onKeyDown={onKeyDown} ref={ref} />
 }
 
-const FocusTrap = { Root }
-export { FocusTrap }
+export { Root }

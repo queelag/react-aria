@@ -5,3 +5,8 @@
 *:focus {
   outline: none !important;
 }
+
+.tear {
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
+}

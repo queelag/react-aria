@@ -34,7 +34,7 @@ function Root(props: TooltipProps) {
   }
 
   return (
-    <div {...omit(props, 'hideDelay', 'popperOptions')} id={store.id} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
+    <div {...omit(props, 'hideDelay', 'popperOptions')} id={store.id} onKeyDown={onKeyDown}>
       {props.children({
         elementID: store.elementID,
         hideDelay: store.hideDelay,
@@ -113,7 +113,7 @@ function Trigger(props: TooltipTriggerProps) {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       ref={ref}
-      tabIndex={0}
+      tabIndex={typeof props.focusable === 'boolean' ? (props.focusable ? 0 : -1) : 0}
     />
   )
 }

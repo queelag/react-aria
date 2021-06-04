@@ -724,13 +724,20 @@ export type SliderProps = {
 
 export type SliderChildrenProps = {
   percentual: number
+  setThumbRef: (ref: MutableRefObject<HTMLDivElement>) => void
   /**
    * The current value limited by maximum and minimum.
    */
   value: number
 } & Pick<SliderProps, 'maximum' | 'minimum'>
 
-export type SliderThumbProps = {} & SliderChildrenProps & HTMLDivProps
+export type SliderThumbProps = {
+  /**
+   * Determines whether the element is focusable or not.
+   */
+  focusable?: boolean
+} & SliderChildrenProps &
+  HTMLDivProps
 
 export type ToggleButtonProps = {
   /**
@@ -784,4 +791,10 @@ export type TooltipChildrenProps = {
 
 export type TooltipElementProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'rootID' | 'setElementRef' | 'popper' | 'setVisible'> & Omit<HTMLDivProps, 'id'>
 
-export type TooltipTriggerProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'hideDelay' | 'rootID' | 'setTriggerRef' | 'setVisible'> & HTMLDivProps
+export type TooltipTriggerProps = {
+  /**
+   * Determines whether the element is focusable or not.
+   */
+  focusable?: boolean
+} & Pick<TooltipChildrenProps, 'elementID' | 'hideDelay' | 'rootID' | 'setTriggerRef' | 'setVisible'> &
+  HTMLDivProps

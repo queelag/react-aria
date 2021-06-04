@@ -45,6 +45,11 @@ class TooltipStore extends ComponentStore {
   }
 
   setVisible = (visible: boolean): void => {
+    if (visible === false && this.triggerRef.current === document.activeElement) {
+      Logger.debug(this.id, 'setVisible', `Failed to set visible to false, the trigger element is still focused.`)
+      return
+    }
+
     this.visible = visible
     Logger.debug(this.id, 'setVisible', `The tooltip has been ${visible ? 'shown' : 'hidden'}.`)
 

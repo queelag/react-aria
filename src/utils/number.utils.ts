@@ -15,12 +15,12 @@ class NumberUtils {
     return isNaN(parseFloat(value)) ? 0 : parseFloat(value)
   }
 
-  static isMultipleOf(value: number, of: number): boolean {
-    return value % of === 0
+  static isMultipleOf(value: number, of: number, decimals: number = 0): boolean {
+    return this.toFixedNumber(value / of, decimals) % 1 !== 0
   }
 
-  static toFixedNumber(value: number, digits: number): number {
-    return this.parseFloat(value.toFixed(digits))
+  static toFixedNumber(value: number, decimals: number): number {
+    return this.parseFloat(value.toFixed(decimals))
   }
 }
 

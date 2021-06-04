@@ -100,6 +100,8 @@ export enum Key {
   ENTER = 'Enter',
   ESCAPE = 'Escape',
   HOME = 'Home',
+  PAGE_DOWN = 'PageDown',
+  PAGE_UP = 'PageUp',
   SPACE = ' ',
   TAB = 'Tab'
 }

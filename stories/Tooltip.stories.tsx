@@ -9,7 +9,7 @@ const Template: Story<TooltipProps> = (args: TooltipProps) => {
   return (
     <div className='flex items-center space-x-2'>
       <span>Generic Title</span>
-      <Component.Root {...args} popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 8] } }], placement: 'auto' }}>
+      <Component.Root {...args} className='relative' popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 8] } }], placement: 'auto' }}>
         {(props: TooltipChildrenProps) => (
           <Fragment>
             <Component.Trigger {...props} className='flex justify-center items-center outline-none rounded-full focus:ring-2 ring-blue-400'>

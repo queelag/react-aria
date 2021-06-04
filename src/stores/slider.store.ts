@@ -1,27 +1,35 @@
 import { KeyboardEvent, MutableRefObject } from 'react'
-import { ComponentName, Key } from '../definitions/enums'
+import { ComponentName, Key, SliderOrientation } from '../definitions/enums'
 import { ID } from '../definitions/types'
 import ComponentRefStore from '../modules/component.ref.store'
 import Logger from '../modules/logger'
 import NumberUtils from '../utils/number.utils'
 
 class SliderStore extends ComponentRefStore {
+  orientation: SliderOrientation
   percentual: number
-  stepSize: number
-  stepSizeDecimals: number
+  step: number
+  stepDecimals: number
   thumbMovable: boolean
   thumbRef: MutableRefObject<HTMLDivElement>
 
-  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, stepSize: number = 1, id?: ID) {
+  constructor(
+    ref: MutableRefObject<HTMLDivElement>,
+    update: () => void,
+    id?: ID,
+    orientation: SliderOrientation = SliderOrientation.HORIZONTAL,
+    step: number = 1
+  ) {
     super(ComponentName.SLIDER, ref, update, id)
 
+    this.orientation = orientation
     this.percentual = 0
-    this.stepSize = 0
-    this.stepSizeDecimals = 0
+    this.step = 0
+    this.stepDecimals = 0
     this.thumbMovable = false
     this.thumbRef = { current: document.createElement('div') }
 
-    this.setStepSize(stepSize)
+    this.setStepSize(step)
   }
 
   handleKeyboardInteractions(
@@ -49,23 +57,23 @@ class SliderStore extends ComponentRefStore {
     switch (event.key) {
       case Key.ARROW_LEFT:
       case Key.ARROW_DOWN:
-        this.setPercentual(maximum, value - this.stepSize)
+        this.setPercentual(maximum, value - this.step)
         this.setValue(minimum, maximum, onChangeValue)
 
         break
       case Key.ARROW_RIGHT:
       case Key.ARROW_UP:
-        this.setPercentual(maximum, value + this.stepSize)
+        this.setPercentual(maximum, value + this.step)
         this.setValue(minimum, maximum, onChangeValue)
 
         break
       case Key.PAGE_DOWN:
-        this.setPercentual(maximum, value - this.stepSize * 10)
+        this.setPercentual(maximum, value - this.step * 10)
         this.setValue(minimum, maximum, onChangeValue)
 
         break
       case Key.PAGE_UP:
-        this.setPercentual(maximum, value + this.stepSize * 10)
+        this.setPercentual(maximum, value + this.step * 10)
         this.setValue(minimum, maximum, onChangeValue)
 
         break
@@ -104,7 +112,7 @@ class SliderStore extends ComponentRefStore {
       return
     }
 
-    this.setPercentualByX(event.clientX)
+    this.setPercentualByCoordinates(event.clientX, event.clientY)
     this.setValue(minimum, maximum, onChangeValue)
   }
 
@@ -125,8 +133,8 @@ class SliderStore extends ComponentRefStore {
   setPercentual(maximum: number, value: number): void {
     let percentual: number
 
-    percentual = NumberUtils.toFixedNumber((value / maximum) * 100, this.stepSizeDecimals)
-    if (NumberUtils.isMultipleOf(percentual, this.stepSize, this.stepSizeDecimals)) return
+    percentual = NumberUtils.toFixedNumber((value / maximum) * 100, this.stepDecimals)
+    if (!NumberUtils.isMultipleOf(percentual, this.step, this.stepDecimals)) return
 
     this.percentual = percentual
     Logger.debug(this.id, 'setPercentual', `The percentual has been set to ${this.percentual}.`)
@@ -134,17 +142,21 @@ class SliderStore extends ComponentRefStore {
     this.update()
   }
 
-  setPercentualByX(x: number, round: boolean = false): void {
+  setPercentualByCoordinates(x: number, y: number, round: boolean = false): void {
     let percentual: number
 
-    percentual = NumberUtils.toFixedNumber(NumberUtils.limit(((x - this.elementOffsetLeft) / this.elementWidth) * 100, 0, 100), this.stepSizeDecimals)
-    if (NumberUtils.isMultipleOf(percentual, this.stepSize, this.stepSizeDecimals) && !round) return
+    switch (this.orientation) {
+      case SliderOrientation.HORIZONTAL:
+        percentual = NumberUtils.toFixedNumber(NumberUtils.limit(((x - this.elementOffsetLeft) / this.elementWidth) * 100, 0, 100), this.stepDecimals)
+        break
+      case SliderOrientation.VERTICAL:
+        percentual = NumberUtils.toFixedNumber(NumberUtils.limit(((this.elementOffsetBottom - y) / this.elementHeight) * 100, 0, 100), this.stepDecimals)
+        break
+    }
+    if (!NumberUtils.isMultipleOf(percentual, this.step, this.stepDecimals) && !round) return
 
     if (round) {
-      percentual = NumberUtils.toFixedNumber(
-        Math[percentual > this.percentual ? 'floor' : 'ceil'](percentual / this.stepSize) * this.stepSize,
-        this.stepSizeDecimals
-      )
+      percentual = NumberUtils.toFixedNumber(Math[percentual > this.percentual ? 'floor' : 'ceil'](percentual / this.step) * this.step, this.stepDecimals)
       Logger.debug(this.id, 'setPercentual', `The percentual has been rounded to ${percentual}%.`)
     }
 
@@ -155,15 +167,15 @@ class SliderStore extends ComponentRefStore {
   setValue(minimum: number, maximum: number, onChangeValue: (value: number) => any): void {
     let value: number
 
-    value = NumberUtils.toFixedNumber(NumberUtils.limit((maximum / 100) * this.percentual, minimum, maximum), this.stepSizeDecimals)
-    if (NumberUtils.isMultipleOf(value, this.stepSize, this.stepSizeDecimals)) return
+    value = NumberUtils.toFixedNumber(NumberUtils.limit((maximum / 100) * this.percentual, minimum, maximum), this.stepDecimals)
+    if (!NumberUtils.isMultipleOf(value, this.step, this.stepDecimals)) return
 
     onChangeValue(value)
   }
 
-  setStepSize(stepSize: number): void {
-    this.stepSize = stepSize
-    this.stepSizeDecimals = (stepSize.toString().match(/\..+/) || [''])[0].slice(1).length
+  setStepSize(step: number): void {
+    this.step = step
+    this.stepDecimals = (step.toString().match(/\..+/) || [''])[0].slice(1).length
   }
 
   setThumbRef = (ref: MutableRefObject<HTMLDivElement>): void => {
@@ -171,8 +183,20 @@ class SliderStore extends ComponentRefStore {
     Logger.debug(this.id, 'setThumbRef', `The ref of the thumb element has been set.`)
   }
 
+  get elementOffsetBottom(): number {
+    return this.element.getBoundingClientRect().bottom
+  }
+
   get elementOffsetLeft(): number {
     return this.element.getBoundingClientRect().left
+  }
+
+  get elementOffsetTop(): number {
+    return this.element.getBoundingClientRect().top
+  }
+
+  get elementHeight(): number {
+    return parseFloat(getComputedStyle(this.element).height)
   }
 
   get elementWidth(): number {

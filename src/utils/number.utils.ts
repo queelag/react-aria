@@ -16,7 +16,7 @@ class NumberUtils {
   }
 
   static isMultipleOf(value: number, of: number, decimals: number = 0): boolean {
-    return this.toFixedNumber(value / of, decimals) % 1 !== 0
+    return this.toFixedNumber(value / of, decimals) % 1 === 0
   }
 
   static toFixedNumber(value: number, decimals: number): number {

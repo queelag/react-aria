@@ -1,5 +1,5 @@
 import { MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
-import { CarouselLive, CarouselRotationMode, DisclosureStatus, ListBoxSelectMode } from './enums'
+import { CarouselLive, CarouselRotationMode, DisclosureStatus, ListBoxSelectMode, SliderOrientation } from './enums'
 import { ID, PopperData, PopperOptions } from './types'
 
 export type AccordionProps = {
@@ -715,7 +715,8 @@ export type SliderProps = {
    */
   minimum: number
   onChangeValue: (value: number) => any
-  stepSize?: number
+  orientation?: SliderOrientation
+  step?: number
   /**
    * The current value of the Slider.
    */
@@ -729,7 +730,7 @@ export type SliderChildrenProps = {
    * The current value limited by maximum and minimum.
    */
   value: number
-} & Pick<SliderProps, 'maximum' | 'minimum'>
+} & Pick<SliderProps, 'maximum' | 'minimum' | 'orientation'>
 
 export type SliderThumbProps = {
   /**

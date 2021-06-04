@@ -105,3 +105,8 @@ export enum Key {
   SPACE = ' ',
   TAB = 'Tab'
 }
+
+export enum SliderOrientation {
+  HORIZONTAL = 'horizontal',
+  VERTICAL = 'vertical'
+}

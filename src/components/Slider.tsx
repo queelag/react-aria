@@ -16,10 +16,10 @@ const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = ['maximum', 'm
 function Root(props: SliderProps) {
   const update = useForceUpdate()
   const ref = useRef(document.createElement('div'))
-  const store = useMemo(() => new SliderStore(ref, update, props.stepSize, props.id), [])
+  const store = useMemo(() => new SliderStore(ref, update, props.id, props.orientation, props.step), [])
 
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
-    store.setPercentualByX(event.clientX, true)
+    store.setPercentualByCoordinates(event.clientX, event.clientY, true)
     store.setValue(props.minimum, props.maximum, props.onChangeValue)
   }
 
@@ -34,14 +34,14 @@ function Root(props: SliderProps) {
   }
 
   useEffect(() => {
-    StoreUtils.shouldUpdateKey(store, 'stepSize', props.stepSize) && store.setStepSize(props.stepSize)
-  }, [props.stepSize])
+    StoreUtils.shouldUpdateKey(store, 'step', props.step) && store.setStepSize(props.step)
+  }, [props.step])
 
   useEffect(() => store.setPercentual(props.maximum, props.value), [])
 
   return (
     <div
-      {...omit(props, 'maximum', 'minimum', 'onChangeValue', 'stepSize', 'value')}
+      {...omit(props, 'maximum', 'minimum', 'onChangeValue', 'step', 'value')}
       id={store.id}
       onClick={onClick}
       onKeyDown={onKeyDown}
@@ -68,6 +68,7 @@ function Thumb(props: SliderThumbProps) {
   return (
     <div
       {...omit(props, SLIDER_CHILDREN_PROPS_KEYS)}
+      aria-orientation={props.orientation}
       aria-valuemax={props.maximum}
       aria-valuemin={props.minimum}
       aria-valuenow={props.value}

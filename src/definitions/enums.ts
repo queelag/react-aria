@@ -106,6 +106,11 @@ export enum Key {
   TAB = 'Tab'
 }
 
+export enum SliderMode {
+  DUAL_THUMB = 'DUAL_THUMB',
+  SINGLE_THUMB = 'SINGLE_THUMB'
+}
+
 export enum SliderOrientation {
   HORIZONTAL = 'horizontal',
   VERTICAL = 'vertical'

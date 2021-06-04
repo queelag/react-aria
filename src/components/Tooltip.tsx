@@ -113,7 +113,7 @@ function Trigger(props: TooltipTriggerProps) {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       ref={ref}
-      tabIndex={typeof props.focusable === 'boolean' ? (props.focusable ? 0 : -1) : 0}
+      tabIndex={0}
     />
   )
 }

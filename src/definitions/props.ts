@@ -1,6 +1,6 @@
-import { MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
-import { CarouselLive, CarouselRotationMode, DisclosureStatus, ListBoxSelectMode, SliderOrientation } from './enums'
-import { ID, PopperData, PopperOptions } from './types'
+import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
+import { CarouselLive, CarouselRotationMode, DisclosureStatus, ListBoxSelectMode, SliderMode, SliderOrientation } from './enums'
+import { ID, PopperData, PopperOptions, SliderPercentual, SliderValue } from './types'
 
 export type AccordionProps = {
   children: (props: AccordionChildrenProps) => ReactNode
@@ -707,6 +707,10 @@ export type RadioGroupItemProps = {
 export type SliderProps = {
   children: (props: SliderChildrenProps) => ReactNode
   /**
+   * The label of the Slider.
+   */
+  label: string
+  /**
    * The maximum value that the Slider can have, the value will be automatically lower or equal to this.
    */
   maximum: number
@@ -714,22 +718,27 @@ export type SliderProps = {
    * The minimum value that the Slider can have, the value will be automatically higher or equal to this.
    */
   minimum: number
-  onChangeValue: (value: number) => any
+  mode?: SliderMode
+  onChangeValue: (value: SliderValue) => any
   orientation?: SliderOrientation
   step?: number
   /**
    * The current value of the Slider.
    */
-  value: number
+  value: SliderValue
 } & Omit<HTMLDivProps, 'children'>
 
 export type SliderChildrenProps = {
-  percentual: number
-  setThumbRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  handleKeyboardInteractions: (event: KeyboardEvent<HTMLDivElement>, index: number) => void
+  handleMouseInteractions: (index: number) => void
+  /**
+   * The percentual value of the current value based on the minimum and maximum values.
+   */
+  percentual: SliderPercentual
   /**
    * The current value limited by maximum and minimum.
    */
-  value: number
+  value: SliderValue
 } & Pick<SliderProps, 'maximum' | 'minimum' | 'orientation'>
 
 export type SliderThumbProps = {
@@ -737,6 +746,7 @@ export type SliderThumbProps = {
    * Determines whether the element is focusable or not.
    */
   focusable?: boolean
+  index: 0 | 1
 } & SliderChildrenProps &
   HTMLDivProps
 
@@ -791,11 +801,4 @@ export type TooltipChildrenProps = {
 } & Pick<TooltipProps, 'hideDelay'>
 
 export type TooltipElementProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'rootID' | 'setElementRef' | 'popper' | 'setVisible'> & Omit<HTMLDivProps, 'id'>
-
-export type TooltipTriggerProps = {
-  /**
-   * Determines whether the element is focusable or not.
-   */
-  focusable?: boolean
-} & Pick<TooltipChildrenProps, 'elementID' | 'hideDelay' | 'rootID' | 'setTriggerRef' | 'setVisible'> &
-  HTMLDivProps
+export type TooltipTriggerProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'hideDelay' | 'rootID' | 'setTriggerRef' | 'setVisible'> & HTMLDivProps

@@ -1,10 +1,13 @@
 import { Meta, Story } from '@storybook/react'
+import { min } from 'lodash'
 import React, { Fragment, useState } from 'react'
 import * as Component from '../src/components/Slider'
 import * as Tooltip from '../src/components/Tooltip'
-import { SliderOrientation } from '../src/definitions/enums'
+import { SliderMode, SliderOrientation } from '../src/definitions/enums'
 import { HTMLDivProps, SliderChildrenProps, SliderProps, TooltipChildrenProps } from '../src/definitions/props'
+import { SliderValue } from '../src/definitions/types'
 import ArrayUtils from '../src/utils/array.utils'
+import NumberUtils from '../src/utils/number.utils'
 
 function ThumbTooltip(props: HTMLDivProps & { orientation: SliderOrientation; value: number }) {
   return (
@@ -35,10 +38,8 @@ function ThumbTooltip(props: HTMLDivProps & { orientation: SliderOrientation; va
           </Tooltip.Element>
           <Tooltip.Trigger
             {...childrenProps}
-            className='w-6 h-6 rounded-full bg-blue-400 cursor-pointer focus:ring-4 ring-blue-100 transition-all duration-200'
-          >
-            {props.children}
-          </Tooltip.Trigger>
+            className='w-6 h-6 rounded-full bg-blue-400 cursor-pointer hover:ring-4 focus:ring-4 active:ring-8 ring-blue-100 transition-all duration-200'
+          />
         </Fragment>
       )}
     </Tooltip.Root>
@@ -46,7 +47,7 @@ function ThumbTooltip(props: HTMLDivProps & { orientation: SliderOrientation; va
 }
 
 const Template: Story<SliderProps> = (args: SliderProps) => {
-  const [value, setValue] = useState<number>(args.value)
+  const [value, setValue] = useState<SliderValue>(args.value)
 
   return (
     <div className='p-6'>
@@ -56,26 +57,48 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
           'relative flex justify-center items-center',
           args.orientation === SliderOrientation.HORIZONTAL ? 'h-6 max-w-lg' : 'w-6'
         )}
-        onChangeValue={(value: number) => setValue(value)}
+        onChangeValue={(value: SliderValue) => setValue(value)}
         value={value}
       >
         {(props: SliderChildrenProps) => (
           <Fragment>
             <div
-              className={ArrayUtils.joinStrings('rounded-full bg-gray-100', args.orientation === SliderOrientation.HORIZONTAL ? 'h-1 w-full' : 'h-64 w-1')}
+              className={ArrayUtils.joinStrings('rounded-full bg-gray-100', props.orientation === SliderOrientation.HORIZONTAL ? 'h-1 w-full' : 'h-64 w-1')}
             />
-            <ThumbTooltip
-              className='absolute'
-              orientation={args.orientation}
-              style={{
-                bottom: args.orientation === SliderOrientation.VERTICAL ? props.percentual + '%' : 0,
-                left: args.orientation === SliderOrientation.HORIZONTAL ? props.percentual + '%' : 0,
-                transform: args.orientation === SliderOrientation.HORIZONTAL ? 'translateX(-50%)' : 'translateY(50%)'
-              }}
-              value={value}
-            >
-              <Component.Thumb {...props} focusable={false} />
-            </ThumbTooltip>
+            <div
+              className={ArrayUtils.joinStrings('absolute bg-blue-100', props.orientation === SliderOrientation.HORIZONTAL ? 'h-1' : 'w-1')}
+              style={
+                props.orientation === SliderOrientation.HORIZONTAL
+                  ? { left: args.mode === SliderMode.DUAL_THUMB ? min(props.percentual) + '%' : 0, width: NumberUtils.difference(...props.percentual) + '%' }
+                  : { bottom: args.mode === SliderMode.DUAL_THUMB ? min(props.percentual) + '%' : 0, height: NumberUtils.difference(...props.percentual) + '%' }
+              }
+            />
+            <Component.Thumb {...props} focusable={false} index={0}>
+              <ThumbTooltip
+                className='absolute z-20'
+                orientation={props.orientation}
+                style={{
+                  bottom: props.orientation === SliderOrientation.VERTICAL ? props.percentual[0] + '%' : 0,
+                  left: props.orientation === SliderOrientation.HORIZONTAL ? props.percentual[0] + '%' : 0,
+                  transform: props.orientation === SliderOrientation.HORIZONTAL ? 'translateX(-50%)' : 'translateY(50%)'
+                }}
+                value={props.value[0]}
+              />
+            </Component.Thumb>
+            {args.mode === SliderMode.DUAL_THUMB && (
+              <Component.Thumb {...props} focusable={false} index={1}>
+                <ThumbTooltip
+                  className='absolute z-20'
+                  orientation={props.orientation}
+                  style={{
+                    bottom: props.orientation === SliderOrientation.VERTICAL ? props.percentual[1] + '%' : 0,
+                    left: props.orientation === SliderOrientation.HORIZONTAL ? props.percentual[1] + '%' : 0,
+                    transform: props.orientation === SliderOrientation.HORIZONTAL ? 'translateX(-50%)' : 'translateY(50%)'
+                  }}
+                  value={props.value[1]}
+                />
+              </Component.Thumb>
+            )}
           </Fragment>
         )}
       </Component.Root>
@@ -84,7 +107,7 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
 }
 
 export const Slider = Template.bind({})
-Slider.args = { minimum: 0, maximum: 100, orientation: SliderOrientation.HORIZONTAL, step: 1, value: 25 }
+Slider.args = { label: 'Slider', minimum: 0, maximum: 100, mode: SliderMode.DUAL_THUMB, orientation: SliderOrientation.HORIZONTAL, step: 1, value: [0, 25] }
 
 export default {
   component: Component.Root,

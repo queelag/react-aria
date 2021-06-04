@@ -1,14 +1,21 @@
-import { omit } from 'lodash'
+import { max, min, omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
-import { ComponentName } from '../definitions/enums'
+import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
 import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import SliderStore from '../stores/slider.store'
-import NumberUtils from '../utils/number.utils'
 import StoreUtils from '../utils/store.utils'
 
-const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = ['maximum', 'minimum', 'setThumbRef', 'value']
+const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
+  'handleKeyboardInteractions',
+  'handleMouseInteractions',
+  'maximum',
+  'minimum',
+  'orientation',
+  'percentual',
+  'value'
+]
 
 /**
  * A slider is an input where the user selects a value from within a given range. Sliders typically have a slider thumb that can be moved along a bar or track to change the value of the slider.
@@ -16,44 +23,46 @@ const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = ['maximum', 'm
 function Root(props: SliderProps) {
   const update = useForceUpdate()
   const ref = useRef(document.createElement('div'))
-  const store = useMemo(() => new SliderStore(ref, update, props.id, props.orientation, props.step), [])
+  const store = useMemo(
+    () => new SliderStore(ref, update, props.id, props.maximum, props.minimum, props.mode, props.onChangeValue, props.orientation, props.step, props.value),
+    []
+  )
 
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
-    store.setPercentualByCoordinates(event.clientX, event.clientY, true)
-    store.setValue(props.minimum, props.maximum, props.onChangeValue)
-  }
-
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    store.handleKeyboardInteractions(event, props.minimum, props.maximum, props.value, props.onChangeValue)
-    props.onKeyDown && props.onKeyDown(event)
-  }
-
-  const onMouseDown = (event: MouseEvent<HTMLDivElement>) => {
-    store.onMouseDown(props.minimum, props.maximum, props.onChangeValue)
-    props.onMouseDown && props.onMouseDown(event)
+    if (store.isModeSingleThumb) {
+      store.setPercentualByCoordinates(event.clientX, event.clientY, 0, true)
+      store.updateValueByPercentual(store.percentual[0], 0)
+    }
   }
 
   useEffect(() => {
     StoreUtils.shouldUpdateKey(store, 'step', props.step) && store.setStepSize(props.step)
-  }, [props.step])
+    StoreUtils.updateFromProps(store, props, update, 'maximum', 'minimum', 'mode', 'onChangeValue', 'orientation', 'step')
+  }, [props.maximum, props.minimum, props.mode, props.onChangeValue, props.orientation, props.step])
 
-  useEffect(() => store.setPercentual(props.maximum, props.value), [])
+  useEffect(() => {
+    switch (store.mode) {
+      case SliderMode.DUAL_THUMB:
+        store.setPercentualByValue(store.value[0], 0)
+        store.setPercentualByValue(store.value[1], 1)
+
+        break
+      case SliderMode.SINGLE_THUMB:
+        store.setPercentualByValue(store.value[0], 0)
+        break
+    }
+  }, [])
 
   return (
-    <div
-      {...omit(props, 'maximum', 'minimum', 'onChangeValue', 'step', 'value')}
-      id={store.id}
-      onClick={onClick}
-      onKeyDown={onKeyDown}
-      onMouseDown={onMouseDown}
-      ref={ref}
-    >
+    <div {...omit(props, 'maximum', 'minimum', 'onChangeValue', 'step', 'value')} id={store.id} onClick={onClick} ref={ref}>
       {props.children({
-        maximum: props.maximum,
-        minimum: props.minimum,
+        handleKeyboardInteractions: store.handleKeyboardInteractions,
+        handleMouseInteractions: store.onMouseDown,
+        maximum: store.maximum,
+        minimum: store.minimum,
+        orientation: store.orientation,
         percentual: store.percentual,
-        setThumbRef: store.setThumbRef,
-        value: NumberUtils.limit(props.value, props.minimum, props.maximum)
+        value: store.value
       })}
     </div>
   )
@@ -61,9 +70,16 @@ function Root(props: SliderProps) {
 
 function Thumb(props: SliderThumbProps) {
   const id = useID(ComponentName.SLIDER_THUMB, props.id)
-  const ref = useRef(document.createElement('div'))
 
-  useEffect(() => props.setThumbRef(ref), [])
+  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    props.handleKeyboardInteractions(event, props.index)
+    props.onKeyDown && props.onKeyDown(event)
+  }
+
+  const onMouseDown = (event: MouseEvent<HTMLDivElement>) => {
+    props.handleMouseInteractions(props.index)
+    props.onMouseDown && props.onMouseDown(event)
+  }
 
   return (
     <div
@@ -71,9 +87,10 @@ function Thumb(props: SliderThumbProps) {
       aria-orientation={props.orientation}
       aria-valuemax={props.maximum}
       aria-valuemin={props.minimum}
-      aria-valuenow={props.value}
+      aria-valuenow={props.index === 0 ? min(props.value) : max(props.value)}
       id={id}
-      ref={ref}
+      onKeyDown={onKeyDown}
+      onMouseDown={onMouseDown}
       role='slider'
       style={{ ...props.style, userSelect: 'none' }}
       tabIndex={typeof props.focusable === 'boolean' ? (props.focusable ? 0 : -1) : 0}

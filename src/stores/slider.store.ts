@@ -1,44 +1,51 @@
+import { sortBy } from 'lodash'
 import { KeyboardEvent, MutableRefObject } from 'react'
-import { ComponentName, Key, SliderOrientation } from '../definitions/enums'
-import { ID } from '../definitions/types'
+import { ComponentName, Key, SliderMode, SliderOrientation } from '../definitions/enums'
+import { OptionalID, SliderPercentual, SliderValue } from '../definitions/types'
 import ComponentRefStore from '../modules/component.ref.store'
 import Logger from '../modules/logger'
 import NumberUtils from '../utils/number.utils'
 
 class SliderStore extends ComponentRefStore {
+  maximum: number
+  minimum: number
+  mode: SliderMode
   orientation: SliderOrientation
-  percentual: number
+  percentual: SliderPercentual
   step: number
   stepDecimals: number
   thumbMovable: boolean
-  thumbRef: MutableRefObject<HTMLDivElement>
+  value: SliderValue
 
   constructor(
     ref: MutableRefObject<HTMLDivElement>,
     update: () => void,
-    id?: ID,
+    id: OptionalID,
+    maximum: number,
+    minimum: number,
+    mode: SliderMode = SliderMode.SINGLE_THUMB,
+    onChangeValue: (value: SliderValue) => void,
     orientation: SliderOrientation = SliderOrientation.HORIZONTAL,
-    step: number = 1
+    step: number = 1,
+    value: SliderValue
   ) {
     super(ComponentName.SLIDER, ref, update, id)
 
+    this.maximum = maximum
+    this.minimum = minimum
+    this.mode = mode
+    this.onChangeValue = onChangeValue
     this.orientation = orientation
-    this.percentual = 0
+    this.percentual = [0, 0]
     this.step = 0
     this.stepDecimals = 0
     this.thumbMovable = false
-    this.thumbRef = { current: document.createElement('div') }
+    this.value = value
 
     this.setStepSize(step)
   }
 
-  handleKeyboardInteractions(
-    event: KeyboardEvent<HTMLDivElement>,
-    minimum: number,
-    maximum: number,
-    value: number,
-    onChangeValue: (value: number) => any
-  ): void {
+  handleKeyboardInteractions = (event: KeyboardEvent<HTMLDivElement>, index: number): void => {
     switch (event.key) {
       case Key.ARROW_LEFT:
       case Key.ARROW_DOWN:
@@ -57,92 +64,90 @@ class SliderStore extends ComponentRefStore {
     switch (event.key) {
       case Key.ARROW_LEFT:
       case Key.ARROW_DOWN:
-        this.setPercentual(maximum, value - this.step)
-        this.setValue(minimum, maximum, onChangeValue)
+        this.setPercentualByValue(this.value[index] - this.step, index)
+        this.updateValueByPercentual(this.percentual[index], index)
 
         break
       case Key.ARROW_RIGHT:
       case Key.ARROW_UP:
-        this.setPercentual(maximum, value + this.step)
-        this.setValue(minimum, maximum, onChangeValue)
+        this.setPercentualByValue(this.value[index] + this.step, index)
+        this.updateValueByPercentual(this.percentual[index], index)
 
         break
       case Key.PAGE_DOWN:
-        this.setPercentual(maximum, value - this.step * 10)
-        this.setValue(minimum, maximum, onChangeValue)
+        this.setPercentualByValue(this.value[index] - this.step * 10, index)
+        this.updateValueByPercentual(this.percentual[index], index)
 
         break
       case Key.PAGE_UP:
-        this.setPercentual(maximum, value + this.step * 10)
-        this.setValue(minimum, maximum, onChangeValue)
+        this.setPercentualByValue(this.value[index] + this.step * 10, index)
+        this.updateValueByPercentual(this.percentual[index], index)
 
         break
       case Key.HOME:
-        this.setPercentual(maximum, minimum)
-        this.setValue(minimum, maximum, onChangeValue)
+        this.setPercentualByValue(this.minimum, index)
+        this.updateValueByPercentual(this.percentual[index], index)
 
         break
       case Key.END:
-        this.setPercentual(maximum, maximum)
-        this.setValue(minimum, maximum, onChangeValue)
+        this.setPercentualByValue(this.maximum, index)
+        this.updateValueByPercentual(this.percentual[index], index)
 
         break
     }
   }
 
-  onMouseDown = (minimum: number, maximum: number, onChangeValue: (value: number) => any): void => {
+  onMouseDown = (index: number): void => {
     this.thumbMovable = true
     Logger.debug(this.id, 'onMouseDown', `The thumb has been unlocked.`)
 
-    document.removeEventListener('mousemove', this.onMouseMoveListener)
-    document.removeEventListener('mouseup', this.onMouseUp)
+    this.onMouseMoveListener = (event: MouseEvent) => this.onMouseMove(event, index)
+    this.onMouseUpListener = () => this.onMouseUp(index)
 
-    this.onMouseMoveListener = (event: MouseEvent) => this.onMouseMove(event, minimum, maximum, onChangeValue)
-    Logger.debug(this.id, 'onMouseDown', `The onMouseMove listener has been set.`)
+    Logger.debug(this.id, 'onMouseDown', `The mousemove and mouseup listeners has been set.`)
 
     document.addEventListener('mousemove', this.onMouseMoveListener)
-    document.addEventListener('mouseup', this.onMouseUp)
+    document.addEventListener('mouseup', this.onMouseUpListener)
 
     Logger.debug(this.id, 'onMouseDown', `The mousemove and mouseup listeners have been registered.`)
   }
 
-  onMouseMove = (event: MouseEvent, minimum: number, maximum: number, onChangeValue: (value: number) => any): void => {
+  onMouseMove = (event: MouseEvent, index: number): void => {
     if (this.thumbMovable === false) {
       Logger.debug(this.id, 'onMouseMove', `The thumb is not movable.`)
       return
     }
 
-    this.setPercentualByCoordinates(event.clientX, event.clientY)
-    this.setValue(minimum, maximum, onChangeValue)
+    this.setPercentualByCoordinates(event.clientX, event.clientY, index)
+    this.updateValueByPercentual(this.percentual[index], index)
   }
 
-  onMouseUp = (): void => {
-    Logger.debug(this.id, 'onMouseUp', `The percentual has been set to ${this.percentual}%.`)
+  onMouseUp = (index: number): void => {
+    Logger.debug(this.id, 'onMouseUp', `The percentual has been set to ${this.percentual[index]}%.`)
 
     this.thumbMovable = false
     Logger.debug(this.id, 'onMouseUp', `The thumb has been locked.`)
 
     document.removeEventListener('mousemove', this.onMouseMoveListener)
-    document.removeEventListener('mouseup', this.onMouseUp)
+    document.removeEventListener('mouseup', this.onMouseUpListener)
 
     Logger.debug(this.id, 'onMouseUp', `THe mousemove and mouseup listeners have been removed.`)
   }
 
+  onChangeValue(value: SliderValue): void {}
   onMouseMoveListener(event: MouseEvent): void {}
+  onMouseUpListener(event: MouseEvent): void {}
 
-  setPercentual(maximum: number, value: number): void {
+  setPercentualByValue(value: number, index: number): void {
     let percentual: number
 
-    percentual = NumberUtils.toFixedNumber((value / maximum) * 100, this.stepDecimals)
+    percentual = NumberUtils.toFixedNumber((value / this.maximum) * 100, this.stepDecimals)
     if (!NumberUtils.isMultipleOf(percentual, this.step, this.stepDecimals)) return
 
-    this.percentual = percentual
-    Logger.debug(this.id, 'setPercentual', `The percentual has been set to ${this.percentual}.`)
-
-    this.update()
+    this.setPercentual(percentual, index)
   }
 
-  setPercentualByCoordinates(x: number, y: number, round: boolean = false): void {
+  setPercentualByCoordinates(x: number, y: number, index: number, round: boolean = false): void {
     let percentual: number
 
     switch (this.orientation) {
@@ -156,21 +161,23 @@ class SliderStore extends ComponentRefStore {
     if (!NumberUtils.isMultipleOf(percentual, this.step, this.stepDecimals) && !round) return
 
     if (round) {
-      percentual = NumberUtils.toFixedNumber(Math[percentual > this.percentual ? 'floor' : 'ceil'](percentual / this.step) * this.step, this.stepDecimals)
+      percentual = NumberUtils.toFixedNumber(
+        Math[percentual > this.percentual[index] ? 'floor' : 'ceil'](percentual / this.step) * this.step,
+        this.stepDecimals
+      )
       Logger.debug(this.id, 'setPercentual', `The percentual has been rounded to ${percentual}%.`)
     }
 
-    this.percentual = percentual
-    this.update()
+    this.setPercentual(percentual, index)
   }
 
-  setValue(minimum: number, maximum: number, onChangeValue: (value: number) => any): void {
-    let value: number
+  setPercentual(percentual: number, index: number): void {
+    this.percentual[index] = percentual
+    // this.percentual = sortBy(this.percentual) as SliderPercentual
 
-    value = NumberUtils.toFixedNumber(NumberUtils.limit((maximum / 100) * this.percentual, minimum, maximum), this.stepDecimals)
-    if (!NumberUtils.isMultipleOf(value, this.step, this.stepDecimals)) return
+    Logger.debug(this.id, 'setPercentual', `The percentual with index ${index} has been set to ${this.percentual[index]}%.`)
 
-    onChangeValue(value)
+    this.update()
   }
 
   setStepSize(step: number): void {
@@ -178,9 +185,15 @@ class SliderStore extends ComponentRefStore {
     this.stepDecimals = (step.toString().match(/\..+/) || [''])[0].slice(1).length
   }
 
-  setThumbRef = (ref: MutableRefObject<HTMLDivElement>): void => {
-    this.thumbRef = ref
-    Logger.debug(this.id, 'setThumbRef', `The ref of the thumb element has been set.`)
+  updateValueByPercentual(percentual: number, index: number): void {
+    let value: number
+
+    value = NumberUtils.toFixedNumber(NumberUtils.limit((this.maximum / 100) * percentual, this.minimum, this.maximum), this.stepDecimals)
+    if (!NumberUtils.isMultipleOf(value, this.step, this.stepDecimals)) return
+
+    this.value[index] = value
+
+    this.onChangeValue(sortBy(this.value) as SliderValue)
   }
 
   get elementOffsetBottom(): number {
@@ -201,6 +214,10 @@ class SliderStore extends ComponentRefStore {
 
   get elementWidth(): number {
     return parseFloat(getComputedStyle(this.element).width)
+  }
+
+  get isModeSingleThumb(): boolean {
+    return this.mode === SliderMode.SINGLE_THUMB
   }
 }
 

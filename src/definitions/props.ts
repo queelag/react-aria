@@ -746,7 +746,6 @@ export type SliderThumbProps = {
    * Determines whether the element is focusable or not.
    */
   focusable?: boolean
-  index: 0 | 1
 } & SliderChildrenProps &
   HTMLDivProps
 

@@ -73,7 +73,7 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
                   : { bottom: args.mode === SliderMode.DUAL_THUMB ? min(props.percentual) + '%' : 0, height: NumberUtils.difference(...props.percentual) + '%' }
               }
             />
-            <Component.Thumb {...props} focusable={false} index={0}>
+            <Component.FirstThumb {...props} focusable={false}>
               <ThumbTooltip
                 className='absolute z-20'
                 orientation={props.orientation}
@@ -84,9 +84,9 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
                 }}
                 value={props.value[0]}
               />
-            </Component.Thumb>
+            </Component.FirstThumb>
             {args.mode === SliderMode.DUAL_THUMB && (
-              <Component.Thumb {...props} focusable={false} index={1}>
+              <Component.SecondThumb {...props} focusable={false}>
                 <ThumbTooltip
                   className='absolute z-20'
                   orientation={props.orientation}
@@ -97,7 +97,7 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
                   }}
                   value={props.value[1]}
                 />
-              </Component.Thumb>
+              </Component.SecondThumb>
             )}
           </Fragment>
         )}
@@ -111,6 +111,6 @@ Slider.args = { label: 'Slider', minimum: 0, maximum: 100, mode: SliderMode.SING
 
 export default {
   component: Component.Root,
-  subcomponents: { Thumb: Component.Thumb },
+  subcomponents: { FirstThumb: Component.FirstThumb, SecondThumb: Component.SecondThumb },
   title: 'Components/Slider'
 } as Meta

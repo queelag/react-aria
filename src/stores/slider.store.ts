@@ -1,4 +1,4 @@
-import { sortBy } from 'lodash'
+import { cloneDeep } from 'lodash'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, SliderMode, SliderOrientation } from '../definitions/enums'
 import { OptionalID, SliderPercentual, SliderValue } from '../definitions/types'
@@ -40,7 +40,7 @@ class SliderStore extends ComponentRefStore {
     this.step = 0
     this.stepDecimals = 0
     this.thumbMovable = false
-    this.value = value
+    this.value = cloneDeep(value)
 
     this.setStepSize(step)
   }
@@ -173,8 +173,6 @@ class SliderStore extends ComponentRefStore {
 
   setPercentual(percentual: number, index: number): void {
     this.percentual[index] = percentual
-    // this.percentual = sortBy(this.percentual) as SliderPercentual
-
     Logger.debug(this.id, 'setPercentual', `The percentual with index ${index} has been set to ${this.percentual[index]}%.`)
 
     this.update()
@@ -192,8 +190,9 @@ class SliderStore extends ComponentRefStore {
     if (!NumberUtils.isMultipleOf(value, this.step, this.stepDecimals)) return
 
     this.value[index] = value
+    Logger.debug(this.id, 'updateValueByPercentual', `The value with index ${index} has been set to ${this.value[index]}.`)
 
-    this.onChangeValue(sortBy(this.value) as SliderValue)
+    this.onChangeValue(cloneDeep(this.value))
   }
 
   get elementOffsetBottom(): number {

@@ -1,4 +1,4 @@
-import { max, min, omit } from 'lodash'
+import { omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
@@ -43,15 +43,20 @@ function Root(props: SliderProps) {
   useEffect(() => {
     switch (store.mode) {
       case SliderMode.DUAL_THUMB:
+        store.value[0] = props.value[0]
         store.setPercentualByValue(store.value[0], 0)
+
+        store.value[1] = props.value[1]
         store.setPercentualByValue(store.value[1], 1)
 
         break
       case SliderMode.SINGLE_THUMB:
+        store.value[0] = props.value[0]
         store.setPercentualByValue(store.value[0], 0)
+
         break
     }
-  }, [])
+  }, [props.value])
 
   return (
     <div {...omit(props, 'maximum', 'minimum', 'onChangeValue', 'step', 'value')} id={store.id} onClick={onClick} ref={ref}>
@@ -68,16 +73,16 @@ function Root(props: SliderProps) {
   )
 }
 
-function Thumb(props: SliderThumbProps) {
+const Thumb = (index: 0 | 1) => (props: SliderThumbProps) => {
   const id = useID(ComponentName.SLIDER_THUMB, props.id)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    props.handleKeyboardInteractions(event, props.index)
+    props.handleKeyboardInteractions(event, index)
     props.onKeyDown && props.onKeyDown(event)
   }
 
   const onMouseDown = (event: MouseEvent<HTMLDivElement>) => {
-    props.handleMouseInteractions(props.index)
+    props.handleMouseInteractions(index)
     props.onMouseDown && props.onMouseDown(event)
   }
 
@@ -87,7 +92,7 @@ function Thumb(props: SliderThumbProps) {
       aria-orientation={props.orientation}
       aria-valuemax={props.maximum}
       aria-valuemin={props.minimum}
-      aria-valuenow={props.index === 0 ? min(props.value) : max(props.value)}
+      aria-valuenow={props.value[index]}
       id={id}
       onKeyDown={onKeyDown}
       onMouseDown={onMouseDown}
@@ -98,4 +103,7 @@ function Thumb(props: SliderThumbProps) {
   )
 }
 
-export { Root, Thumb }
+const FirstThumb = Thumb(0)
+const SecondThumb = Thumb(1)
+
+export { Root, FirstThumb, SecondThumb }

@@ -8,7 +8,7 @@ import { ComboBoxChildrenProps, ComboBoxProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 
 const StyledTemplate: Story<ComboBoxProps> = (args: ComboBoxProps) => {
-  const [options] = useState<string[]>(new Array(5).fill(0).map(() => Chance().country({ full: true })))
+  const [options] = useState<string[]>(new Array(3).fill(0).map(() => Chance().country({ full: true })))
   const [filter, setFilter] = useState<string>('')
   const [value, setValue] = useState<string>('')
 
@@ -32,57 +32,60 @@ const StyledTemplate: Story<ComboBoxProps> = (args: ComboBoxProps) => {
   }
 
   return (
-    <Component.Root
-      {...args}
-      onCollapse={onCollapse}
-      onEscape={onEscape}
-      popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 16] } }] }}
-      autocomplete
-    >
-      {(props: ComboBoxChildrenProps) => (
-        <Fragment>
-          <Component.Group {...props} className='relative'>
-            <Component.Input
-              {...props}
-              className={ArrayUtils.joinStrings(
-                'border border-gray-200 rounded-md p-4 pr-12 font-medium outline-none transition-all duration-200',
-                'hover:bg-gray-100 focus:bg-gray-50',
-                'focus:ring-2 ring-offset-2 ring-blue-400'
-              )}
-              onChange={onChangeFilter}
-              placeholder='ex. Italy'
-              value={filter || value}
-            />
-            <Component.Button {...props} className={ArrayUtils.joinStrings('absolute top-0 right-0 w-12 min-h-full flex justify-center items-center')}>
-              <KeyboardArrowDownRounded />
-            </Component.Button>
-          </Component.Group>
-          <motion.div animate={{ opacity: props.expanded ? 1 : 0 }} className={ArrayUtils.joinStrings(!props.expanded && 'pointer-events-none')}>
-            <Component.ListBox {...props} className='w-full bg-white rounded-md border border-gray-200'>
-              {options
-                .filter((v: string) => v.toLowerCase().trim().includes(filter.toLowerCase().trim()))
-                .map((v: string, k: number) => (
-                  <Component.ListBoxItem
-                    {...props}
-                    className={ArrayUtils.joinStrings(
-                      'flex justify-between p-4 transition-all duration-200',
-                      'hover:bg-gray-100',
-                      props.isListBoxItemFocused(k) && 'bg-gray-100',
-                      v === value && 'bg-gray-50'
-                    )}
-                    index={k}
-                    key={k}
-                    onClick={() => onClick(v)}
-                  >
-                    <span className='font-medium'>{v}</span>
-                    {v === value && <DoneRounded />}
-                  </Component.ListBoxItem>
-                ))}
-            </Component.ListBox>
-          </motion.div>
-        </Fragment>
-      )}
-    </Component.Root>
+    <div className='h-96'>
+      <Component.Root
+        {...args}
+        className='max-w-lg'
+        onCollapse={onCollapse}
+        onEscape={onEscape}
+        popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 16] } }] }}
+        autocomplete
+      >
+        {(props: ComboBoxChildrenProps) => (
+          <Fragment>
+            <Component.Group {...props} className='relative'>
+              <Component.Input
+                {...props}
+                className={ArrayUtils.joinStrings(
+                  'w-full border border-gray-200 rounded-md p-6 pr-12 font-medium outline-none transition-all duration-200',
+                  'hover:bg-gray-100 focus:bg-gray-50',
+                  'focus:ring-2 ring-offset-2 ring-blue-400'
+                )}
+                onChange={onChangeFilter}
+                placeholder='ex. Italy'
+                value={filter || value}
+              />
+              <Component.Button {...props} className={ArrayUtils.joinStrings('absolute top-0 right-0 w-12 min-h-full flex justify-center items-center')}>
+                <KeyboardArrowDownRounded />
+              </Component.Button>
+            </Component.Group>
+            <motion.div animate={{ opacity: props.expanded ? 1 : 0 }} className={ArrayUtils.joinStrings(!props.expanded && 'pointer-events-none')}>
+              <Component.ListBox {...props} className='w-full bg-white rounded-md border border-gray-200 divide-y divide-gray-200'>
+                {options
+                  .filter((v: string) => v.toLowerCase().trim().includes(filter.toLowerCase().trim()))
+                  .map((v: string, k: number) => (
+                    <Component.ListBoxItem
+                      {...props}
+                      className={ArrayUtils.joinStrings(
+                        'flex justify-between p-6 transition-all duration-200',
+                        'hover:bg-gray-100',
+                        props.isListBoxItemFocused(k) && 'bg-gray-100',
+                        v === value && 'bg-gray-50'
+                      )}
+                      index={k}
+                      key={k}
+                      onClick={() => onClick(v)}
+                    >
+                      <span className='font-medium'>{v}</span>
+                      {v === value && <DoneRounded />}
+                    </Component.ListBoxItem>
+                  ))}
+              </Component.ListBox>
+            </motion.div>
+          </Fragment>
+        )}
+      </Component.Root>
+    </div>
   )
 }
 

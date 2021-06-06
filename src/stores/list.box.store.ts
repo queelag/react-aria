@@ -1,9 +1,9 @@
-import { slice } from 'lodash'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, ListBoxSelectMode } from '../definitions/enums'
-import { ID } from '../definitions/types'
+import { ID, OptionalID } from '../definitions/types'
 import ComponentStore from '../modules/component.store'
 import Logger from '../modules/logger'
+import noop from '../modules/noop'
 
 class ListBoxStore extends ComponentStore {
   buttonRef: MutableRefObject<HTMLButtonElement>
@@ -14,7 +14,12 @@ class ListBoxStore extends ComponentStore {
   selectMode: ListBoxSelectMode
   selectedListItemIndexes: number[]
 
-  constructor(update: () => void, id?: ID, selectMode: ListBoxSelectMode = ListBoxSelectMode.SINGLE) {
+  constructor(
+    update: () => void,
+    id: OptionalID,
+    onSelectListItem: (indexes: number[]) => void = noop,
+    selectMode: ListBoxSelectMode = ListBoxSelectMode.SINGLE
+  ) {
     super(ComponentName.LIST_BOX, update, id)
 
     this.buttonRef = { current: document.createElement('button') }
@@ -22,6 +27,7 @@ class ListBoxStore extends ComponentStore {
     this.focusedListItemIndex = -1
     this.listItemsRef = new Map()
     this.listRef = { current: document.createElement('ul') }
+    this.onSelectListItem = onSelectListItem
     this.selectMode = selectMode
     this.selectedListItemIndexes = []
   }
@@ -45,10 +51,7 @@ class ListBoxStore extends ComponentStore {
     switch (event.key) {
       case Key.A:
         if (event.ctrlKey && this.isSelectModeMultiple) {
-          this.selectedListItemIndexes = [...this.listItemsRef.values()].map((v, k: number) => k)
-          Logger.debug(this.id, 'handleKeyboardInteractions', `Every list item has been selected.`)
-
-          this.update()
+          this.setSelectedListItemIndexes([...this.listItemsRef.values()].map((v, k: number) => [k, true]))
         }
 
         break
@@ -57,7 +60,7 @@ class ListBoxStore extends ComponentStore {
         this.setFocusedListItemIndex(this.focusedListItemIndex < this.listItemsRef.size - 1 ? this.focusedListItemIndex + 1 : 0)
 
         if (event.shiftKey || this.isSelectModeSingle) {
-          this.setSelectedListItemIndex(true, this.focusedListItemIndex)
+          this.setSelectedListItemIndex(this.focusedListItemIndex, true)
         }
 
         break
@@ -66,7 +69,7 @@ class ListBoxStore extends ComponentStore {
         this.setFocusedListItemIndex(this.focusedListItemIndex > 0 ? this.focusedListItemIndex - 1 : this.listItemsRef.size - 1)
 
         if (event.shiftKey || this.isSelectModeSingle) {
-          this.setSelectedListItemIndex(true, this.focusedListItemIndex)
+          this.setSelectedListItemIndex(this.focusedListItemIndex, true)
         }
 
         break
@@ -94,16 +97,13 @@ class ListBoxStore extends ComponentStore {
         switch (this.selectMode) {
           case ListBoxSelectMode.MULTIPLE:
             if (event.ctrlKey && event.shiftKey) {
-              this.selectedListItemIndexes = slice([...this.listItemsRef.values()], 0, this.focusedListItemIndex).map((v, k: number) => k)
-              Logger.debug(this.id, 'handleKeyboardEvents', `All list items from the start to the index ${this.focusedListItemIndex} have been selected.`)
-
-              this.update()
+              this.setSelectedListItemIndexes([...this.listItemsRef.values()].map((v, k: number) => [k, k >= 0 && k <= this.focusedListItemIndex]))
             }
 
             break
           case ListBoxSelectMode.SINGLE:
             this.setFocusedListItemIndex(0)
-            this.setSelectedListItemIndex(true, this.focusedListItemIndex)
+            this.setSelectedListItemIndex(this.focusedListItemIndex, true)
 
             break
         }
@@ -113,16 +113,13 @@ class ListBoxStore extends ComponentStore {
         switch (this.selectMode) {
           case ListBoxSelectMode.MULTIPLE:
             if (event.ctrlKey && event.shiftKey) {
-              this.selectedListItemIndexes = slice([...this.listItemsRef.values()], this.focusedListItemIndex).map((v, k: number) => k)
-              Logger.debug(this.id, 'handleKeyboardEvents', `All list items from index ${this.focusedListItemIndex} to the end have been selected.`)
-
-              this.update()
+              this.setSelectedListItemIndexes([...this.listItemsRef.values()].map((v, k: number) => [k, k >= this.focusedListItemIndex]))
             }
 
             break
           case ListBoxSelectMode.SINGLE:
             this.setFocusedListItemIndex(this.listItemsRef.size - 1)
-            this.setSelectedListItemIndex(true, this.focusedListItemIndex)
+            this.setSelectedListItemIndex(this.focusedListItemIndex, true)
 
             break
         }
@@ -130,6 +127,8 @@ class ListBoxStore extends ComponentStore {
         break
     }
   }
+
+  onSelectListItem(indexes: number[]): void {}
 
   setButtonRef = (ref: MutableRefObject<HTMLButtonElement>): void => {
     this.buttonRef = ref
@@ -175,7 +174,7 @@ class ListBoxStore extends ComponentStore {
     this.update()
   }
 
-  setSelectedListItemIndex = (selected: boolean, index: number): void => {
+  setSelectedListItemIndex = (index: number, selected: boolean): void => {
     switch (this.selectMode) {
       case ListBoxSelectMode.MULTIPLE:
         this.selectedListItemIndexes = selected ? [...this.selectedListItemIndexes, index] : this.selectedListItemIndexes.filter((v: number) => v !== index)
@@ -190,7 +189,11 @@ class ListBoxStore extends ComponentStore {
     this.listRef.current.focus()
     Logger.debug(this.id, 'setSelectedListItemID', `The list has been focused.`)
 
-    this.update()
+    this.onSelectListItem === noop ? this.update() : this.onSelectListItem(this.selectedListItemIndexes)
+  }
+
+  setSelectedListItemIndexes = (indexes: [number, boolean][]): void => {
+    indexes.forEach((v: [number, boolean]) => this.setSelectedListItemIndex(v[0], v[1]))
   }
 
   isListItemFocused = (index: number): boolean => {

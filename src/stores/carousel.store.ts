@@ -2,6 +2,7 @@ import { MutableRefObject } from 'react'
 import { CarouselLive, CarouselRotationMode, ComponentName } from '../definitions/enums'
 import ComponentStore from '../modules/component.store'
 import Logger from '../modules/logger'
+import noop from '../modules/noop'
 import rc from '../modules/rc'
 
 class CarouselStore extends ComponentStore {
@@ -20,6 +21,7 @@ class CarouselStore extends ComponentStore {
     activeSlideIndex: number = 0,
     automaticRotationDuration: number = 2000,
     live: CarouselLive = CarouselLive.OFF,
+    onChangeActiveSlideIndex: (index: number) => any = noop,
     rotationMode: CarouselRotationMode = CarouselRotationMode.INFINITE
   ) {
     super(ComponentName.CAROUSEL, update, id)
@@ -30,6 +32,7 @@ class CarouselStore extends ComponentStore {
     this.rotationMode = rotationMode
     this.live = live
     this.mouseEntered = false
+    this.onChangeActiveSlideIndex = onChangeActiveSlideIndex
     this.slideElementRefs = new Map()
 
     this.toggleAutomaticRotation()
@@ -62,11 +65,13 @@ class CarouselStore extends ComponentStore {
     this.update()
   }
 
-  setActiveSlide = (index: number): void => {
-    this.activeSlideIndex = index
-    Logger.debug(this.id, 'setActiveSlide', `The slide with index ${index} has been set as the active slide.`)
+  onChangeActiveSlideIndex(index: number): void {}
 
-    this.update()
+  setActiveSlideIndex = (index: number): void => {
+    this.activeSlideIndex = index
+    Logger.debug(this.id, 'setActiveSlideIndex', `The slide with index ${index} has been set as the active slide.`)
+
+    this.onChangeActiveSlideIndex === noop ? this.update() : this.onChangeActiveSlideIndex(index)
   }
 
   setLive = (live: CarouselLive): void => {
@@ -80,8 +85,6 @@ class CarouselStore extends ComponentStore {
   setSlideElementRef = (index: number, ref: MutableRefObject<HTMLDivElement>): void => {
     this.slideElementRefs.set(index, ref)
     Logger.debug(this.id, 'setSlideElementRef', `The slide with index ${index} has been set to the slide element refs.`)
-
-    this.update()
   }
 
   deleteSlideElementRef = (index: number): void => {
@@ -105,9 +108,9 @@ class CarouselStore extends ComponentStore {
           return this.setLive(CarouselLive.POLITE)
         }
 
-        return this.setActiveSlide(this.activeSlideIndex - 1)
+        return this.setActiveSlideIndex(this.activeSlideIndex - 1)
       case CarouselRotationMode.INFINITE:
-        return this.setActiveSlide(this.activeSlideIndex > 0 ? this.activeSlideIndex - 1 : this.slideElementRefs.size - 1)
+        return this.setActiveSlideIndex(this.activeSlideIndex > 0 ? this.activeSlideIndex - 1 : this.slideElementRefs.size - 1)
     }
   }
 
@@ -122,9 +125,9 @@ class CarouselStore extends ComponentStore {
           return this.setLive(CarouselLive.POLITE)
         }
 
-        return this.setActiveSlide(this.activeSlideIndex + 1)
+        return this.setActiveSlideIndex(this.activeSlideIndex + 1)
       case CarouselRotationMode.INFINITE:
-        return this.setActiveSlide(this.activeSlideIndex < this.slideElementRefs.size - 1 ? this.activeSlideIndex + 1 : 0)
+        return this.setActiveSlideIndex(this.activeSlideIndex < this.slideElementRefs.size - 1 ? this.activeSlideIndex + 1 : 0)
     }
   }
 

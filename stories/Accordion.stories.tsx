@@ -20,7 +20,7 @@ const Template: Story<AccordionProps> = (args: AccordionProps) => {
             <Component.Section {...props} className='flex flex-col' key={k}>
               {(props) => (
                 <Fragment>
-                  <Component.SectionHeader {...props} className='rounded-md ring-offset-2 ring-blue-400 focus:ring-2 z-10'>
+                  <Component.SectionHeader {...props} className='hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-50 z-10 transition-all duration-200'>
                     <div className='flex justify-between items-center p-6 space-x-6'>
                       <span className='font-medium'>{v.title}</span>
                       <motion.div animate={{ rotate: props.expanded ? 180 : 0 }}>
@@ -31,7 +31,7 @@ const Template: Story<AccordionProps> = (args: AccordionProps) => {
                   <Component.SectionPanel {...props}>
                     <motion.div
                       animate={{ height: props.expanded ? 'auto' : 0 }}
-                      className='overflow-hidden bg-gray-100'
+                      className='overflow-hidden bg-gray-50'
                       initial={{ height: 0 }}
                       transition={{ type: 'linear' }}
                     >

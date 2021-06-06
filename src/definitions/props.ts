@@ -1,6 +1,6 @@
-import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, Ref } from 'react'
-import { CarouselLive, CarouselRotationMode, DisclosureStatus, ListBoxSelectMode, SliderMode, SliderOrientation } from './enums'
-import { ID, PopperData, PopperOptions, SliderPercentual, SliderValue } from './types'
+import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, Ref, TouchEvent } from 'react'
+import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, SliderMode, SliderOrientation } from './enums'
+import { ID, PopperData, PopperOptions, SliderPercentual, SliderThumbIndex, SliderValue } from './types'
 
 export type AccordionProps = {
   children: (props: AccordionChildrenProps) => ReactNode
@@ -103,6 +103,7 @@ export type CarouselProps = {
    * Setting it to ASSERTIVE or POLITE will disable automatic rotation.
    */
   live?: CarouselLive
+  onChangeActiveSlideIndex?: (index: number) => any
   /**
    * The rotation mode determines the behaviour of the rotation.
    *
@@ -201,10 +202,12 @@ export type ComboBoxProps = {
    * The callback of the escape event, trigger by the keyboard.
    */
   onEscape: () => any
+  onSelectListBoxItem?: (indexes: number[]) => any
   /**
    * Freely configurable popper options as they are.
    */
   popperOptions?: PopperOptions<unknown>
+  selectedListBoxItemIndexes?: number[]
 } & Omit<HTMLDivProps, 'children'>
 
 export type ComboBoxChildrenProps = {
@@ -224,6 +227,7 @@ export type ComboBoxChildrenProps = {
    * The method which tells you if a ListBoxItem with a certain index is focused or not.
    */
   isListBoxItemFocused: (index: number) => boolean
+  isListBoxItemSelected: (index: number) => boolean
   /**
    * The ID of the ListBox element.
    */
@@ -252,6 +256,7 @@ export type ComboBoxChildrenProps = {
    * The method which sets the ref of the ListBox element.
    */
   setListBoxRef: (ref: MutableRefObject<HTMLUListElement>) => void
+  setSelectedListBoxItemIndex: (index: number, selected: boolean) => void
 } & Pick<ComboBoxProps, 'autocomplete' | 'listBoxLabel'>
 
 export type ComboBoxButtonProps = Pick<ComboBoxChildrenProps, 'expanded' | 'setExpanded'> & HTMLButtonProps
@@ -270,7 +275,7 @@ export type ComboBoxListBoxItemProps = {
    * The index of the ListBoxItem element.
    */
   index: number
-} & Pick<ComboBoxChildrenProps, 'deleteListBoxItemRef' | 'isListBoxItemFocused' | 'setExpanded' | 'setListBoxItemRef'> &
+} & Pick<ComboBoxChildrenProps, 'deleteListBoxItemRef' | 'isListBoxItemSelected' | 'setExpanded' | 'setListBoxItemRef' | 'setSelectedListBoxItemIndex'> &
   HTMLLIProps
 
 export type DialogProps = {
@@ -307,9 +312,14 @@ export type DisclosureProps = HTMLDListProps
 
 export type DisclosureSectionProps = {
   children: (props: DisclosureSectionChildrenProps) => ReactFragment
+  expanded?: boolean
 }
 
 export type DisclosureSectionChildrenProps = {
+  /**
+   * Indicates whether the DisclosureSection is expanded or collapsed.
+   */
+  expanded: boolean
   /**
    * The ID of the Panel element.
    */
@@ -317,11 +327,7 @@ export type DisclosureSectionChildrenProps = {
   /**
    * The method which sets the status of the DisclosureSection.
    */
-  setStatus: (status: DisclosureStatus) => void
-  /**
-   * Indicates whether the DisclosureSection is expanded or collapsed.
-   */
-  status: DisclosureStatus
+  setExpanded: (expanded: boolean) => void
 }
 
 export type DisclosureSectionHeaderProps = HTMLElementProps
@@ -345,6 +351,7 @@ export type ListBoxProps = {
    * Determines if the ListBox is collapsable or not, useful for creating Select components.
    */
   collapsable?: boolean
+  onSelectListItem?: (indexes: number[]) => any
   /**
    * The popper options.
    */
@@ -353,6 +360,7 @@ export type ListBoxProps = {
    * The select mode, can be either SINGLE or MULTIPLE, it is SINGLE by default.
    */
   selectMode?: ListBoxSelectMode
+  selectedListItemIndexes?: number[]
 } & Omit<HTMLDivProps, 'children'>
 
 export type ListBoxChildrenProps = {
@@ -403,7 +411,7 @@ export type ListBoxChildrenProps = {
   /**
    * The method which sets the index of the selected ListItem element.
    */
-  setSelectedListItemIndex: (selected: boolean, index: number) => void
+  setSelectedListItemIndex: (index: number, selected: boolean) => void
 } & Pick<ListBoxProps, 'collapsable' | 'selectMode'>
 
 export type ListBoxButtonProps = Pick<ListBoxChildrenProps, 'collapsable' | 'expanded' | 'setButtonRef' | 'setExpanded'> & HTMLButtonProps
@@ -670,7 +678,9 @@ export type MeterChildrenProps = {
 }
 
 export type RadioGroupProps = {
+  checkedItemIndex?: number
   children: (props: RadioGroupChildrenProps) => ReactNode
+  onCheckItem?: (index: number) => any
 } & Omit<HTMLDivProps, 'children'>
 
 export type RadioGroupChildrenProps = {
@@ -719,18 +729,21 @@ export type SliderProps = {
    */
   minimum: number
   mode?: SliderMode
-  onChangeValue: (value: SliderValue) => any
+  onChangeValue?: (value: SliderValue) => any
   orientation?: SliderOrientation
   step?: number
   /**
    * The current value of the Slider.
    */
-  value: SliderValue
+  value?: SliderValue
 } & Omit<HTMLDivProps, 'children'>
 
 export type SliderChildrenProps = {
-  handleKeyboardInteractions: (event: KeyboardEvent<HTMLDivElement>, index: number) => void
-  handleMouseInteractions: (index: number) => void
+  handleKeyboardInteractions: (index: SliderThumbIndex, event: KeyboardEvent<HTMLDivElement>) => void
+  onThumbMouseDown: (index: SliderThumbIndex) => void
+  onThumbTouchStart: () => void
+  onThumbTouchMove: (index: SliderThumbIndex, event: TouchEvent<HTMLDivElement>) => void
+  onThumbTouchEnd: (index: SliderThumbIndex) => void
   /**
    * The percentual value of the current value based on the minimum and maximum values.
    */

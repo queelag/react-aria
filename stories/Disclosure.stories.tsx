@@ -4,7 +4,6 @@ import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React, { Fragment, useState } from 'react'
 import * as Component from '../src/components/Disclosure'
-import { DisclosureStatus } from '../src/definitions/enums'
 import { DisclosureProps, DisclosureSectionChildrenProps } from '../src/definitions/props'
 import ArrayUtils from '../src/utils/array.utils'
 
@@ -32,14 +31,14 @@ const Template: Story<DisclosureProps> = (args: DisclosureProps) => {
                   )}
                 >
                   <span className='font-medium'>{v.title}</span>
-                  <motion.div animate={{ rotate: props.status === DisclosureStatus.EXPANDED ? 180 : 0 }}>
+                  <motion.div animate={{ rotate: props.expanded ? 180 : 0 }}>
                     <KeyboardArrowDownRounded />
                   </motion.div>
                 </Component.SectionHeaderButton>
               </Component.SectionHeader>
               <Component.SectionPanel {...props}>
                 <motion.div
-                  animate={{ height: props.status === DisclosureStatus.EXPANDED ? 'auto' : 0 }}
+                  animate={{ height: props.expanded ? 'auto' : 0 }}
                   className='overflow-hidden bg-gray-50'
                   initial={{ height: 0 }}
                   transition={{ type: 'linear' }}

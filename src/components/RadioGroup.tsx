@@ -5,6 +5,7 @@ import { RadioGroupChildrenProps, RadioGroupItemProps, RadioGroupProps } from '.
 import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import RadioGroupStore from '../stores/radio.group.store'
+import StoreUtils from '../utils/store.utils'
 
 const RADIO_GROUP_CHILDREN_PROPS_KEYS: (keyof RadioGroupChildrenProps)[] = ['deleteItemRef', 'isItemChecked', 'setCheckedItemIndex', 'setItemRef']
 
@@ -13,12 +14,16 @@ const RADIO_GROUP_CHILDREN_PROPS_KEYS: (keyof RadioGroupChildrenProps)[] = ['del
  */
 function Root(props: RadioGroupProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new RadioGroupStore(update, props.id), [])
+  const store = useMemo(() => new RadioGroupStore(update, props.id, props.checkedItemIndex, props.onCheckItem), [])
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     store.handleKeyboardInteractions(event)
     props.onKeyDown && props.onKeyDown(event)
   }
+
+  useEffect(() => {
+    StoreUtils.updateFromProps(store, props, update, 'checkedItemIndex', 'onCheckItem')
+  }, [props.checkedItemIndex, props.onCheckItem])
 
   return (
     <div {...props} onKeyDown={onKeyDown} role='radiogroup'>

@@ -1,8 +1,9 @@
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
-import { ID } from '../definitions/types'
+import { ID, OptionalID } from '../definitions/types'
 import ComponentStore from '../modules/component.store'
 import Logger from '../modules/logger'
+import noop from '../modules/noop'
 import tc from '../modules/tc'
 import IDUtils from '../utils/id.utils'
 
@@ -14,8 +15,15 @@ class ComboBoxStore extends ComponentStore {
   listBoxID: ID
   listBoxItemsRef: Map<number, MutableRefObject<HTMLLIElement>>
   listBoxRef: MutableRefObject<HTMLUListElement>
+  selectedListBoxItemIndexes: number[]
 
-  constructor(update: () => void, onCollapse: () => any, id?: ID) {
+  constructor(
+    update: () => void,
+    id: OptionalID,
+    onCollapse: () => any = noop,
+    onSelectListBoxItem: (indexes: number[]) => any = noop,
+    selectedListBoxItemIndexes: number[] = []
+  ) {
     super(ComponentName.COMBO_BOX, update, id)
 
     this.expanded = false
@@ -26,8 +34,11 @@ class ComboBoxStore extends ComponentStore {
     this.listBoxItemsRef = new Map()
     this.listBoxRef = { current: document.createElement('ul') }
     this.onCollapse = onCollapse
+    this.onSelectListBoxItem = onSelectListBoxItem
+    this.selectedListBoxItemIndexes = selectedListBoxItemIndexes
   }
 
+  onSelectListBoxItem(indexes: number[]): void {}
   onCollapse(): void {}
 
   handleKeyboardInteractions = (event: KeyboardEvent<HTMLDivElement>, onEscape: () => any): void => {
@@ -98,6 +109,13 @@ class ComboBoxStore extends ComponentStore {
     this.update()
   }
 
+  setSelectedListBoxItemIndex = (index: number, selected: boolean): void => {
+    this.selectedListBoxItemIndexes = selected ? [index] : []
+    Logger.debug(this.id, 'setSelectedListBoxItemIndex', `The selected list box item index has been set to ${index}.`)
+
+    this.onSelectListBoxItem === noop ? this.update() : this.onSelectListBoxItem(this.selectedListBoxItemIndexes)
+  }
+
   setGroupRef = (ref: MutableRefObject<HTMLDivElement>): void => {
     this.groupRef = ref
     Logger.debug(this.id, 'setGroupRef', `The group ref has been set.`)
@@ -130,6 +148,10 @@ class ComboBoxStore extends ComponentStore {
 
   isListBoxItemFocused = (index: number): boolean => {
     return this.focusedListBoxItemIndex === index
+  }
+
+  isListBoxItemSelected = (index: number): boolean => {
+    return this.selectedListBoxItemIndexes.includes(index)
   }
 
   get focusedListBoxItemID(): ID {

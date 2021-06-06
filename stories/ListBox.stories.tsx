@@ -9,11 +9,21 @@ import ArrayUtils from '../src/utils/array.utils'
 
 const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
   const [options] = useState(new Array(3).fill(0).map(() => Chance().country({ full: true })))
-  const [value, setValue] = useState<string>('')
+  const [value, setValue] = useState<string[]>([])
+
+  const onSelectListItem = (indexes: number[]) => {
+    setValue(options.filter((v, k: number) => indexes.includes(k)))
+  }
 
   return (
     <div className={ArrayUtils.joinStrings(args.collapsable && 'h-96')}>
-      <Component.Root {...args} className='max-w-lg' popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 16] } }] }}>
+      <Component.Root
+        {...args}
+        className='max-w-lg'
+        onSelectListItem={onSelectListItem}
+        popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 16] } }] }}
+        selectedListItemIndexes={value.map((v: string) => options.indexOf(v))}
+      >
         {(props: ListBoxChildrenProps) => (
           <Fragment>
             {props.collapsable && (
@@ -25,7 +35,7 @@ const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
                   'focus:ring-2 ring-offset-2 ring-blue-400'
                 )}
               >
-                {'Select a country' || value}
+                {value.join(', ') || 'Select a country'}
               </Component.Button>
             )}
             <Component.List
@@ -46,7 +56,6 @@ const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
                   )}
                   index={k}
                   key={k}
-                  onClick={() => setValue(v)}
                 >
                   <span>{v}</span>
                   {props.isListItemSelected(k) && <DoneRounded />}

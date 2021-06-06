@@ -1,21 +1,25 @@
+import { ArrowRightRounded } from '@material-ui/icons'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
-import React from 'react'
+import React, { Fragment } from 'react'
 import * as Component from '../src/components/Breadcrumb'
 import { BreadcrumbProps } from '../src/definitions/props'
 
 const Template: Story<BreadcrumbProps> = (args: BreadcrumbProps) => {
-  const links: string[] = new Array(5).fill(0).map(() => Chance().sentence({ words: 2 }))
+  const links: string[] = new Array(5).fill(0).map(() => Chance().first())
 
   return (
     <Component.Root {...args}>
-      <Component.List className='flex divide-x divide-black'>
+      <Component.List className='flex space-x-2'>
         {links.map((v: string, k: number) => (
-          <Component.ListItem className='px-2' key={k}>
-            <Component.ListItemLink className={k >= links.length - 1 ? 'text-blue-600' : ''} href='#' isCurrent={k >= links.length - 1}>
-              {v}
-            </Component.ListItemLink>
-          </Component.ListItem>
+          <Fragment key={k}>
+            {k > 0 && <ArrowRightRounded />}
+            <Component.ListItem>
+              <Component.ListItemLink className={k >= links.length - 1 ? 'text-blue-600' : ''} href='#' isCurrent={k >= links.length - 1}>
+                {v}
+              </Component.ListItemLink>
+            </Component.ListItem>
+          </Fragment>
         ))}
       </Component.List>
     </Component.Root>

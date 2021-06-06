@@ -22,6 +22,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
   'expanded',
   'focusedListBoxItemID',
   'isListBoxItemFocused',
+  'isListBoxItemSelected',
   'listBoxID',
   'listBoxLabel',
   'popper',
@@ -29,7 +30,8 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
   'setGroupRef',
   'setInputRef',
   'setListBoxItemRef',
-  'setListBoxRef'
+  'setListBoxRef',
+  'setSelectedListBoxItemIndex'
 ]
 
 /**
@@ -37,7 +39,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
  */
 function Root(props: ComboBoxProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new ComboBoxStore(update, props.onCollapse, props.id), [])
+  const store = useMemo(() => new ComboBoxStore(update, props.id, props.onCollapse, props.onSelectListBoxItem, props.selectedListBoxItemIndexes), [])
   const popper = usePopper(store.groupRef.current, store.listBoxRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -46,17 +48,23 @@ function Root(props: ComboBoxProps) {
   }
 
   useEffect(() => {
-    StoreUtils.shouldUpdateKey(store, 'onCollapse', props.onCollapse) && (store.onCollapse = props.onCollapse)
-  }, [props.onCollapse])
+    StoreUtils.updateFromProps(store, props, update, 'onCollapse', 'onSelectListBoxItem', 'selectedListBoxItemIndexes')
+  }, [props.onCollapse, props.onSelectListBoxItem, props.selectedListBoxItemIndexes])
 
   return (
-    <div {...omit(props, 'autocomplete', 'listBoxLabel', 'popperOptions')} id={store.id} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
+    <div
+      {...omit(props, 'autocomplete', 'listBoxLabel', 'onCollapse', 'onEscape', 'onSelectListBoxItem', 'popperOptions', 'selectedListBoxItemIndexes')}
+      id={store.id}
+      onKeyDown={onKeyDown}
+      style={{ ...props.style, position: 'relative' }}
+    >
       {props.children({
         autocomplete: props.autocomplete,
         deleteListBoxItemRef: store.deleteListBoxItemRef,
         expanded: store.expanded,
         focusedListBoxItemID: store.focusedListBoxItemID,
         isListBoxItemFocused: store.isListBoxItemFocused,
+        isListBoxItemSelected: store.isListBoxItemSelected,
         listBoxID: store.listBoxID,
         listBoxLabel: props.listBoxLabel,
         popper,
@@ -64,7 +72,8 @@ function Root(props: ComboBoxProps) {
         setGroupRef: store.setGroupRef,
         setInputRef: store.setInputRef,
         setListBoxItemRef: store.setListBoxItemRef,
-        setListBoxRef: store.setListBoxRef
+        setListBoxRef: store.setListBoxRef,
+        setSelectedListBoxItemIndex: store.setSelectedListBoxItemIndex
       })}
     </div>
   )
@@ -160,6 +169,7 @@ function ListBoxItem(props: ComboBoxListBoxItemProps) {
   const ref = useRef(document.createElement('li'))
 
   const onClick = (event: MouseEvent<HTMLLIElement>) => {
+    props.setSelectedListBoxItemIndex(props.index, !props.isListBoxItemSelected(props.index))
     props.setExpanded(false, id, 'onClick')
     props.onClick && props.onClick(event)
   }
@@ -177,7 +187,7 @@ function ListBoxItem(props: ComboBoxListBoxItemProps) {
   return (
     <li
       {...omit(props, 'index', ROOT_CHILDREN_PROPS_KEYS)}
-      aria-selected={props.isListBoxItemFocused(props.index)}
+      aria-selected={props.isListBoxItemSelected(props.index)}
       id={id}
       onClick={onClick}
       onMouseDown={onMouseDown}

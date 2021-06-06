@@ -1,23 +1,23 @@
-import { ComponentName, DisclosureStatus } from '../definitions/enums'
+import { ComponentName } from '../definitions/enums'
 import { ID } from '../definitions/types'
 import ComponentStore from '../modules/component.store'
 import Logger from '../modules/logger'
 import IDUtils from '../utils/id.utils'
 
 class DisclosureSectionStore extends ComponentStore {
+  expanded: boolean
   panelID: ID
-  status: DisclosureStatus
 
   constructor(update: () => void) {
     super(ComponentName.DISCLOSURE_SECTION, update)
 
+    this.expanded = false
     this.panelID = IDUtils.prefixed(ComponentName.DISCLOSURE_SECTION_PANEL)
-    this.status = DisclosureStatus.COLLAPSED
   }
 
-  setStatus = (status: DisclosureStatus): void => {
-    this.status = status
-    Logger.debug(this.id, 'setStatus', `The status has been set to ${status}.`)
+  setExpanded = (expanded: boolean): void => {
+    this.expanded = expanded
+    Logger.debug(this.id, 'setExpanded', `The section has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
     this.update()
   }

@@ -1,7 +1,8 @@
 import { omit } from 'lodash'
-import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import React, { KeyboardEvent, MouseEvent, TouchEvent, useEffect, useMemo, useRef } from 'react'
 import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
+import { SliderThumbIndex } from '../definitions/types'
 import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import SliderStore from '../stores/slider.store'
@@ -9,9 +10,12 @@ import StoreUtils from '../utils/store.utils'
 
 const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
   'handleKeyboardInteractions',
-  'handleMouseInteractions',
   'maximum',
   'minimum',
+  'onThumbMouseDown',
+  'onThumbTouchEnd',
+  'onThumbTouchMove',
+  'onThumbTouchStart',
   'orientation',
   'percentual',
   'value'
@@ -29,37 +33,43 @@ function Root(props: SliderProps) {
   )
 
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
-    if (store.isModeSingleThumb) {
-      store.setPercentualByCoordinates(event.clientX, event.clientY, 0, true)
-      store.updateValueByPercentual(store.percentual[0], 0)
+    switch (store.mode) {
+      case SliderMode.DUAL_THUMB:
+        break
+      case SliderMode.SINGLE_THUMB:
+        store.setValueByCoordinates(0, event.clientX, event.clientY, true)
+        break
     }
+    props.onClick && props.onClick(event)
   }
 
   useEffect(() => {
     StoreUtils.shouldUpdateKey(store, 'step', props.step) && store.setStepSize(props.step)
-    StoreUtils.updateFromProps(store, props, update, 'maximum', 'minimum', 'mode', 'onChangeValue', 'orientation', 'step')
+    StoreUtils.updateFromProps(store, props, update, 'maximum', 'minimum', 'mode', 'onChangeValue', 'orientation')
   }, [props.maximum, props.minimum, props.mode, props.onChangeValue, props.orientation, props.step])
 
   useEffect(() => {
-    switch (store.mode) {
-      case SliderMode.DUAL_THUMB:
-        if (props.value[0] <= props.value[1] && store.value[0] >= store.value[1]) {
-          store.value[0] = props.value[1]
-          store.value[1] = props.value[0]
-        } else if (props.value[0] >= props.value[1] && store.value[0] <= store.value[1]) {
+    if (props.value) {
+      switch (store.mode) {
+        case SliderMode.DUAL_THUMB:
+          if (props.value[0] < props.value[1] && store.value[0] > store.value[1]) {
+            store.value[0] = props.value[1]
+            store.value[1] = props.value[0]
+          } else if (props.value[0] > props.value[1] && store.value[0] < store.value[1]) {
+            store.value[0] = props.value[0]
+            store.value[1] = props.value[1]
+          }
+
+          store.setPercentualByValue(0, store.value[0])
+          store.setPercentualByValue(1, store.value[1])
+
+          break
+        case SliderMode.SINGLE_THUMB:
           store.value[0] = props.value[0]
-          store.value[1] = props.value[1]
-        }
+          store.setPercentualByValue(0, store.value[0])
 
-        store.setPercentualByValue(store.value[0], 0)
-        store.setPercentualByValue(store.value[1], 1)
-
-        break
-      case SliderMode.SINGLE_THUMB:
-        store.value[0] = props.value[0]
-        store.setPercentualByValue(store.value[0], 0)
-
-        break
+          break
+      }
     }
   }, [props.value])
 
@@ -67,9 +77,12 @@ function Root(props: SliderProps) {
     <div {...omit(props, 'maximum', 'minimum', 'onChangeValue', 'step', 'value')} id={store.id} onClick={onClick} ref={ref}>
       {props.children({
         handleKeyboardInteractions: store.handleKeyboardInteractions,
-        handleMouseInteractions: store.onMouseDown,
         maximum: store.maximum,
         minimum: store.minimum,
+        onThumbMouseDown: store.onThumbMouseDown,
+        onThumbTouchEnd: store.onThumbTouchEnd,
+        onThumbTouchMove: store.onThumbTouchMove,
+        onThumbTouchStart: store.onThumbTouchStart,
         orientation: store.orientation,
         percentual: store.percentual,
         value: store.value
@@ -78,17 +91,32 @@ function Root(props: SliderProps) {
   )
 }
 
-const Thumb = (index: 0 | 1) => (props: SliderThumbProps) => {
+const Thumb = (index: SliderThumbIndex) => (props: SliderThumbProps) => {
   const id = useID(ComponentName.SLIDER_THUMB, props.id)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    props.handleKeyboardInteractions(event, index)
+    props.handleKeyboardInteractions(index, event)
     props.onKeyDown && props.onKeyDown(event)
   }
 
   const onMouseDown = (event: MouseEvent<HTMLDivElement>) => {
-    props.handleMouseInteractions(index)
+    props.onThumbMouseDown(index)
     props.onMouseDown && props.onMouseDown(event)
+  }
+
+  const onTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    props.onThumbTouchStart()
+    props.onTouchStart && props.onTouchStart(event)
+  }
+
+  const onTouchMove = (event: TouchEvent<HTMLDivElement>) => {
+    props.onThumbTouchMove(index, event)
+    props.onTouchMove && props.onTouchMove(event)
+  }
+
+  const onTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    props.onThumbTouchEnd(index)
+    props.onTouchEnd && props.onTouchEnd(event)
   }
 
   return (
@@ -101,8 +129,11 @@ const Thumb = (index: 0 | 1) => (props: SliderThumbProps) => {
       id={id}
       onKeyDown={onKeyDown}
       onMouseDown={onMouseDown}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
       role='slider'
-      style={{ ...props.style, userSelect: 'none' }}
+      style={{ ...props.style, touchAction: 'none', userSelect: 'none' }}
       tabIndex={typeof props.focusable === 'boolean' ? (props.focusable ? 0 : -1) : 0}
     />
   )

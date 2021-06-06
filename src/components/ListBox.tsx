@@ -6,8 +6,10 @@ import { ListBoxButtonProps, ListBoxChildrenProps, ListBoxListItemProps, ListBox
 import useForceUpdate from '../hooks/use.force.update'
 import useID from '../hooks/use.id'
 import ListBoxStore from '../stores/list.box.store'
+import StoreUtils from '../utils/store.utils'
 
 const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
+  'collapsable',
   'deleteListItemRef',
   'expanded',
   'focusedListItemID',
@@ -17,6 +19,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
   'selectMode',
   'setButtonRef',
   'setExpanded',
+  'setFocusedListItemIndex',
   'setListItemRef',
   'setListRef',
   'setSelectedListItemIndex'
@@ -27,7 +30,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
  */
 function Root(props: ListBoxProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new ListBoxStore(update, props.id, props.selectMode), [])
+  const store = useMemo(() => new ListBoxStore(update, props.id, props.onSelectListItem, props.selectMode), [])
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -35,8 +38,17 @@ function Root(props: ListBoxProps) {
     props.onKeyDown && props.onKeyDown(event)
   }
 
+  useEffect(() => {
+    StoreUtils.updateFromProps(store, props, update, 'onSelectListItem', 'selectMode', 'selectedListItemIndexes')
+  }, [props.onSelectListItem, props.selectMode, props.selectedListItemIndexes])
+
   return (
-    <div {...omit(props, 'popperOptions')} id={store.id} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
+    <div
+      {...omit(props, 'collapsable', 'onSelectListItem', 'popperOptions', 'selectMode', 'selectedListItemIndexes')}
+      id={store.id}
+      onKeyDown={onKeyDown}
+      style={{ ...props.style, position: 'relative' }}
+    >
       {props.children({
         collapsable: props.collapsable,
         deleteListItemRef: store.deleteListItemRef,
@@ -120,7 +132,7 @@ function ListItem(props: ListBoxListItemProps) {
 
   const onClick = (event: MouseEvent<HTMLLIElement>) => {
     props.setFocusedListItemIndex(props.index)
-    props.setSelectedListItemIndex(!props.isListItemSelected(props.index), props.index)
+    props.setSelectedListItemIndex(props.index, !props.isListItemSelected(props.index))
 
     props.onClick && props.onClick(event)
   }

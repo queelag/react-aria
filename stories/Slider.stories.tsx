@@ -50,7 +50,7 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
   const [value, setValue] = useState<SliderValue>(args.value)
 
   const onChangeValue = (value: SliderValue) => {
-    console.log('ON_CHANGE_VALUE', value)
+    // console.log('ON_CHANGE_VALUE', value)
     setValue(value)
   }
 
@@ -112,7 +112,15 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
 }
 
 export const Slider = Template.bind({})
-Slider.args = { label: 'Slider', minimum: 0, maximum: 100, mode: SliderMode.SINGLE_THUMB, orientation: SliderOrientation.HORIZONTAL, step: 1, value: [0, 25] }
+Slider.args = {
+  label: 'Slider',
+  minimum: 100,
+  maximum: 200,
+  mode: SliderMode.SINGLE_THUMB,
+  orientation: SliderOrientation.HORIZONTAL,
+  step: 1,
+  value: [100, 150]
+}
 
 export default {
   component: Component.Root,

@@ -34,7 +34,19 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof CarouselChildrenProps)[] = [
  */
 function Root(props: CarouselProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new CarouselStore(update, props.id, props.activeSlideIndex, props.automaticRotationDuration, props.live), [])
+  const store = useMemo(
+    () =>
+      new CarouselStore(
+        update,
+        props.id,
+        props.activeSlideIndex,
+        props.automaticRotationDuration,
+        props.live,
+        props.onChangeActiveSlideIndex,
+        props.rotationMode
+      ),
+    []
+  )
   const slidesID = useID(ComponentName.CAROUSEL_SLIDES)
 
   const onBlur = (event: FocusEvent<HTMLDivElement>) => {
@@ -58,19 +70,15 @@ function Root(props: CarouselProps) {
   }
 
   useEffect(() => {
-    StoreUtils.updateFromProps(store, props, update, 'activeSlideIndex')
-  }, [props.activeSlideIndex])
-
-  useEffect(() => {
     StoreUtils.shouldUpdateKey(store, 'live', props.live) && store.setLive(props.live)
-    StoreUtils.shouldUpdateKey(store, 'rotationMode', props.rotationMode) && (store.rotationMode = props.rotationMode)
-  }, [props.live, props.rotationMode])
+    StoreUtils.updateFromProps(store, props, update, 'activeSlideIndex', 'automaticRotationDuration', 'onChangeActiveSlideIndex', 'rotationMode')
+  }, [props.activeSlideIndex, props.automaticRotationDuration, props.live, props.onChangeActiveSlideIndex, props.rotationMode])
 
   useEffect(() => store.disableAutomaticRotation, [])
 
   return (
     <section
-      {...omit(props, 'activeSlideIndex', 'automaticRotationDuration', 'label', 'live', 'rotationMode')}
+      {...omit(props, 'activeSlideIndex', 'automaticRotationDuration', 'label', 'live', 'onChangeActiveSlideIndex', 'rotationMode')}
       aria-label={props.label}
       aria-roledescription='carousel'
       id={store.id}

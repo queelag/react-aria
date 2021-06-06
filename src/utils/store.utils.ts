@@ -1,26 +1,17 @@
-import { get, set, some } from 'lodash'
+import { forEach, get, set, some } from 'lodash'
 
 class StoreUtils {
   static updateFromProps<T extends object, U extends object>(store: T, props: U, update: () => void, ...whitelist: (keyof T)[]): void {
-    let keys: (keyof T)[], values: any[], key: keyof T, value: any, changes: number
+    let updated: boolean | undefined
 
-    keys = Object.keys(props) as any
-    values = Object.values(props)
-    changes = 0
-
-    for (let i = 0; i < keys.length; ) {
-      key = keys[i]
-      value = values[i]
-
-      if (whitelist.includes(key) && value !== undefined && get(store, key) !== value) {
-        set(store, key, value)
-        changes++
+    forEach(props, (v: any, k: any) => {
+      if (whitelist.includes(k) && this.shouldUpdateKey(store, k, v)) {
+        set(store, k, v)
+        updated = true
       }
+    })
 
-      i++
-    }
-
-    changes > 0 && update()
+    updated && update()
   }
 
   static shouldUpdateKeys<T extends object, U extends object>(store: T, props: U, ...whitelist: (keyof T)[]): boolean {

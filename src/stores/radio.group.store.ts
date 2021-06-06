@@ -1,19 +1,23 @@
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
-import { ID } from '../definitions/types'
+import { OptionalID } from '../definitions/types'
 import ComponentStore from '../modules/component.store'
 import Logger from '../modules/logger'
+import noop from '../modules/noop'
 
 class RadioGroupStore extends ComponentStore {
   itemsRef: Map<number, MutableRefObject<HTMLDivElement>>
   checkedItemIndex: number
 
-  constructor(update: () => void, id?: ID) {
+  constructor(update: () => void, id: OptionalID, checkedItemIndex: number = -1, onCheckItem: (index: number) => any = noop) {
     super(ComponentName.RADIO_GROUP, update, id)
 
     this.itemsRef = new Map()
-    this.checkedItemIndex = -1
+    this.checkedItemIndex = checkedItemIndex
+    this.onCheckItem = onCheckItem
   }
+
+  onCheckItem(index: number): void {}
 
   handleKeyboardInteractions(event: KeyboardEvent): void {
     switch (event.key) {
@@ -59,7 +63,7 @@ class RadioGroupStore extends ComponentStore {
     this.checkedItemIndex = index
     Logger.debug(this.id, 'setCheckedItemIndex', `The item with index ${index} has been checked.`)
 
-    this.update()
+    this.onCheckItem === noop ? this.update() : this.onCheckItem(index)
   }
 
   focusItem(index: number): void {

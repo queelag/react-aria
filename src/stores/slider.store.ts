@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash'
+import { cloneDeep, sortBy } from 'lodash'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, SliderMode, SliderOrientation } from '../definitions/enums'
 import { OptionalID, SliderPercentual, SliderValue } from '../definitions/types'
@@ -192,7 +192,7 @@ class SliderStore extends ComponentRefStore {
     this.value[index] = value
     Logger.debug(this.id, 'updateValueByPercentual', `The value with index ${index} has been set to ${this.value[index]}.`)
 
-    this.onChangeValue(cloneDeep(this.value))
+    this.onChangeValue(sortBy(this.value) as SliderValue)
   }
 
   get elementOffsetBottom(): number {

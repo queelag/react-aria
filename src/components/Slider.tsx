@@ -43,10 +43,15 @@ function Root(props: SliderProps) {
   useEffect(() => {
     switch (store.mode) {
       case SliderMode.DUAL_THUMB:
-        store.value[0] = props.value[0]
-        store.setPercentualByValue(store.value[0], 0)
+        if (props.value[0] <= props.value[1] && store.value[0] >= store.value[1]) {
+          store.value[0] = props.value[1]
+          store.value[1] = props.value[0]
+        } else if (props.value[0] >= props.value[1] && store.value[0] <= store.value[1]) {
+          store.value[0] = props.value[0]
+          store.value[1] = props.value[1]
+        }
 
-        store.value[1] = props.value[1]
+        store.setPercentualByValue(store.value[0], 0)
         store.setPercentualByValue(store.value[1], 1)
 
         break

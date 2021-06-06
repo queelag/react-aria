@@ -49,6 +49,11 @@ function ThumbTooltip(props: HTMLDivProps & { orientation: SliderOrientation; va
 const Template: Story<SliderProps> = (args: SliderProps) => {
   const [value, setValue] = useState<SliderValue>(args.value)
 
+  const onChangeValue = (value: SliderValue) => {
+    console.log('ON_CHANGE_VALUE', value)
+    setValue(value)
+  }
+
   return (
     <div className='p-6'>
       <Component.Root
@@ -57,7 +62,7 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
           'relative flex justify-center items-center',
           args.orientation === SliderOrientation.HORIZONTAL ? 'h-6 max-w-lg' : 'w-6'
         )}
-        onChangeValue={(value: SliderValue) => setValue(value)}
+        onChangeValue={onChangeValue}
         value={value}
       >
         {(props: SliderChildrenProps) => (

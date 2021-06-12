@@ -1,5 +1,5 @@
 module.exports = {
-  purge: [],
+  purge: ['stories'],
   darkMode: false,
   theme: {
     extend: {}

@@ -762,6 +762,26 @@ export type SliderThumbProps = {
 } & SliderChildrenProps &
   HTMLDivProps
 
+export type TabberProps = {
+  label: string
+} & HTMLDivProps
+
+export type TabberChildrenProps = {}
+
+export type TabberListItemProps = {
+  children: (props: TabberListItemChildrenProps) => ReactNode
+  index: number
+}
+
+export type TabberListItemChildrenProps = {
+  buttonID: ID
+  sectionID: ID
+}
+
+export type TabberListItemButtonProps = {} & Pick<TabberListItemChildrenProps, 'buttonID' | 'sectionID'>
+
+export type TabberListItemSectionProps = {} & Pick<TabberListItemChildrenProps, 'buttonID' | 'sectionID'>
+
 export type ToggleButtonProps = {
   /**
    * Determines whether the Button is toggled or not.

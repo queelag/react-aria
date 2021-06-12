@@ -3,6 +3,7 @@ coverage
 declarations
 dist
 node_modules
+storybook-static
 
 # FILES
 .DS_Store

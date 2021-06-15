@@ -763,24 +763,34 @@ export type SliderThumbProps = {
   HTMLDivProps
 
 export type TabberProps = {
-  label: string
-} & HTMLDivProps
+  children: (props: TabberChildrenProps) => ReactNode
+  size: number
+} & Omit<HTMLDivProps, 'children'>
 
-export type TabberChildrenProps = {}
+export type TabberChildrenProps = {
+  handleKeyboardEvents: (event: KeyboardEvent<HTMLDivElement>) => void
+  isTabSelected: (index: number) => boolean
+  listItemIDs: ID[]
+  panelIDs: ID[]
+  selectedListItemIndex: number
+  setListItemRef: (index: number, ref: MutableRefObject<HTMLButtonElement>) => void
+  setSelectedListItemIndex: (index: number) => void
+}
+
+export type TabberListProps = {
+  label: string
+} & Pick<TabberChildrenProps, 'handleKeyboardEvents'> &
+  HTMLDivProps
 
 export type TabberListItemProps = {
-  children: (props: TabberListItemChildrenProps) => ReactNode
   index: number
-}
+} & Pick<TabberChildrenProps, 'isTabSelected' | 'listItemIDs' | 'panelIDs' | 'setListItemRef' | 'setSelectedListItemIndex'> &
+  HTMLButtonProps
 
-export type TabberListItemChildrenProps = {
-  buttonID: ID
-  sectionID: ID
-}
-
-export type TabberListItemButtonProps = {} & Pick<TabberListItemChildrenProps, 'buttonID' | 'sectionID'>
-
-export type TabberListItemSectionProps = {} & Pick<TabberListItemChildrenProps, 'buttonID' | 'sectionID'>
+export type TabberPanelProps = {
+  index: number
+} & Pick<TabberChildrenProps, 'isTabSelected' | 'listItemIDs' | 'panelIDs'> &
+  HTMLDivProps
 
 export type ToggleButtonProps = {
   /**

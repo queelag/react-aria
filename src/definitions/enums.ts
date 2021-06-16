@@ -119,3 +119,8 @@ export enum SliderOrientation {
   HORIZONTAL = 'horizontal',
   VERTICAL = 'vertical'
 }
+
+export enum TabberActivation {
+  AUTOMATIC = 'AUTOMATIC',
+  MANUAL = 'MANUAL'
+}

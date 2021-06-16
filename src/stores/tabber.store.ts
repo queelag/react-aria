@@ -1,20 +1,23 @@
 import { KeyboardEvent, MutableRefObject } from 'react'
-import { ComponentName, Key } from '../definitions/enums'
+import { ComponentName, Key, TabberActivation } from '../definitions/enums'
 import { ID, OptionalID } from '../definitions/types'
 import ComponentStore from '../modules/component.store'
 import Logger from '../modules/logger'
+import rc from '../modules/rc'
 import IDUtils from '../utils/id.utils'
 
 class TabberStore extends ComponentStore {
+  activation: TabberActivation
   listItemIDs: ID[]
   listItemRefs: Map<number, MutableRefObject<HTMLButtonElement>>
   panelIDs: ID[]
   selectedListItemIndex: number
   size: number
 
-  constructor(update: () => void, id: OptionalID, size: number) {
+  constructor(update: () => void, id: OptionalID, activation: TabberActivation = TabberActivation.AUTOMATIC, size: number) {
     super(ComponentName.TABBER, update, id)
 
+    this.activation = activation
     this.listItemIDs = []
     this.listItemRefs = new Map()
     this.panelIDs = []
@@ -25,47 +28,80 @@ class TabberStore extends ComponentStore {
   }
 
   handleKeyboardEvents = (event: KeyboardEvent): void => {
+    let focusedListItemIndex: number, selectedListItemIndex: number
+
+    focusedListItemIndex = 0
+    selectedListItemIndex = 0
+
     switch (event.key) {
       case Key.ARROW_LEFT:
       case Key.ARROW_RIGHT:
-      case Key.HOME:
       case Key.END:
+      case Key.ENTER:
+      case Key.HOME:
+      case Key.SPACE:
         event.preventDefault()
         break
     }
 
     switch (event.key) {
       case Key.ARROW_LEFT:
-        this.setSelectedListItemIndex(this.selectedListItemIndex > 0 ? this.selectedListItemIndex - 1 : this.size - 1)
-        this.focusSelectedListItem()
+        focusedListItemIndex = this.focusedListItemIndex > 0 ? this.focusedListItemIndex - 1 : this.size - 1
+        selectedListItemIndex = this.selectedListItemIndex > 0 ? this.selectedListItemIndex - 1 : this.size - 1
 
         break
       case Key.ARROW_RIGHT:
-        this.setSelectedListItemIndex(this.selectedListItemIndex < this.size - 1 ? this.selectedListItemIndex + 1 : 0)
-        this.focusSelectedListItem()
+        focusedListItemIndex = this.focusedListItemIndex < this.size - 1 ? this.focusedListItemIndex + 1 : 0
+        selectedListItemIndex = this.selectedListItemIndex < this.size - 1 ? this.selectedListItemIndex + 1 : 0
 
         break
       case Key.HOME:
-        this.setSelectedListItemIndex(0)
-        this.focusSelectedListItem()
+        focusedListItemIndex = 0
+        selectedListItemIndex = 0
 
         break
       case Key.END:
-        this.setSelectedListItemIndex(this.size - 1)
-        this.focusSelectedListItem()
+        focusedListItemIndex = this.size - 1
+        selectedListItemIndex = this.size - 1
 
         break
+      case Key.ENTER:
+      case Key.SPACE:
+        this.setSelectedListItemIndex(this.focusedListItemIndex)
+
+        break
+    }
+
+    switch (event.key) {
+      case Key.ARROW_LEFT:
+      case Key.ARROW_RIGHT:
+      case Key.END:
+      case Key.HOME:
+        switch (this.activation) {
+          case TabberActivation.AUTOMATIC:
+            this.setSelectedListItemIndex(selectedListItemIndex)
+            this.focusSelectedListItem()
+
+            break
+          case TabberActivation.MANUAL:
+            this.focusListItem(focusedListItemIndex)
+            break
+        }
     }
   }
 
   focusSelectedListItem(): void {
+    return this.focusListItem(this.selectedListItemIndex)
+  }
+
+  focusListItem(index: number): void {
     let ref: MutableRefObject<HTMLButtonElement> | undefined
 
-    ref = this.listItemRefs.get(this.selectedListItemIndex)
-    if (!ref) return Logger.error(this.id, 'focusSelectedListItem', `Failed to find the list item ref with index ${this.selectedListItemIndex}.`)
+    ref = this.listItemRefs.get(index)
+    if (!ref) return Logger.error(this.id, 'focusSelectedListItem', `Failed to find the list item ref with index ${index}.`)
 
     ref.current.focus()
-    Logger.debug(this.id, 'focusSelectedListItem', `The list item with index ${this.selectedListItemIndex} has been focused.`)
+    Logger.debug(this.id, 'focusSelectedListItem', `The list item with index ${index} has been focused.`)
   }
 
   setListItemRef = (index: number, ref: MutableRefObject<HTMLButtonElement>): void => {
@@ -95,6 +131,18 @@ class TabberStore extends ComponentStore {
 
   isTabSelected = (index: number): boolean => {
     return this.selectedListItemIndex === index
+  }
+
+  get focusedListItemIndex(): number {
+    let items: HTMLButtonElement[], index: number
+
+    items = [...this.listItemRefs.values()].map((v: MutableRefObject<HTMLButtonElement>) => v.current)
+    if (items.length <= 0) return rc(() => Logger.error(this.id, 'focusedListItemIndex', `There are no items.`), 0)
+
+    index = items.findIndex((v: HTMLButtonElement) => v === document.activeElement)
+    if (index < 0) return rc(() => Logger.error(this.id, 'focusedListItemIndex', `Failed to find the focused list item index.`), 0)
+
+    return index
   }
 }
 

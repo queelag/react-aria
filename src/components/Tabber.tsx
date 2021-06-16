@@ -16,7 +16,7 @@ const TABBER_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
 
 function Root(props: TabberProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new TabberStore(update, props.id, props.size), [])
+  const store = useMemo(() => new TabberStore(update, props.id, props.activation, props.size), [])
 
   return (
     <div {...omit(props, 'listLabel', 'size')}>

@@ -1,5 +1,5 @@
 import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, Ref, TouchEvent } from 'react'
-import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, SliderMode, SliderOrientation } from './enums'
+import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, SliderMode, SliderOrientation, TabberActivation } from './enums'
 import { ID, PopperData, PopperOptions, SliderPercentual, SliderThumbIndex, SliderValue } from './types'
 
 export type AccordionProps = {
@@ -763,6 +763,7 @@ export type SliderThumbProps = {
   HTMLDivProps
 
 export type TabberProps = {
+  activation?: TabberActivation
   children: (props: TabberChildrenProps) => ReactNode
   size: number
 } & Omit<HTMLDivProps, 'children'>

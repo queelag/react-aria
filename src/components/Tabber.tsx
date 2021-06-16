@@ -2,7 +2,9 @@ import { omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { TabberChildrenProps, TabberListItemProps, TabberListProps, TabberPanelProps, TabberProps } from '../definitions/props'
 import useForceUpdate from '../hooks/use.force.update'
+import noop from '../modules/noop'
 import TabberStore from '../stores/tabber.store'
+import StoreUtils from '../utils/store.utils'
 
 const TABBER_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
   'handleKeyboardEvents',
@@ -17,6 +19,11 @@ const TABBER_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
 function Root(props: TabberProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new TabberStore(update, props.id, props.activation, props.size), [])
+
+  useEffect(() => {
+    StoreUtils.shouldUpdateKey(store, 'size', props.size) && store.setSize(props.size)
+    StoreUtils.updateFromProps(store, props, noop, 'activation')
+  }, [props.activation, props.size])
 
   return (
     <div {...omit(props, 'listLabel', 'size')}>

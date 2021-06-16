@@ -4,13 +4,14 @@ import { Chance } from 'chance'
 import React, { useState } from 'react'
 import * as Component from '../src/components/RadioGroup'
 import { RadioGroupChildrenProps, RadioGroupProps } from '../src/definitions/props'
+import noop from '../src/modules/noop'
 import ArrayUtils from '../src/utils/array.utils'
 
 const Template: Story<RadioGroupProps> = (args: RadioGroupProps) => {
   const [options] = useState(new Array(3).fill(0).map(() => Chance().animal()))
 
   return (
-    <Component.Root {...args} className='w-72 space-y-2'>
+    <Component.Root {...args} className='w-72 space-y-2' onCheckItem={noop}>
       {(props: RadioGroupChildrenProps) =>
         options.map((v: string, k: number) => (
           <Component.Item
@@ -32,7 +33,7 @@ const Template: Story<RadioGroupProps> = (args: RadioGroupProps) => {
   )
 }
 
-export const RadioGroup = Template.bind({})
+export const RadioGroup: Story<RadioGroupProps> = Template.bind({})
 RadioGroup.args = {}
 RadioGroup.storyName = 'RadioGroup'
 

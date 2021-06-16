@@ -15,14 +15,15 @@ const Template: Story<TooltipProps> = (args: TooltipProps) => {
             <Component.Trigger {...props} className='flex justify-center items-center outline-none rounded-full focus:ring-2 ring-blue-400'>
               <InfoOutlined />
             </Component.Trigger>
-            <Component.Element
-              {...props}
-              className={ArrayUtils.joinStrings(
-                'p-2 bg-black text-white text-xs whitespace-nowrap rounded-md transition-opacity duration-200',
-                !props.visible && 'opacity-0 pointer-events-none'
-              )}
-            >
-              Tooltip Content
+            <Component.Element {...props}>
+              <div
+                className={ArrayUtils.joinStrings(
+                  'p-2 bg-black text-white text-xs whitespace-nowrap rounded-md transform origin-left transition-all duration-200',
+                  !props.visible && 'opacity-0 pointer-events-none scale-50'
+                )}
+              >
+                Tooltip Content
+              </div>
             </Component.Element>
           </Fragment>
         )}

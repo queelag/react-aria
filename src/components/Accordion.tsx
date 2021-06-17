@@ -1,16 +1,15 @@
+import { Logger } from '@queelag/core'
+import { useForceUpdate, useID } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { ComponentName } from '../definitions/enums'
 import { AccordionProps, AccordionSectionHeaderProps, AccordionSectionPanelProps, AccordionSectionProps } from '../definitions/props'
-import useForceUpdate from '../hooks/use.force.update'
-import useID from '../hooks/use.id'
-import Logger from '../modules/logger'
 import AccordionStore from '../stores/accordion.store'
 
 /**
  * An accordion is a vertically stacked set of interactive headings that each contain a title, content snippet, or thumbnail representing a section of content. The headings function as controls that enable users to reveal or hide their associated sections of content. Accordions are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.
  */
-function Root(props: AccordionProps) {
+export function Root(props: AccordionProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new AccordionStore(update, props.id), [])
 
@@ -26,7 +25,7 @@ function Root(props: AccordionProps) {
   )
 }
 
-function Section(props: AccordionSectionProps) {
+export function Section(props: AccordionSectionProps) {
   const id = useID(ComponentName.ACCORDION_SECTION, props.id)
   const contentID = useID(ComponentName.ACCORDION_SECTION_PANEL)
   const headerID = useID(ComponentName.ACCORDION_SECTION_HEADER)
@@ -54,7 +53,7 @@ function Section(props: AccordionSectionProps) {
   )
 }
 
-function SectionHeader(props: AccordionSectionHeaderProps) {
+export function SectionHeader(props: AccordionSectionHeaderProps) {
   const ref = useRef(document.createElement('button'))
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -81,10 +80,8 @@ function SectionHeader(props: AccordionSectionHeaderProps) {
   )
 }
 
-function SectionPanel(props: AccordionSectionPanelProps) {
+export function SectionPanel(props: AccordionSectionPanelProps) {
   return (
     <div {...omit(props, 'contentID', 'expand', 'expanded', 'headerID', 'setHeaderRef')} aria-labelledby={props.headerID} id={props.contentID} role='region' />
   )
 }
-
-export { Root, Section, SectionHeader, SectionPanel }

@@ -1,9 +1,9 @@
 import { VolumeMuteRounded, VolumeUpRounded } from '@material-ui/icons'
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 import * as Component from '../src/components/ToggleButton'
 import { ToggleButtonProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 const Template: Story<ToggleButtonProps> = (args: ToggleButtonProps) => {
   const [toggled, setToggled] = useState<boolean>(args.toggled)
@@ -11,7 +11,7 @@ const Template: Story<ToggleButtonProps> = (args: ToggleButtonProps) => {
   return (
     <Component.Root
       {...args}
-      className={ArrayUtils.joinStrings(
+      className={ReactUtils.joinClassNames(
         'flex bg-white px-12 py-6 space-x-2 rounded-md border border-gray-200 font-medium transition-all duration-200',
         'ring-offset-2 ring-blue-400 focus:ring-2',
         'hover:bg-gray-100 active:bg-gray-50'

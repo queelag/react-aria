@@ -1,3 +1,5 @@
+import { Debounce, noop } from '@queelag/core'
+import { useForceUpdate, useID } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
@@ -12,10 +14,6 @@ import {
   MenuItemProps,
   MenuProps
 } from '../definitions/props'
-import useForceUpdate from '../hooks/use.force.update'
-import useID from '../hooks/use.id'
-import Debounce from '../modules/debounce'
-import noop from '../modules/noop'
 import MenuStore from '../stores/menu.store'
 
 const MENU_CHILDREN_PROPS_KEYS: (keyof MenuChildrenProps)[] = [
@@ -52,7 +50,7 @@ const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
 /**
  * A menu is a widget that offers a list of choices to the user, such as a set of actions or functions. Menu widgets behave like native operating system menus, such as the menus that pull down from the menubars commonly found at the top of many desktop application windows.
  */
-function Root(props: MenuProps) {
+export function Root(props: MenuProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new MenuStore(update, props.id), [])
 
@@ -113,7 +111,7 @@ function Root(props: MenuProps) {
   )
 }
 
-function Item(props: MenuItemProps) {
+export function Item(props: MenuItemProps) {
   const id = useID(ComponentName.MENU_ITEM, props.id)
   const ref = useRef(document.createElement('li'))
   const popper = usePopper(ref.current, props.findItemMenuRef(id).current, props.popperOptions)
@@ -149,7 +147,7 @@ function Item(props: MenuItemProps) {
   )
 }
 
-function ItemAnchor(props: MenuItemAnchorProps) {
+export function ItemAnchor(props: MenuItemAnchorProps) {
   const id = useID(ComponentName.MENU_ITEM_ANCHOR, props.id)
   const ref = useRef(document.createElement('a'))
 
@@ -187,7 +185,7 @@ function ItemAnchor(props: MenuItemAnchorProps) {
   )
 }
 
-function ItemMenu(props: MenuItemMenuProps) {
+export function ItemMenu(props: MenuItemMenuProps) {
   const id = useID(ComponentName.MENU_ITEM_MENU, props.id)
   const ref = useRef(document.createElement('ul'))
 
@@ -209,12 +207,12 @@ function ItemMenu(props: MenuItemMenuProps) {
   )
 }
 
-function ItemMenuItem(props: MenuItemMenuItemProps) {
+export function ItemMenuItem(props: MenuItemMenuItemProps) {
   const id = useID(ComponentName.MENU_ITEM_MENU_ITEM, props.id)
   return <li {...omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS)} id={id} role='none' />
 }
 
-function ItemMenuItemAnchor(props: MenuItemMenuItemAnchorProps) {
+export function ItemMenuItemAnchor(props: MenuItemMenuItemAnchorProps) {
   const id = useID(ComponentName.MENU_ITEM_MENU_ITEM_ANCHOR, props.id)
   const ref = useRef(document.createElement('a'))
 
@@ -230,5 +228,3 @@ function ItemMenuItemAnchor(props: MenuItemMenuItemAnchorProps) {
 
   return <a {...omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS, 'index')} id={id} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
 }
-
-export { Root, Item, ItemAnchor, ItemMenu, ItemMenuItem, ItemMenuItemAnchor }

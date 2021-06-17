@@ -1,15 +1,13 @@
+import { ID, IDUtils, Logger } from '@queelag/core'
+import { ComponentStore } from '@queelag/react-core'
 import { ComponentName } from '../definitions/enums'
-import { ID } from '../definitions/types'
-import ComponentStore from '../modules/component.store'
-import Logger from '../modules/logger'
-import IDUtils from '../utils/id.utils'
 
-class DisclosureSectionStore extends ComponentStore {
+class DisclosureSectionStore extends ComponentStore<HTMLElement> {
   expanded: boolean
   panelID: ID
 
   constructor(update: () => void) {
-    super(ComponentName.DISCLOSURE_SECTION, update)
+    super(ComponentName.DISCLOSURE_SECTION, undefined, undefined, update)
 
     this.expanded = false
     this.panelID = IDUtils.prefixed(ComponentName.DISCLOSURE_SECTION_PANEL)

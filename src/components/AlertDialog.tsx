@@ -1,17 +1,17 @@
+import { Logger } from '@queelag/core'
+import { useID } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { KeyboardEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { ComponentName, Key } from '../definitions/enums'
 import { AlertDialogChildrenProps, AlertDialogDescriptionProps, AlertDialogProps, AlertDialogTitleProps } from '../definitions/props'
-import useID from '../hooks/use.id'
-import Logger from '../modules/logger'
 
 const ALERT_DIALOG_CHILDREN_PROPS_KEYS: (keyof AlertDialogChildrenProps)[] = ['descriptionID', 'titleID']
 
 /**
  * An alert dialog is a modal dialog that interrupts the user's workflow to communicate an important message and acquire a response.
  */
-function Root(props: AlertDialogProps) {
+export function Root(props: AlertDialogProps) {
   const id = useID(ComponentName.ALERT_DIALOG, props.id)
   const descriptionID = useID(ComponentName.ALERT_DIALOG_DESCRIPTION)
   const titleID = useID(ComponentName.ALERT_DIALOG_TITLE)
@@ -51,12 +51,10 @@ function Root(props: AlertDialogProps) {
   )
 }
 
-function Title(props: AlertDialogTitleProps) {
+export function Title(props: AlertDialogTitleProps) {
   return <span {...omit(props, ALERT_DIALOG_CHILDREN_PROPS_KEYS)} id={props.titleID}></span>
 }
 
-function Description(props: AlertDialogDescriptionProps) {
+export function Description(props: AlertDialogDescriptionProps) {
   return <span {...omit(props, ALERT_DIALOG_CHILDREN_PROPS_KEYS)} id={props.descriptionID}></span>
 }
-
-export { Root, Title, Description }

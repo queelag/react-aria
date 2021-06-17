@@ -1,14 +1,14 @@
+import { Logger } from '@queelag/core'
+import { useID } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { KeyboardEvent, useRef } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { CheckBoxProps } from '../definitions/props'
-import useID from '../hooks/use.id'
-import Logger from '../modules/logger'
 
 /**
  * The most common type of checkbox, it allows the user to toggle between two choices -- checked and not checked.
  */
-function Root(props: CheckBoxProps) {
+export function Root(props: CheckBoxProps) {
   const id = useID(ComponentName.CHECK_BOX, props.id)
   const ref = useRef(document.createElement('div'))
 
@@ -43,5 +43,3 @@ function Root(props: CheckBoxProps) {
     />
   )
 }
-
-export { Root }

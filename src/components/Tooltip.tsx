@@ -1,12 +1,10 @@
+import { Debounce, noop } from '@queelag/core'
+import { useForceUpdate, useID } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import { TooltipChildrenProps, TooltipElementProps, TooltipProps, TooltipTriggerProps } from '../definitions/props'
-import useForceUpdate from '../hooks/use.force.update'
-import useID from '../hooks/use.id'
-import Debounce from '../modules/debounce'
-import noop from '../modules/noop'
 import TooltipStore from '../stores/tooltip.store'
 
 const TOOLTIP_CHILDREN_PROPS_KEYS: (keyof TooltipChildrenProps)[] = [
@@ -23,7 +21,7 @@ const TOOLTIP_CHILDREN_PROPS_KEYS: (keyof TooltipChildrenProps)[] = [
 /**
  * A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it. It typically appears after a small delay and disappears when Escape is pressed or on mouse out.
  */
-function Root(props: TooltipProps) {
+export function Root(props: TooltipProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new TooltipStore(update, props.hideDelay, props.id), [])
   const popper = usePopper(store.triggerRef.current, store.elementRef.current, props.popperOptions)
@@ -49,7 +47,7 @@ function Root(props: TooltipProps) {
   )
 }
 
-function Element(props: TooltipElementProps) {
+export function Element(props: TooltipElementProps) {
   const ref = useRef(document.createElement('div'))
 
   const onMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
@@ -77,7 +75,7 @@ function Element(props: TooltipElementProps) {
   )
 }
 
-function Trigger(props: TooltipTriggerProps) {
+export function Trigger(props: TooltipTriggerProps) {
   const id = useID(ComponentName.TOOLTIP_TRIGGER, props.id)
   const ref = useRef(document.createElement('div'))
 
@@ -117,5 +115,3 @@ function Trigger(props: TooltipTriggerProps) {
     />
   )
 }
-
-export { Root, Element, Trigger }

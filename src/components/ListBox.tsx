@@ -1,12 +1,11 @@
+import { StoreUtils } from '@queelag/core'
+import { useForceUpdate, useID } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName, ListBoxSelectMode } from '../definitions/enums'
 import { ListBoxButtonProps, ListBoxChildrenProps, ListBoxListItemProps, ListBoxListProps, ListBoxProps } from '../definitions/props'
-import useForceUpdate from '../hooks/use.force.update'
-import useID from '../hooks/use.id'
 import ListBoxStore from '../stores/list.box.store'
-import StoreUtils from '../utils/store.utils'
 
 const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
   'collapsable',
@@ -28,7 +27,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
 /**
  * A listbox widget presents a list of options and allows a user to select one or more of them. A listbox that allows a single option to be chosen is a single-select listbox; one that allows multiple options to be selected is a multi-select listbox.
  */
-function Root(props: ListBoxProps) {
+export function Root(props: ListBoxProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new ListBoxStore(update, props.id, props.onSelectListItem, props.selectMode), [])
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
@@ -39,7 +38,7 @@ function Root(props: ListBoxProps) {
   }
 
   useEffect(() => {
-    StoreUtils.updateFromProps(store, props, update, 'onSelectListItem', 'selectMode', 'selectedListItemIndexes')
+    StoreUtils.updateKeys(store, props, ['onSelectListItem', 'selectMode', 'selectedListItemIndexes'], update)
   }, [props.onSelectListItem, props.selectMode, props.selectedListItemIndexes])
 
   return (
@@ -69,7 +68,7 @@ function Root(props: ListBoxProps) {
   )
 }
 
-function Button(props: ListBoxButtonProps) {
+export function Button(props: ListBoxButtonProps) {
   const id = useID(ComponentName.LIST_BOX_BUTTON, props.id)
   const ref = useRef(document.createElement('button'))
 
@@ -99,7 +98,7 @@ function Button(props: ListBoxButtonProps) {
   )
 }
 
-function List(props: ListBoxListProps) {
+export function List(props: ListBoxListProps) {
   const id = useID(ComponentName.LIST_BOX_LIST, props.id)
   const ref = useRef(document.createElement('ul'))
 
@@ -126,7 +125,7 @@ function List(props: ListBoxListProps) {
   )
 }
 
-function ListItem(props: ListBoxListItemProps) {
+export function ListItem(props: ListBoxListItemProps) {
   const id = useID(ComponentName.COMBO_BOX_LIST_BOX_ITEM, props.id)
   const ref = useRef(document.createElement('li'))
 
@@ -160,5 +159,3 @@ function ListItem(props: ListBoxListItemProps) {
     />
   )
 }
-
-export { Root, Button, List, ListItem }

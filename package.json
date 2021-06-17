@@ -5,12 +5,10 @@
   "author": "Dario Sechi",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.14.5",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@microsoft/api-extractor": "^7.16.1",
     "@rollup/plugin-typescript": "^8.2.1",
-    "@storybook/addon-actions": "^6.3.0-rc.3",
     "@storybook/addon-essentials": "^6.3.0-rc.3",
     "@storybook/addon-links": "^6.3.0-rc.3",
     "@storybook/builder-webpack5": "^6.3.0-rc.3",
@@ -24,13 +22,11 @@
     "@types/lodash": "^4.14.170",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.7",
-    "@types/react-window": "^1.8.2",
     "autoprefixer": "^10.2.6",
-    "babel-loader": "^8.2.2",
     "chance": "^1.1.7",
     "framer-motion": "^4.1.17",
     "jest": "^27.0.4",
-    "postcss": "^8.3.2",
+    "postcss": "^8.3.5",
     "postcss-loader": "6.1.0",
     "prettier": "^2.3.1",
     "rollup": "^2.51.2",
@@ -38,27 +34,20 @@
     "tailwindcss": "^2.1.4",
     "ts-jest": "^27.0.3",
     "typescript": "4.2.2",
-    "webpack": "^5.38.1"
+    "webpack": "^5.39.1"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
-    "buffer": "^6.0.3",
-    "joi": "^17.4.0",
     "lodash": "^4.17.21",
-    "nanoid": "^3.1.22",
-    "queue": "^6.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-popper": "^2.2.5",
-    "react-window": "^1.8.6",
-    "squircleyjs": "^1.1.0"
+    "react-popper": "^2.2.5"
   },
   "scripts": {
-    "build": "rm -rf declarations && rm -rf dist && yarn tsc && yarn dts && yarn rollup -c rollup.config.js",
     "test": "yarn jest --coverage",
-    "dts": "yarn api-extractor run --local",
+    "build": "rm -rf declarations && rm -rf dist && yarn tsc && yarn api-extractor run --local && yarn rollup -c rollup.config.js",
     "tarball": "yarn version && cp package.json dist/. && cd dist && yarn pack",
-    "deploy": "yarn test && MODE=PRODUCTION yarn build && yarn tarball && yarn publish dist/*.tgz --access public && git push",
+    "deploy": "yarn test && yarn build && yarn tarball && yarn publish dist/*.tgz --access public && git push",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   }

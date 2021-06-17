@@ -1,6 +1,7 @@
+import { ID } from '@queelag/core'
 import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, Ref, TouchEvent } from 'react'
 import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, SliderMode, SliderOrientation, TabberActivation } from './enums'
-import { ID, PopperData, PopperOptions, SliderPercentual, SliderThumbIndex, SliderValue } from './types'
+import { PopperData, PopperOptions, SliderPercentual, SliderThumbIndex, SliderValue } from './types'
 
 export type AccordionProps = {
   children: (props: AccordionChildrenProps) => ReactNode

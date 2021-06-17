@@ -1,11 +1,11 @@
 import { DoneRounded } from '@material-ui/icons'
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import React, { Fragment, useState } from 'react'
 import * as Component from '../src/components/ListBox'
 import { ListBoxSelectMode } from '../src/definitions/enums'
 import { ListBoxChildrenProps, ListBoxProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
   const [options] = useState(new Array(3).fill(0).map(() => Chance().country({ full: true })))
@@ -16,7 +16,7 @@ const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
   }
 
   return (
-    <div className={ArrayUtils.joinStrings(args.collapsable && 'h-96')}>
+    <div className={ReactUtils.joinClassNames(args.collapsable && 'h-96')}>
       <Component.Root
         {...args}
         className='max-w-lg'
@@ -29,7 +29,7 @@ const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
             {props.collapsable && (
               <Component.Button
                 {...props}
-                className={ArrayUtils.joinStrings(
+                className={ReactUtils.joinClassNames(
                   'w-full flex border border-gray-200 rounded-md p-6 font-medium outline-none transition-all duration-200',
                   'hover:bg-gray-100 focus:bg-gray-50',
                   'focus:ring-2 ring-offset-2 ring-blue-400'
@@ -40,7 +40,7 @@ const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
             )}
             <Component.List
               {...props}
-              className={ArrayUtils.joinStrings(
+              className={ReactUtils.joinClassNames(
                 'w-full border border-gray-200 rounded-md divide-y divide-gray-200 outline-none transition-all duration-200',
                 'focus:ring-2 ring-offset-2 ring-blue-400',
                 props.collapsable && !props.expanded && 'opacity-0 pointer-events-none'
@@ -49,7 +49,7 @@ const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
               {options.map((v: string, k: number) => (
                 <Component.ListItem
                   {...props}
-                  className={ArrayUtils.joinStrings(
+                  className={ReactUtils.joinClassNames(
                     'flex justify-between p-6 space-x-6 transition-all duration-100 hover:bg-gray-100',
                     props.isListItemFocused(k) && 'bg-gray-100',
                     props.isListItemSelected(k) && 'bg-gray-50'

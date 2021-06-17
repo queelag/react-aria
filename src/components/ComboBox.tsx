@@ -1,3 +1,5 @@
+import { StoreUtils } from '@queelag/core'
+import { useForceUpdate, useID } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
@@ -11,10 +13,7 @@ import {
   ComboBoxListBoxProps,
   ComboBoxProps
 } from '../definitions/props'
-import useForceUpdate from '../hooks/use.force.update'
-import useID from '../hooks/use.id'
 import ComboBoxStore from '../stores/combo.box.store'
-import StoreUtils from '../utils/store.utils'
 
 const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
   'autocomplete',
@@ -37,7 +36,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
 /**
  * A combobox is an input widget with an associated popup that enables users to select a value for the combobox from a collection of possible values. In some implementations, the popup presents allowed values, while in other implementations, the popup presents suggested values, and users may either select one of the suggestions or type a value.
  */
-function Root(props: ComboBoxProps) {
+export function Root(props: ComboBoxProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new ComboBoxStore(update, props.id, props.onCollapse, props.onSelectListBoxItem, props.selectedListBoxItemIndexes), [])
   const popper = usePopper(store.groupRef.current, store.listBoxRef.current, props.popperOptions)
@@ -48,7 +47,7 @@ function Root(props: ComboBoxProps) {
   }
 
   useEffect(() => {
-    StoreUtils.updateFromProps(store, props, update, 'onCollapse', 'onSelectListBoxItem', 'selectedListBoxItemIndexes')
+    StoreUtils.updateKeys(store, props, ['onCollapse', 'onSelectListBoxItem', 'selectedListBoxItemIndexes'], update)
   }, [props.onCollapse, props.onSelectListBoxItem, props.selectedListBoxItemIndexes])
 
   return (
@@ -79,7 +78,7 @@ function Root(props: ComboBoxProps) {
   )
 }
 
-function Group(props: ComboBoxGroupProps) {
+export function Group(props: ComboBoxGroupProps) {
   const id = useID(ComponentName.COMBO_BOX_GROUP, props.id)
   const ref = useRef(document.createElement('div'))
 
@@ -88,7 +87,7 @@ function Group(props: ComboBoxGroupProps) {
   return <div {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} id={id} ref={ref} />
 }
 
-function Input(props: ComboBoxInputProps) {
+export function Input(props: ComboBoxInputProps) {
   const id = useID(ComponentName.COMBO_BOX_INPUT, props.id)
   const ref = useRef(document.createElement('input'))
 
@@ -127,7 +126,7 @@ function Input(props: ComboBoxInputProps) {
   )
 }
 
-function Button(props: ComboBoxButtonProps) {
+export function Button(props: ComboBoxButtonProps) {
   const id = useID(ComponentName.COMBO_BOX_BUTTON, props.id)
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -145,7 +144,7 @@ function Button(props: ComboBoxButtonProps) {
   return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label='Open' id={id} onClick={onClick} onMouseDown={onMouseDown} tabIndex={-1} type='button' />
 }
 
-function ListBox(props: ComboBoxListBoxProps) {
+export function ListBox(props: ComboBoxListBoxProps) {
   const ref = useRef(document.createElement('ul'))
 
   useEffect(() => props.setListBoxRef(ref), [])
@@ -164,7 +163,7 @@ function ListBox(props: ComboBoxListBoxProps) {
   )
 }
 
-function ListBoxItem(props: ComboBoxListBoxItemProps) {
+export function ListBoxItem(props: ComboBoxListBoxItemProps) {
   const id = useID(ComponentName.COMBO_BOX_LIST_BOX_ITEM, props.id)
   const ref = useRef(document.createElement('li'))
 
@@ -197,5 +196,3 @@ function ListBoxItem(props: ComboBoxListBoxItemProps) {
     />
   )
 }
-
-export { Root, Group, Input, Button, ListBox, ListBoxItem }

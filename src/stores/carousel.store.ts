@@ -1,11 +1,9 @@
+import { Logger, noop, rc } from '@queelag/core'
+import { ComponentStore } from '@queelag/react-core'
 import { MutableRefObject } from 'react'
 import { CarouselLive, CarouselRotationMode, ComponentName } from '../definitions/enums'
-import ComponentStore from '../modules/component.store'
-import Logger from '../modules/logger'
-import noop from '../modules/noop'
-import rc from '../modules/rc'
 
-class CarouselStore extends ComponentStore {
+class CarouselStore extends ComponentStore<HTMLElement> {
   activeSlideIndex: number
   automaticRotationDuration: number
   automaticRotationInterval: number
@@ -24,7 +22,7 @@ class CarouselStore extends ComponentStore {
     onChangeActiveSlideIndex: (index: number) => any = noop,
     rotationMode: CarouselRotationMode = CarouselRotationMode.INFINITE
   ) {
-    super(ComponentName.CAROUSEL, update, id)
+    super(ComponentName.CAROUSEL, id, undefined, update)
 
     this.activeSlideIndex = activeSlideIndex
     this.automaticRotationDuration = automaticRotationDuration

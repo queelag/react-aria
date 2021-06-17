@@ -1,10 +1,10 @@
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React, { Fragment } from 'react'
 import * as Component from '../src/components/Tabber'
 import { TabberChildrenProps, TabberProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 type Item = {
   content: string
@@ -21,7 +21,7 @@ const Template: Story<TabberProps> = (args: TabberProps) => (
           {items.map((v: Item, k: number) => (
             <Component.ListItem
               {...props}
-              className={ArrayUtils.joinStrings(
+              className={ReactUtils.joinClassNames(
                 'flex justify-center p-6 transition-all duration-200',
                 'hover:bg-gray-100 active:bg-gray-50 focus:bg-gray-100',
                 props.isTabSelected(k) && 'bg-gray-50'
@@ -43,7 +43,7 @@ const Template: Story<TabberProps> = (args: TabberProps) => (
             {items.map((v: Item, k: number) => (
               <Component.Panel
                 {...props}
-                className={ArrayUtils.joinStrings(
+                className={ReactUtils.joinClassNames(
                   'min-w-full border border-gray-100 p-6 bg-gray-50 text-sm rounded-lg transition-all duration-200',
                   'focus:ring-2 ring-offset-2 ring-blue-400',
                   !props.isTabSelected(k) && 'opacity-0'

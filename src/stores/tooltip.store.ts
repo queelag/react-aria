@@ -1,11 +1,9 @@
+import { ID, IDUtils, Logger } from '@queelag/core'
+import { ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
-import { ID } from '../definitions/types'
-import ComponentStore from '../modules/component.store'
-import Logger from '../modules/logger'
-import IDUtils from '../utils/id.utils'
 
-class TooltipStore extends ComponentStore {
+class TooltipStore extends ComponentStore<HTMLDivElement> {
   elementID: ID
   elementRef: MutableRefObject<HTMLDivElement>
   hideDelay: number
@@ -13,7 +11,7 @@ class TooltipStore extends ComponentStore {
   visible: boolean
 
   constructor(update: () => void, hideDelay: number = 200, id?: ID) {
-    super(ComponentName.TOOLTIP, update, id)
+    super(ComponentName.TOOLTIP, id, undefined, update)
 
     this.elementID = IDUtils.prefixed(ComponentName.TOOLTIP_ELEMENT)
     this.elementRef = { current: document.createElement('div') }

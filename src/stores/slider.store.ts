@@ -1,13 +1,11 @@
+import { Logger, noop, NumberUtils, OptionalID } from '@queelag/core'
+import { ComponentStore } from '@queelag/react-core'
 import { cloneDeep, sortBy } from 'lodash'
 import React, { MutableRefObject } from 'react'
 import { ComponentName, Key, SliderMode, SliderOrientation } from '../definitions/enums'
-import { OptionalID, SliderPercentual, SliderThumbIndex, SliderValue } from '../definitions/types'
-import ComponentRefStore from '../modules/component.ref.store'
-import Logger from '../modules/logger'
-import noop from '../modules/noop'
-import NumberUtils from '../utils/number.utils'
+import { SliderPercentual, SliderThumbIndex, SliderValue } from '../definitions/types'
 
-class SliderStore extends ComponentRefStore {
+class SliderStore extends ComponentStore<HTMLDivElement> {
   maximum: number
   minimum: number
   mode: SliderMode
@@ -30,7 +28,7 @@ class SliderStore extends ComponentRefStore {
     step: number = 1,
     value: SliderValue = [minimum, maximum]
   ) {
-    super(ComponentName.SLIDER, ref, update, id)
+    super(ComponentName.SLIDER, id, ref, update)
 
     this.maximum = maximum
     this.minimum = minimum

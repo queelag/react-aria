@@ -1,11 +1,11 @@
 import { DoneRounded, KeyboardArrowDownRounded } from '@material-ui/icons'
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React, { ChangeEvent, Fragment, useState } from 'react'
 import * as Component from '../src/components/ComboBox'
 import { ComboBoxChildrenProps, ComboBoxProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 const StyledTemplate: Story<ComboBoxProps> = (args: ComboBoxProps) => {
   const [options] = useState<string[]>(new Array(3).fill(0).map(() => Chance().country({ full: true })))
@@ -46,7 +46,7 @@ const StyledTemplate: Story<ComboBoxProps> = (args: ComboBoxProps) => {
             <Component.Group {...props} className='relative'>
               <Component.Input
                 {...props}
-                className={ArrayUtils.joinStrings(
+                className={ReactUtils.joinClassNames(
                   'w-full border border-gray-200 rounded-md p-6 pr-12 font-medium outline-none transition-all duration-200',
                   'hover:bg-gray-100 focus:bg-gray-50',
                   'focus:ring-2 ring-offset-2 ring-blue-400'
@@ -55,18 +55,18 @@ const StyledTemplate: Story<ComboBoxProps> = (args: ComboBoxProps) => {
                 placeholder='ex. Italy'
                 value={filter || value}
               />
-              <Component.Button {...props} className={ArrayUtils.joinStrings('absolute top-0 right-0 w-12 min-h-full flex justify-center items-center')}>
+              <Component.Button {...props} className={ReactUtils.joinClassNames('absolute top-0 right-0 w-12 min-h-full flex justify-center items-center')}>
                 <KeyboardArrowDownRounded />
               </Component.Button>
             </Component.Group>
-            <motion.div animate={{ opacity: props.expanded ? 1 : 0 }} className={ArrayUtils.joinStrings(!props.expanded && 'pointer-events-none')}>
+            <motion.div animate={{ opacity: props.expanded ? 1 : 0 }} className={ReactUtils.joinClassNames(!props.expanded && 'pointer-events-none')}>
               <Component.ListBox {...props} className='w-full bg-white rounded-md border border-gray-200 divide-y divide-gray-200'>
                 {options
                   .filter((v: string) => v.toLowerCase().trim().includes(filter.toLowerCase().trim()))
                   .map((v: string, k: number) => (
                     <Component.ListBoxItem
                       {...props}
-                      className={ArrayUtils.joinStrings(
+                      className={ReactUtils.joinClassNames(
                         'flex justify-between p-6 transition-all duration-200',
                         'hover:bg-gray-100',
                         props.isListBoxItemFocused(k) && 'bg-gray-100',

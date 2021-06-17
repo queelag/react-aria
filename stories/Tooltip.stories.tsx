@@ -1,9 +1,9 @@
 import { InfoOutlined } from '@material-ui/icons'
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import React, { Fragment } from 'react'
 import * as Component from '../src/components/Tooltip'
 import { TooltipChildrenProps, TooltipProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 const Template: Story<TooltipProps> = (args: TooltipProps) => {
   return (
@@ -17,7 +17,7 @@ const Template: Story<TooltipProps> = (args: TooltipProps) => {
             </Component.Trigger>
             <Component.Element {...props}>
               <div
-                className={ArrayUtils.joinStrings(
+                className={ReactUtils.joinClassNames(
                   'p-2 bg-black text-white text-xs whitespace-nowrap rounded-md transform origin-left transition-all duration-200',
                   !props.visible && 'opacity-0 pointer-events-none scale-50'
                 )}

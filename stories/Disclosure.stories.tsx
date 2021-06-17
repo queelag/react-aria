@@ -1,11 +1,11 @@
 import { KeyboardArrowDownRounded } from '@material-ui/icons'
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React, { Fragment, useState } from 'react'
 import * as Component from '../src/components/Disclosure'
 import { DisclosureProps, DisclosureSectionChildrenProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 const Template: Story<DisclosureProps> = (args: DisclosureProps) => {
   const [sections] = useState(
@@ -24,7 +24,7 @@ const Template: Story<DisclosureProps> = (args: DisclosureProps) => {
               <Component.SectionHeader>
                 <Component.SectionHeaderButton
                   {...props}
-                  className={ArrayUtils.joinStrings(
+                  className={ReactUtils.joinClassNames(
                     'w-full flex justify-between items-center p-6 space-x-6 transition-all duration-200',
                     'hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-50',
                     k > 0 && 'border-t border-gray-200'

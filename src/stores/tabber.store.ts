@@ -1,12 +1,9 @@
+import { ID, IDUtils, Logger, OptionalID, rc } from '@queelag/core'
+import { ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, TabberActivation } from '../definitions/enums'
-import { ID, OptionalID } from '../definitions/types'
-import ComponentStore from '../modules/component.store'
-import Logger from '../modules/logger'
-import rc from '../modules/rc'
-import IDUtils from '../utils/id.utils'
 
-class TabberStore extends ComponentStore {
+class TabberStore extends ComponentStore<HTMLDivElement> {
   activation: TabberActivation
   listItemIDs: ID[]
   listItemRefs: Map<number, MutableRefObject<HTMLButtonElement>>
@@ -15,7 +12,7 @@ class TabberStore extends ComponentStore {
   size: number
 
   constructor(update: () => void, id: OptionalID, activation: TabberActivation = TabberActivation.AUTOMATIC, size: number) {
-    super(ComponentName.TABBER, update, id)
+    super(ComponentName.TABBER, id, undefined, update)
 
     this.activation = activation
     this.listItemIDs = []

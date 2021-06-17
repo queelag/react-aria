@@ -1,3 +1,5 @@
+import { StoreUtils } from '@queelag/core'
+import { useForceUpdate, useID } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { FocusEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { CarouselLive, ComponentName } from '../definitions/enums'
@@ -10,10 +12,7 @@ import {
   CarouselSlideProps,
   CarouselSlidesProps
 } from '../definitions/props'
-import useForceUpdate from '../hooks/use.force.update'
-import useID from '../hooks/use.id'
 import CarouselStore from '../stores/carousel.store'
-import StoreUtils from '../utils/store.utils'
 
 const ROOT_CHILDREN_PROPS_KEYS: (keyof CarouselChildrenProps)[] = [
   'activeSlideIndex',
@@ -32,7 +31,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof CarouselChildrenProps)[] = [
 /**
  * A carousel presents a set of items, referred to as slides, by sequentially displaying a subset of one or more slides. Typically, one slide is displayed at a time, and users can activate a next or previous slide control that hides the current slide and "rotates" the next or previous slide into view. In some implementations, rotation automatically starts when the page loads, and it may also automatically stop once all the slides have been displayed. While a slide may contain any type of content, image carousels where each slide contains nothing more than a single image are common.
  */
-function Root(props: CarouselProps) {
+export function Root(props: CarouselProps) {
   const update = useForceUpdate()
   const store = useMemo(
     () =>
@@ -71,7 +70,7 @@ function Root(props: CarouselProps) {
 
   useEffect(() => {
     StoreUtils.shouldUpdateKey(store, 'live', props.live) && store.setLive(props.live)
-    StoreUtils.updateFromProps(store, props, update, 'activeSlideIndex', 'automaticRotationDuration', 'onChangeActiveSlideIndex', 'rotationMode')
+    StoreUtils.updateKeys(store, props, ['activeSlideIndex', 'automaticRotationDuration', 'onChangeActiveSlideIndex', 'rotationMode'], update)
   }, [props.activeSlideIndex, props.automaticRotationDuration, props.live, props.onChangeActiveSlideIndex, props.rotationMode])
 
   useEffect(() => store.disableAutomaticRotation, [])
@@ -104,11 +103,11 @@ function Root(props: CarouselProps) {
   )
 }
 
-function Slides(props: CarouselSlidesProps) {
+export function Slides(props: CarouselSlidesProps) {
   return <div {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-live={props.liveTemporary || props.live} id={props.slidesID} />
 }
 
-function Slide(props: CarouselSlideProps) {
+export function Slide(props: CarouselSlideProps) {
   const id = useID(ComponentName.CAROUSEL_SLIDE, props.id)
   const ref = useRef(document.createElement('div'))
 
@@ -129,7 +128,7 @@ function Slide(props: CarouselSlideProps) {
   )
 }
 
-function ButtonLive(props: CarouselButtonLiveProps) {
+export function ButtonLive(props: CarouselButtonLiveProps) {
   const id = useID(ComponentName.CAROUSEL_BUTTON_LIVE, props.id)
 
   const findLabelByLive = () => {
@@ -158,7 +157,7 @@ function ButtonLive(props: CarouselButtonLiveProps) {
   return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label={findLabelByLive()} id={id} onClick={onClick} type='button' />
 }
 
-function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
+export function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
   const id = useID(ComponentName.CAROUSEL_BUTTON_PREVIOUS_SLIDE, props.id)
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -171,7 +170,7 @@ function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
   )
 }
 
-function ButtonNextSlide(props: CarouselButtonNextProps) {
+export function ButtonNextSlide(props: CarouselButtonNextProps) {
   const id = useID(ComponentName.CAROUSEL_BUTTON_NEXT_SLIDE, props.id)
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -181,5 +180,3 @@ function ButtonNextSlide(props: CarouselButtonNextProps) {
 
   return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-controls={props.slidesID} aria-label='Next Slide' id={id} onClick={onClick} type='button' />
 }
-
-export { Root, Slides, Slide, ButtonLive, ButtonPreviousSlide, ButtonNextSlide }

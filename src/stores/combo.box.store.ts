@@ -1,13 +1,9 @@
+import { ID, IDUtils, Logger, noop, OptionalID, tc } from '@queelag/core'
+import { ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
-import { ID, OptionalID } from '../definitions/types'
-import ComponentStore from '../modules/component.store'
-import Logger from '../modules/logger'
-import noop from '../modules/noop'
-import tc from '../modules/tc'
-import IDUtils from '../utils/id.utils'
 
-class ComboBoxStore extends ComponentStore {
+class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   expanded: boolean
   focusedListBoxItemIndex: number
   groupRef: MutableRefObject<HTMLDivElement>
@@ -24,7 +20,7 @@ class ComboBoxStore extends ComponentStore {
     onSelectListBoxItem: (indexes: number[]) => any = noop,
     selectedListBoxItemIndexes: number[] = []
   ) {
-    super(ComponentName.COMBO_BOX, update, id)
+    super(ComponentName.COMBO_BOX, id, undefined, update)
 
     this.expanded = false
     this.focusedListBoxItemIndex = -1

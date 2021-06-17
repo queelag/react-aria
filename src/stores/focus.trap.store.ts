@@ -1,15 +1,15 @@
+import { Logger } from '@queelag/core'
+import { ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
-import ComponentRefStore from '../modules/component.ref.store'
-import Logger from '../modules/logger'
 import DOMUtils from '../utils/dom.utils'
 
-class FocusTrapStore extends ComponentRefStore {
+class FocusTrapStore extends ComponentStore<HTMLDivElement> {
   focusables: Element[]
   originalFocused: Element
 
   constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, id?: string) {
-    super(ComponentName.FOCUS_TRAP, ref, update, id)
+    super(ComponentName.FOCUS_TRAP, id, ref, update)
 
     this.focusables = []
     this.originalFocused = document.createElement('div')

@@ -1,3 +1,4 @@
+import { useForceUpdate } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
@@ -9,7 +10,6 @@ import {
   MenuButtonListProps,
   MenuButtonProps
 } from '../definitions/props'
-import useForceUpdate from '../hooks/use.force.update'
 import MenuButtonStore from '../stores/menu.button.store'
 
 const MENU_BUTTON_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
@@ -27,7 +27,7 @@ const MENU_BUTTON_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
 /**
  * A menu button is a button that opens a menu. It is often styled as a typical push button with a downward pointing arrow or triangle to hint that activating the button will display a menu.
  */
-function Root(props: MenuButtonProps) {
+export function Root(props: MenuButtonProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new MenuButtonStore(update, props.id), [])
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
@@ -59,7 +59,7 @@ function Root(props: MenuButtonProps) {
   )
 }
 
-function Button(props: MenuButtonButtonProps) {
+export function Button(props: MenuButtonButtonProps) {
   const ref = useRef(document.createElement('button'))
 
   const onClick = () => {
@@ -82,7 +82,7 @@ function Button(props: MenuButtonButtonProps) {
   )
 }
 
-function List(props: MenuButtonListProps) {
+export function List(props: MenuButtonListProps) {
   const ref = useRef(document.createElement('ul'))
 
   useEffect(() => props.setListRef(ref), [])
@@ -101,11 +101,11 @@ function List(props: MenuButtonListProps) {
   )
 }
 
-function ListItem(props: MenuButtonListItemProps) {
+export function ListItem(props: MenuButtonListItemProps) {
   return <li {...omit(props, MENU_BUTTON_CHILDREN_PROPS_KEYS)} role='none' />
 }
 
-function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
+export function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
   const ref = useRef(document.createElement('a'))
 
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -120,5 +120,3 @@ function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
 
   return <a {...omit(props, MENU_BUTTON_CHILDREN_PROPS_KEYS, 'index')} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
 }
-
-export { Root, Button, List, ListItem, ListItemAnchor }

@@ -1,3 +1,4 @@
+import { NumberUtils, ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { min } from 'lodash'
 import React, { Fragment, useState } from 'react'
@@ -6,8 +7,6 @@ import * as Tooltip from '../src/components/Tooltip'
 import { SliderMode, SliderOrientation } from '../src/definitions/enums'
 import { HTMLDivProps, SliderChildrenProps, SliderProps, TooltipChildrenProps } from '../src/definitions/props'
 import { SliderValue } from '../src/definitions/types'
-import ArrayUtils from '../src/utils/array.utils'
-import NumberUtils from '../src/utils/number.utils'
 
 function ThumbTooltip(props: HTMLDivProps & { orientation: SliderOrientation; value: number }) {
   return (
@@ -22,16 +21,16 @@ function ThumbTooltip(props: HTMLDivProps & { orientation: SliderOrientation; va
         <Fragment>
           <Tooltip.Element
             {...childrenProps}
-            className={ArrayUtils.joinStrings('w-6 h-6 transition-all duration-200', !childrenProps.visible && 'opacity-0 pointer-events-none')}
+            className={ReactUtils.joinClassNames('w-6 h-6 transition-all duration-200', !childrenProps.visible && 'opacity-0 pointer-events-none')}
           >
             <div
-              className={ArrayUtils.joinStrings(
+              className={ReactUtils.joinClassNames(
                 'tear w-full h-full flex justify-center items-center font-semibold bg-gray-100 transform',
                 props.orientation === SliderOrientation.HORIZONTAL ? 'rotate-45' : '-rotate-45'
               )}
               style={{ fontSize: 8 }}
             >
-              <span className={ArrayUtils.joinStrings('transform', props.orientation === SliderOrientation.HORIZONTAL ? '-rotate-45' : 'rotate-45')}>
+              <span className={ReactUtils.joinClassNames('transform', props.orientation === SliderOrientation.HORIZONTAL ? '-rotate-45' : 'rotate-45')}>
                 {props.value}
               </span>
             </div>
@@ -58,7 +57,7 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
     <div className='p-6'>
       <Component.Root
         {...args}
-        className={ArrayUtils.joinStrings(
+        className={ReactUtils.joinClassNames(
           'relative flex justify-center items-center',
           args.orientation === SliderOrientation.HORIZONTAL ? 'h-6 max-w-lg' : 'w-6'
         )}
@@ -68,14 +67,14 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
         {(props: SliderChildrenProps) => (
           <Fragment>
             <div
-              className={ArrayUtils.joinStrings('rounded-full bg-gray-100', props.orientation === SliderOrientation.HORIZONTAL ? 'h-1 w-full' : 'h-64 w-1')}
+              className={ReactUtils.joinClassNames('rounded-full bg-gray-100', props.orientation === SliderOrientation.HORIZONTAL ? 'h-1 w-full' : 'h-64 w-1')}
             />
             <div
-              className={ArrayUtils.joinStrings('absolute bg-blue-100', props.orientation === SliderOrientation.HORIZONTAL ? 'h-1' : 'w-1')}
+              className={ReactUtils.joinClassNames('absolute bg-blue-100', props.orientation === SliderOrientation.HORIZONTAL ? 'h-1' : 'w-1')}
               style={
                 props.orientation === SliderOrientation.HORIZONTAL
-                  ? { left: args.mode === SliderMode.DUAL_THUMB ? min(props.percentual) + '%' : 0, width: NumberUtils.difference(...props.percentual) + '%' }
-                  : { bottom: args.mode === SliderMode.DUAL_THUMB ? min(props.percentual) + '%' : 0, height: NumberUtils.difference(...props.percentual) + '%' }
+                  ? { left: args.mode === SliderMode.DUAL_THUMB ? min(props.percentual) + '%' : 0, width: NumberUtils.range(...props.percentual) + '%' }
+                  : { bottom: args.mode === SliderMode.DUAL_THUMB ? min(props.percentual) + '%' : 0, height: NumberUtils.range(...props.percentual) + '%' }
               }
             />
             <Component.FirstThumb {...props} focusable={false}>

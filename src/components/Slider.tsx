@@ -1,12 +1,11 @@
+import { StoreUtils } from '@queelag/core'
+import { useForceUpdate, useID } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, TouchEvent, useEffect, useMemo, useRef } from 'react'
 import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
 import { SliderThumbIndex } from '../definitions/types'
-import useForceUpdate from '../hooks/use.force.update'
-import useID from '../hooks/use.id'
 import SliderStore from '../stores/slider.store'
-import StoreUtils from '../utils/store.utils'
 
 const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
   'handleKeyboardInteractions',
@@ -24,7 +23,7 @@ const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
 /**
  * A slider is an input where the user selects a value from within a given range. Sliders typically have a slider thumb that can be moved along a bar or track to change the value of the slider.
  */
-function Root(props: SliderProps) {
+export function Root(props: SliderProps) {
   const update = useForceUpdate()
   const ref = useRef(document.createElement('div'))
   const store = useMemo(
@@ -45,7 +44,7 @@ function Root(props: SliderProps) {
 
   useEffect(() => {
     StoreUtils.shouldUpdateKey(store, 'step', props.step) && store.setStepSize(props.step)
-    StoreUtils.updateFromProps(store, props, update, 'maximum', 'minimum', 'mode', 'onChangeValue', 'orientation')
+    StoreUtils.updateKeys(store, props, ['maximum', 'minimum', 'mode', 'onChangeValue', 'orientation'], update)
   }, [props.maximum, props.minimum, props.mode, props.onChangeValue, props.orientation, props.step])
 
   useEffect(() => {
@@ -139,7 +138,5 @@ const Thumb = (index: SliderThumbIndex) => (props: SliderThumbProps) => {
   )
 }
 
-const FirstThumb = Thumb(0)
-const SecondThumb = Thumb(1)
-
-export { Root, FirstThumb, SecondThumb }
+export const FirstThumb = Thumb(0)
+export const SecondThumb = Thumb(1)

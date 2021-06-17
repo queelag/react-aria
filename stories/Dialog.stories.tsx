@@ -1,3 +1,4 @@
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -5,7 +6,6 @@ import React, { Fragment, useState } from 'react'
 import * as Component from '../src/components/Dialog'
 import * as FocusTrap from '../src/components/FocusTrap'
 import { DialogChildrenProps, DialogProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 const Template: Story<DialogProps> = (args: DialogProps) => {
   const [visible, setVisible] = useState<boolean>(false)
@@ -17,7 +17,7 @@ const Template: Story<DialogProps> = (args: DialogProps) => {
   return (
     <Fragment>
       <button
-        className={ArrayUtils.joinStrings(
+        className={ReactUtils.joinClassNames(
           'bg-white px-12 py-6 rounded-md border border-gray-200 font-medium transition-all duration-200',
           'ring-offset-2 ring-blue-400 focus:ring-2',
           'hover:bg-gray-100 active:bg-gray-50'
@@ -50,7 +50,7 @@ const Template: Story<DialogProps> = (args: DialogProps) => {
                     </div>
                     <div className='flex justify-end space-x-3'>
                       <button
-                        className={ArrayUtils.joinStrings(
+                        className={ReactUtils.joinClassNames(
                           'bg-white px-6 py-3 rounded-md border border-gray-200 font-medium transition-all duration-200',
                           'ring-offset-2 ring-blue-400 focus:ring-2',
                           'hover:bg-gray-100 active:bg-gray-50'
@@ -61,7 +61,7 @@ const Template: Story<DialogProps> = (args: DialogProps) => {
                         No
                       </button>
                       <button
-                        className={ArrayUtils.joinStrings(
+                        className={ReactUtils.joinClassNames(
                           'bg-black px-6 py-3 rounded-md text-white font-medium transition-all duration-200',
                           'ring-offset-2 ring-blue-400 focus:ring-2',
                           'hover:bg-gray-700 active:bg-gray-600'

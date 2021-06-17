@@ -1,9 +1,9 @@
 import { CheckRounded } from '@material-ui/icons'
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 import * as Component from '../src/components/CheckBox'
 import { CheckBoxProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 const Template: Story<CheckBoxProps> = (args: CheckBoxProps) => {
   const [checked, setChecked] = useState<boolean>(args.checked)
@@ -15,7 +15,7 @@ const Template: Story<CheckBoxProps> = (args: CheckBoxProps) => {
       onClick={() => setChecked(!checked)}
     >
       <div
-        className={ArrayUtils.joinStrings(
+        className={ReactUtils.joinClassNames(
           'w-8 h-8 flex justify-center items-center rounded-md border border-gray-200',
           'hover:bg-gray-100 active:bg-gray-50'
           //   'focus:ring-2 ring-offset-2 ring-blue-400'

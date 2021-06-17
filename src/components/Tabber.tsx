@@ -1,10 +1,9 @@
+import { StoreUtils } from '@queelag/core'
+import { useForceUpdate } from '@queelag/react-core'
 import { omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { TabberChildrenProps, TabberListItemProps, TabberListProps, TabberPanelProps, TabberProps } from '../definitions/props'
-import useForceUpdate from '../hooks/use.force.update'
-import noop from '../modules/noop'
 import TabberStore from '../stores/tabber.store'
-import StoreUtils from '../utils/store.utils'
 
 const TABBER_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
   'handleKeyboardEvents',
@@ -16,13 +15,13 @@ const TABBER_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
   'setSelectedListItemIndex'
 ]
 
-function Root(props: TabberProps) {
+export function Root(props: TabberProps) {
   const update = useForceUpdate()
   const store = useMemo(() => new TabberStore(update, props.id, props.activation, props.size), [])
 
   useEffect(() => {
     StoreUtils.shouldUpdateKey(store, 'size', props.size) && store.setSize(props.size)
-    StoreUtils.updateFromProps(store, props, noop, 'activation')
+    StoreUtils.updateKeys(store, props, ['activation'], update)
   }, [props.activation, props.size])
 
   return (
@@ -40,7 +39,7 @@ function Root(props: TabberProps) {
   )
 }
 
-function List(props: TabberListProps) {
+export function List(props: TabberListProps) {
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     props.handleKeyboardEvents(event)
     props.onKeyDown && props.onKeyDown(event)
@@ -49,7 +48,7 @@ function List(props: TabberListProps) {
   return <div {...omit(props, TABBER_CHILDREN_PROPS_KEYS)} aria-label={props.label} onKeyDown={onKeyDown} role='tablist' />
 }
 
-function ListItem(props: TabberListItemProps) {
+export function ListItem(props: TabberListItemProps) {
   const ref = useRef(document.createElement('button'))
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -73,7 +72,7 @@ function ListItem(props: TabberListItemProps) {
   )
 }
 
-function Panel(props: TabberPanelProps) {
+export function Panel(props: TabberPanelProps) {
   return (
     <div
       {...omit(props, TABBER_CHILDREN_PROPS_KEYS, 'index')}
@@ -85,5 +84,3 @@ function Panel(props: TabberPanelProps) {
     />
   )
 }
-
-export { Root, List, ListItem, Panel }

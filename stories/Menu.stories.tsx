@@ -1,9 +1,9 @@
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import React, { Fragment, useState } from 'react'
 import * as Component from '../src/components/Menu'
 import { MenuChildrenProps, MenuItemChildrenProps, MenuProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 const Template: Story<MenuProps> = (args: MenuProps) => {
   const [items] = useState([
@@ -37,7 +37,7 @@ const Template: Story<MenuProps> = (args: MenuProps) => {
                 <Fragment>
                   <Component.ItemAnchor
                     {...props}
-                    className={ArrayUtils.joinStrings(
+                    className={ReactUtils.joinClassNames(
                       'bg-gray-100 p-6 cursor-pointer outline-none transition-all duration-200',
                       'hover:bg-blue-700 focus:bg-blue-700 hover:text-white focus:text-white',
                       k <= 0 && 'rounded-l-md',
@@ -48,7 +48,7 @@ const Template: Story<MenuProps> = (args: MenuProps) => {
                   </Component.ItemAnchor>
                   <Component.ItemMenu
                     {...props}
-                    className={ArrayUtils.joinStrings(
+                    className={ReactUtils.joinClassNames(
                       'border border-gray-200 divide-y divide-gray-200 rounded-md',
                       'transition-opacity duration-200',
                       !props.expanded && 'opacity-0 pointer-events-none'
@@ -58,7 +58,7 @@ const Template: Story<MenuProps> = (args: MenuProps) => {
                       <Component.ItemMenuItem {...props} className='flex' key={k}>
                         <Component.ItemMenuItemAnchor
                           {...props}
-                          className={ArrayUtils.joinStrings(
+                          className={ReactUtils.joinClassNames(
                             'w-64 p-6 whitespace-nowrap cursor-pointer outline-none transition-all duration-200',
                             'hover:bg-gray-100 focus:bg-gray-100'
                           )}

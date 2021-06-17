@@ -1,15 +1,14 @@
+import { ID, Logger, OptionalID } from '@queelag/core'
+import { ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
-import { ID } from '../definitions/types'
-import ComponentStore from '../modules/component.store'
-import Logger from '../modules/logger'
 
-class AccordionStore extends ComponentStore {
+class AccordionStore extends ComponentStore<HTMLDivElement> {
   expandedSections: Map<ID, boolean>
   sectionHeaderRefs: Map<ID, MutableRefObject<HTMLButtonElement>>
 
-  constructor(update: () => void, id?: string) {
-    super(ComponentName.ACCORDION, update, id)
+  constructor(update: () => void, id: OptionalID) {
+    super(ComponentName.ACCORDION, id, undefined, update)
 
     this.expandedSections = new Map()
     this.sectionHeaderRefs = new Map()

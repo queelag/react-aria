@@ -1,4 +1,5 @@
 import { ChevronLeftRounded, ChevronRightRounded, PauseRounded, PlayArrowRounded } from '@material-ui/icons'
+import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
@@ -6,7 +7,6 @@ import React, { Fragment } from 'react'
 import { CarouselLive, CarouselRotationMode } from '../src'
 import * as Component from '../src/components/Carousel'
 import { CarouselChildrenProps, CarouselProps } from '../src/definitions/props'
-import ArrayUtils from '../src/utils/array.utils'
 
 const StyledTemplate: Story<CarouselProps> = (args: CarouselProps) => {
   const slides = new Array(5).fill(0).map((v, k: number) => ({ alt: Chance().first(), id: Chance().guid(), src: require(`../assets/cats/${k}.jpg`) }))
@@ -33,7 +33,7 @@ const StyledTemplate: Story<CarouselProps> = (args: CarouselProps) => {
           </Component.Slides>
           <Component.ButtonLive
             {...props}
-            className={ArrayUtils.joinStrings(
+            className={ReactUtils.joinClassNames(
               'absolute top-2 left-2 w-5 h-5 flex justify-center items-center bg-black rounded-full transition-all duration-200',
               'ring-white focus:ring-2',
               'hover:bg-gray-800 active:bg-gray-700'
@@ -47,7 +47,7 @@ const StyledTemplate: Story<CarouselProps> = (args: CarouselProps) => {
           </Component.ButtonLive>
           <Component.ButtonPreviousSlide
             {...props}
-            className={ArrayUtils.joinStrings(
+            className={ReactUtils.joinClassNames(
               'absolute bottom-2 left-2 w-5 h-5 flex justify-center items-center bg-black rounded-full transition-all duration-200',
               'ring-white focus:ring-2',
               'hover:bg-gray-800 active:bg-gray-700'
@@ -57,7 +57,7 @@ const StyledTemplate: Story<CarouselProps> = (args: CarouselProps) => {
           </Component.ButtonPreviousSlide>
           <Component.ButtonNextSlide
             {...props}
-            className={ArrayUtils.joinStrings(
+            className={ReactUtils.joinClassNames(
               'absolute bottom-2 right-2 w-5 h-5 flex justify-center items-center bg-black rounded-full transition-all duration-200',
               'ring-white focus:ring-2',
               'hover:bg-gray-800 active:bg-gray-700'

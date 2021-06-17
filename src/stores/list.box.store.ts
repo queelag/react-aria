@@ -1,11 +1,9 @@
+import { ID, Logger, noop, OptionalID } from '@queelag/core'
+import { ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, ListBoxSelectMode } from '../definitions/enums'
-import { ID, OptionalID } from '../definitions/types'
-import ComponentStore from '../modules/component.store'
-import Logger from '../modules/logger'
-import noop from '../modules/noop'
 
-class ListBoxStore extends ComponentStore {
+class ListBoxStore extends ComponentStore<HTMLDivElement> {
   buttonRef: MutableRefObject<HTMLButtonElement>
   expanded: boolean
   focusedListItemIndex: number
@@ -20,7 +18,7 @@ class ListBoxStore extends ComponentStore {
     onSelectListItem: (indexes: number[]) => void = noop,
     selectMode: ListBoxSelectMode = ListBoxSelectMode.SINGLE
   ) {
-    super(ComponentName.LIST_BOX, update, id)
+    super(ComponentName.LIST_BOX, id, undefined, update)
 
     this.buttonRef = { current: document.createElement('button') }
     this.expanded = false

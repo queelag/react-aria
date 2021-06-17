@@ -1,8 +1,5 @@
 import PopperJS from '@popperjs/core'
 
-export type ID = string
-export type OptionalID = string | undefined
-
 export type PopperData = {
   styles: { [key: string]: React.CSSProperties }
   attributes: { [key: string]: { [key: string]: string } | undefined }

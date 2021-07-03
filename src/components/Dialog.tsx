@@ -1,6 +1,5 @@
-import { Logger } from '@queelag/core'
+import { Logger, ObjectUtils } from '@queelag/core'
 import { useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { KeyboardEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { ComponentName, Key } from '../definitions/enums'
@@ -36,7 +35,7 @@ export function Root(props: DialogProps) {
 
   return createPortal(
     <div
-      {...omit(props, 'hasDescription', 'hasTitle', 'onClose')}
+      {...ObjectUtils.omit(props, 'hasDescription', 'hasTitle', 'onClose')}
       aria-describedby={props.hasDescription ? descriptionID : undefined}
       aria-labelledby={props.hasTitle ? titleID : undefined}
       id={id}
@@ -51,9 +50,15 @@ export function Root(props: DialogProps) {
 }
 
 export function Title(props: DialogTitleProps) {
-  return <span {...omit(props, DIALOG_CHILDREN_PROPS_KEYS)} id={props.titleID} />
+  return <span {...ObjectUtils.omit(props, ...DIALOG_CHILDREN_PROPS_KEYS)} id={props.titleID} />
 }
 
 export function Description(props: DialogDescriptionProps) {
-  return <span {...omit(props, DIALOG_CHILDREN_PROPS_KEYS)} id={props.descriptionID} />
+  return <span {...ObjectUtils.omit(props, ...DIALOG_CHILDREN_PROPS_KEYS)} id={props.descriptionID} />
+}
+
+export const AriaDialog = {
+  Root,
+  Title,
+  Description
 }

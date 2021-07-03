@@ -1,6 +1,5 @@
-import { ID, NumberUtils } from '@queelag/core'
+import { ID, NumberUtils, ObjectUtils } from '@queelag/core'
 import { useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React from 'react'
 import { ComponentName } from '../definitions/enums'
 import { MeterProps } from '../definitions/props'
@@ -13,11 +12,22 @@ export function Root(props: MeterProps) {
   const value: number = NumberUtils.limit(props.value, props.minimum, props.maximum)
 
   return (
-    <div {...omit(props, 'maximum', 'minimum', 'value')} aria-valuemax={props.maximum} aria-valuemin={props.minimum} aria-valuenow={value} id={id} role='meter'>
+    <div
+      {...ObjectUtils.omit(props, 'maximum', 'minimum', 'value')}
+      aria-valuemax={props.maximum}
+      aria-valuemin={props.minimum}
+      aria-valuenow={value}
+      id={id}
+      role='meter'
+    >
       {props.children({
         percentual: (value / (props.maximum - props.minimum)) * 100,
         value: value
       })}
     </div>
   )
+}
+
+export const AriaMeter = {
+  Root
 }

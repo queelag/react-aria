@@ -1,6 +1,5 @@
-import { noop } from '@queelag/core'
+import { noop, ObjectUtils } from '@queelag/core'
 import { useForceUpdate } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { KeyboardEvent, useEffect, useMemo, useRef } from 'react'
 import { FocusTrapProps } from '../definitions/props'
 import FocusTrapStore from '../stores/focus.trap.store'
@@ -22,5 +21,9 @@ export function Root(props: FocusTrapProps) {
   useEffect(() => (props.restoreFocus ? store.readOriginalFocusedAndReturnFocuser() : noop), [props.restoreFocus])
   useEffect(() => (props.autoFocus ? store.focusFirstFocusable() : noop), [props.autoFocus])
 
-  return <div {...omit(props, 'autoFocus', 'restoreFocus')} id={store.id} onKeyDown={onKeyDown} ref={ref} />
+  return <div {...ObjectUtils.omit(props, 'autoFocus', 'restoreFocus')} id={store.id} onKeyDown={onKeyDown} ref={ref} />
+}
+
+export const AriaFocusTrap = {
+  Root
 }

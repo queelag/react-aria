@@ -1,6 +1,5 @@
-import { StoreUtils } from '@queelag/core'
+import { ObjectUtils, StoreUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, TouchEvent, useEffect, useMemo, useRef } from 'react'
 import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
@@ -73,7 +72,7 @@ export function Root(props: SliderProps) {
   }, [props.value])
 
   return (
-    <div {...omit(props, 'maximum', 'minimum', 'onChangeValue', 'step', 'value')} id={store.id} onClick={onClick} ref={ref}>
+    <div {...ObjectUtils.omit(props, 'maximum', 'minimum', 'onChangeValue', 'step', 'value')} id={store.id} onClick={onClick} ref={ref}>
       {props.children({
         handleKeyboardInteractions: store.handleKeyboardInteractions,
         maximum: store.maximum,
@@ -120,7 +119,7 @@ const Thumb = (index: SliderThumbIndex) => (props: SliderThumbProps) => {
 
   return (
     <div
-      {...omit(props, SLIDER_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...SLIDER_CHILDREN_PROPS_KEYS)}
       aria-orientation={props.orientation}
       aria-valuemax={props.maximum}
       aria-valuemin={props.minimum}
@@ -140,3 +139,9 @@ const Thumb = (index: SliderThumbIndex) => (props: SliderThumbProps) => {
 
 export const FirstThumb = Thumb(0)
 export const SecondThumb = Thumb(1)
+
+export const AriaSlider = {
+  Root,
+  FirstThumb,
+  SecondThumb
+}

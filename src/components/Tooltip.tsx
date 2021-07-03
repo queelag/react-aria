@@ -1,6 +1,5 @@
-import { Debounce, noop } from '@queelag/core'
+import { Debounce, noop, ObjectUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
@@ -32,7 +31,7 @@ export function Root(props: TooltipProps) {
   }
 
   return (
-    <div {...omit(props, 'hideDelay', 'popperOptions')} id={store.id} onKeyDown={onKeyDown}>
+    <div {...ObjectUtils.omit(props, 'hideDelay', 'popperOptions')} id={store.id} onKeyDown={onKeyDown}>
       {props.children({
         elementID: store.elementID,
         hideDelay: store.hideDelay,
@@ -65,7 +64,7 @@ export function Element(props: TooltipElementProps) {
   return (
     <div
       {...props.popper.attributes.popper}
-      {...omit(props, TOOLTIP_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...TOOLTIP_CHILDREN_PROPS_KEYS)}
       id={props.elementID}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -103,7 +102,7 @@ export function Trigger(props: TooltipTriggerProps) {
 
   return (
     <div
-      {...omit(props, TOOLTIP_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...TOOLTIP_CHILDREN_PROPS_KEYS)}
       aria-describedby={props.elementID}
       id={id}
       onBlur={onBlur}
@@ -114,4 +113,10 @@ export function Trigger(props: TooltipTriggerProps) {
       tabIndex={0}
     />
   )
+}
+
+export const AriaTooltip = {
+  Root,
+  Element,
+  Trigger
 }

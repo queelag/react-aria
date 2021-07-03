@@ -1,6 +1,5 @@
-import { Logger, noop, NumberUtils, OptionalID } from '@queelag/core'
+import { ID, Logger, noop, NumberUtils, ObjectUtils } from '@queelag/core'
 import { ComponentStore } from '@queelag/react-core'
-import { cloneDeep, sortBy } from 'lodash'
 import React, { MutableRefObject } from 'react'
 import { ComponentName, Key, SliderMode, SliderOrientation } from '../definitions/enums'
 import { SliderPercentual, SliderThumbIndex, SliderValue } from '../definitions/types'
@@ -19,7 +18,7 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
   constructor(
     ref: MutableRefObject<HTMLDivElement>,
     update: () => void,
-    id: OptionalID,
+    id: ID = '',
     maximum: number,
     minimum: number,
     mode: SliderMode = SliderMode.SINGLE_THUMB,
@@ -39,7 +38,7 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
     this.step = 0
     this.stepDecimals = 0
     this.thumbMovable = false
-    this.value = cloneDeep(value)
+    this.value = JSON.parse(JSON.stringify(value))
 
     this.setStepSize(step)
   }
@@ -201,10 +200,10 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
 
     switch (this.mode) {
       case SliderMode.DUAL_THUMB:
-        this.onChangeValue === noop ? this.setPercentualByValue(index, value) : this.onChangeValue(sortBy(this.value) as SliderValue)
+        this.onChangeValue === noop ? this.setPercentualByValue(index, value) : this.onChangeValue(ObjectUtils.clone(this.value).sort())
         break
       case SliderMode.SINGLE_THUMB:
-        this.onChangeValue === noop ? this.setPercentualByValue(index, value) : this.onChangeValue(cloneDeep(this.value))
+        this.onChangeValue === noop ? this.setPercentualByValue(index, value) : this.onChangeValue(JSON.parse(JSON.stringify(this.value)))
         break
     }
   }

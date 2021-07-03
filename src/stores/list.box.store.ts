@@ -1,4 +1,4 @@
-import { ID, Logger, noop, OptionalID } from '@queelag/core'
+import { ID, Logger, noop } from '@queelag/core'
 import { ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, ListBoxSelectMode } from '../definitions/enums'
@@ -12,12 +12,7 @@ class ListBoxStore extends ComponentStore<HTMLDivElement> {
   selectMode: ListBoxSelectMode
   selectedListItemIndexes: number[]
 
-  constructor(
-    update: () => void,
-    id: OptionalID,
-    onSelectListItem: (indexes: number[]) => void = noop,
-    selectMode: ListBoxSelectMode = ListBoxSelectMode.SINGLE
-  ) {
+  constructor(update: () => void, id: ID = '', onSelectListItem: (indexes: number[]) => void = noop, selectMode: ListBoxSelectMode = ListBoxSelectMode.SINGLE) {
     super(ComponentName.LIST_BOX, id, undefined, update)
 
     this.buttonRef = { current: document.createElement('button') }

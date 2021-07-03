@@ -1,6 +1,5 @@
-import { StoreUtils } from '@queelag/core'
+import { ObjectUtils, StoreUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
@@ -52,7 +51,16 @@ export function Root(props: ComboBoxProps) {
 
   return (
     <div
-      {...omit(props, 'autocomplete', 'listBoxLabel', 'onCollapse', 'onEscape', 'onSelectListBoxItem', 'popperOptions', 'selectedListBoxItemIndexes')}
+      {...ObjectUtils.omit(
+        props,
+        'autocomplete',
+        'listBoxLabel',
+        'onCollapse',
+        'onEscape',
+        'onSelectListBoxItem',
+        'popperOptions',
+        'selectedListBoxItemIndexes'
+      )}
       id={store.id}
       onKeyDown={onKeyDown}
       style={{ ...props.style, position: 'relative' }}
@@ -84,7 +92,7 @@ export function Group(props: ComboBoxGroupProps) {
 
   useEffect(() => props.setGroupRef(ref), [])
 
-  return <div {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} id={id} ref={ref} />
+  return <div {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)} id={id} ref={ref} />
 }
 
 export function Input(props: ComboBoxInputProps) {
@@ -109,7 +117,7 @@ export function Input(props: ComboBoxInputProps) {
 
   return (
     <input
-      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
       aria-activedescendant={props.focusedListBoxItemID}
       aria-autocomplete={props.autocomplete ? 'list' : 'none'}
       aria-controls={props.listBoxID}
@@ -141,7 +149,17 @@ export function Button(props: ComboBoxButtonProps) {
     props.onMouseDown && props.onMouseDown(event)
   }
 
-  return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label='Open' id={id} onClick={onClick} onMouseDown={onMouseDown} tabIndex={-1} type='button' />
+  return (
+    <button
+      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
+      aria-label='Open'
+      id={id}
+      onClick={onClick}
+      onMouseDown={onMouseDown}
+      tabIndex={-1}
+      type='button'
+    />
+  )
 }
 
 export function ListBox(props: ComboBoxListBoxProps) {
@@ -152,7 +170,7 @@ export function ListBox(props: ComboBoxListBoxProps) {
   return (
     <ul
       {...props.popper.attributes.popper}
-      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
       aria-label={props.listBoxLabel}
       id={props.listBoxID}
       ref={ref}
@@ -185,7 +203,7 @@ export function ListBoxItem(props: ComboBoxListBoxItemProps) {
 
   return (
     <li
-      {...omit(props, 'index', ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, 'index', ...ROOT_CHILDREN_PROPS_KEYS)}
       aria-selected={props.isListBoxItemSelected(props.index)}
       id={id}
       onClick={onClick}
@@ -195,4 +213,13 @@ export function ListBoxItem(props: ComboBoxListBoxItemProps) {
       style={{ ...props.style, cursor: 'pointer' }}
     />
   )
+}
+
+export const AriaComboBox = {
+  Root,
+  Group,
+  Input,
+  Button,
+  ListBox,
+  ListBoxItem
 }

@@ -58,7 +58,7 @@ export type AccordionSectionChildrenProps = {
   setHeaderRef: (ref: MutableRefObject<HTMLButtonElement>) => void
 }
 
-export type AccordionSectionPanelProps = Pick<AccordionSectionChildrenProps, 'contentID' | 'headerID'> & Omit<HTMLDivProps, 'aria-labelledby' | 'id' | 'role'>
+export type AccordionSectionPanelProps = AccordionSectionChildrenProps & Omit<HTMLDivProps, 'aria-labelledby' | 'id' | 'role'>
 export type AccordionSectionHeaderProps = AccordionSectionChildrenProps & Omit<HTMLButtonProps, 'aria-controls' | 'aria-expanded' | 'id' | 'type'>
 
 export type AlertProps = HTMLDivProps
@@ -164,19 +164,19 @@ export type CarouselChildrenProps = {
   slidesID: ID
 }
 
-export type CarouselButtonLiveProps = Pick<CarouselChildrenProps, 'live' | 'setLive'> & HTMLButtonProps
-export type CarouselButtonNextProps = Pick<CarouselChildrenProps, 'gotoNextSlide' | 'slidesID'> & HTMLButtonProps
-export type CarouselButtonPreviousProps = Pick<CarouselChildrenProps, 'gotoPreviousSlide' | 'slidesID'> & HTMLButtonProps
+export type CarouselButtonLiveProps = CarouselChildrenProps & HTMLButtonProps
+export type CarouselButtonNextProps = CarouselChildrenProps & HTMLButtonProps
+export type CarouselButtonPreviousProps = CarouselChildrenProps & HTMLButtonProps
 
 export type CarouselSlideProps = {
   /**
    * The index of this slide, necessary to handle the visibility and to build the internal map of slides.
    */
   index: number
-} & Pick<CarouselChildrenProps, 'deleteSlideElementRef' | 'setSlideElementRef' | 'slides'> &
+} & CarouselChildrenProps &
   HTMLDivProps
 
-export type CarouselSlidesProps = Pick<CarouselChildrenProps, 'live' | 'liveTemporary' | 'slidesID'> & Omit<HTMLDivProps, 'id'>
+export type CarouselSlidesProps = CarouselChildrenProps & Omit<HTMLDivProps, 'id'>
 
 export type CheckBoxProps = {
   /**
@@ -260,23 +260,19 @@ export type ComboBoxChildrenProps = {
   setSelectedListBoxItemIndex: (index: number, selected: boolean) => void
 } & Pick<ComboBoxProps, 'autocomplete' | 'listBoxLabel'>
 
-export type ComboBoxButtonProps = Pick<ComboBoxChildrenProps, 'expanded' | 'setExpanded'> & HTMLButtonProps
-export type ComboBoxGroupProps = Pick<ComboBoxChildrenProps, 'setGroupRef'> & HTMLDivProps
+export type ComboBoxButtonProps = ComboBoxChildrenProps & HTMLButtonProps
+export type ComboBoxGroupProps = ComboBoxChildrenProps & HTMLDivProps
 
-export type ComboBoxInputProps = Pick<
-  ComboBoxChildrenProps,
-  'autocomplete' | 'expanded' | 'focusedListBoxItemID' | 'listBoxID' | 'setExpanded' | 'setInputRef'
-> &
-  HTMLInputProps
+export type ComboBoxInputProps = ComboBoxChildrenProps & HTMLInputProps
 
-export type ComboBoxListBoxProps = Pick<ComboBoxChildrenProps, 'listBoxID' | 'listBoxLabel' | 'popper' | 'setListBoxRef'> & Omit<HTMLUListProps, 'id'>
+export type ComboBoxListBoxProps = ComboBoxChildrenProps & Omit<HTMLUListProps, 'id'>
 
 export type ComboBoxListBoxItemProps = {
   /**
    * The index of the ListBoxItem element.
    */
   index: number
-} & Pick<ComboBoxChildrenProps, 'deleteListBoxItemRef' | 'isListBoxItemSelected' | 'setExpanded' | 'setListBoxItemRef' | 'setSelectedListBoxItemIndex'> &
+} & ComboBoxChildrenProps &
   HTMLLIProps
 
 export type DialogProps = {
@@ -306,8 +302,8 @@ export type DialogChildrenProps = {
   titleID: ID
 }
 
-export type DialogDescriptionProps = Pick<DialogChildrenProps, 'descriptionID'> & Omit<HTMLSpanProps, 'id'>
-export type DialogTitleProps = Pick<DialogChildrenProps, 'titleID'> & Omit<HTMLSpanProps, 'id'>
+export type DialogDescriptionProps = DialogChildrenProps & Omit<HTMLSpanProps, 'id'>
+export type DialogTitleProps = DialogChildrenProps & Omit<HTMLSpanProps, 'id'>
 
 export type DisclosureProps = HTMLDListProps
 
@@ -333,7 +329,7 @@ export type DisclosureSectionChildrenProps = {
 
 export type DisclosureSectionHeaderProps = HTMLElementProps
 export type DisclosureSectionHeaderButtonProps = DisclosureSectionChildrenProps & HTMLButtonProps
-export type DisclosureSectionPanelProps = Pick<DisclosureSectionChildrenProps, 'panelID'> & Omit<HTMLElementProps, 'id'>
+export type DisclosureSectionPanelProps = DisclosureSectionChildrenProps & Omit<HTMLElementProps, 'id'>
 
 export type FocusTrapProps = {
   /**
@@ -415,16 +411,15 @@ export type ListBoxChildrenProps = {
   setSelectedListItemIndex: (index: number, selected: boolean) => void
 } & Pick<ListBoxProps, 'collapsable' | 'selectMode'>
 
-export type ListBoxButtonProps = Pick<ListBoxChildrenProps, 'collapsable' | 'expanded' | 'setButtonRef' | 'setExpanded'> & HTMLButtonProps
-export type ListBoxListProps = Pick<ListBoxChildrenProps, 'collapsable' | 'focusedListItemID' | 'popper' | 'selectMode' | 'setExpanded' | 'setListRef'> &
-  HTMLUListProps
+export type ListBoxButtonProps = ListBoxChildrenProps & HTMLButtonProps
+export type ListBoxListProps = ListBoxChildrenProps & HTMLUListProps
 
 export type ListBoxListItemProps = {
   /**
    * The index of the ListItem element.
    */
   index: number
-} & Pick<ListBoxChildrenProps, 'deleteListItemRef' | 'isListItemSelected' | 'setFocusedListItemIndex' | 'setListItemRef' | 'setSelectedListItemIndex'> &
+} & ListBoxChildrenProps &
   HTMLLIProps
 
 export type HTMLAnchorProps = React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
@@ -565,31 +560,20 @@ export type MenuItemChildrenProps = {
 
 export type MenuItemAnchorProps = {
   children: string
-} & Pick<
-  MenuItemChildrenProps,
-  | 'autoOpen'
-  | 'deleteItemAnchorRef'
-  | 'expanded'
-  | 'expandedItemIndex'
-  | 'focusItemAnchor'
-  | 'focusedItemIndex'
-  | 'parentIndex'
-  | 'setExpandedItemIndex'
-  | 'setItemAnchorRef'
-> &
+} & MenuItemChildrenProps &
   Omit<HTMLAnchorProps, 'children'>
 
-export type MenuItemMenuProps = {} & Pick<MenuItemChildrenProps, 'deleteItemMenuRef' | 'expanded' | 'parentID' | 'popper' | 'setItemMenuRef'> & HTMLUListProps
+export type MenuItemMenuProps = {} & MenuItemChildrenProps & HTMLUListProps
 
 export type MenuItemMenuItemAnchorProps = {
   /**
    * The index of the ItemMenuItemAnchor element.
    */
   index: number
-} & Pick<MenuItemChildrenProps, 'deleteItemMenuItemAnchorRef' | 'parentIndex' | 'setExpandedItemIndex' | 'setItemMenuItemAnchorRef'> &
+} & MenuItemChildrenProps &
   HTMLAnchorProps
 
-export type MenuItemMenuItemProps = HTMLLIProps
+export type MenuItemMenuItemProps = MenuItemChildrenProps & HTMLLIProps
 
 export type MenuButtonProps = {
   children: (props: MenuButtonChildrenProps) => ReactNode
@@ -638,17 +622,16 @@ export type MenuButtonChildrenProps = {
   setListItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
 }
 
-export type MenuButtonButtonProps = {} & Pick<MenuButtonChildrenProps, 'buttonID' | 'expanded' | 'listID' | 'setButtonRef' | 'setExpanded'> &
-  Omit<HTMLButtonProps, 'id'>
-export type MenuButtonListProps = {} & Pick<MenuButtonChildrenProps, 'buttonID' | 'listID' | 'popper' | 'setListRef'> & Omit<HTMLUListProps, 'id'>
-export type MenuButtonListItemProps = {} & HTMLLIProps
+export type MenuButtonButtonProps = MenuButtonChildrenProps & Omit<HTMLButtonProps, 'id'>
+export type MenuButtonListProps = MenuButtonChildrenProps & Omit<HTMLUListProps, 'id'>
+export type MenuButtonListItemProps = MenuButtonChildrenProps & HTMLLIProps
 
 export type MenuButtonListItemAnchorProps = {
   /**
    * The index of the ListItemAnchor element.
    */
   index: number
-} & Pick<MenuButtonChildrenProps, 'deleteListItemAnchorRef' | 'setExpanded' | 'setListItemAnchorRef'> &
+} & MenuButtonChildrenProps &
   HTMLAnchorProps
 
 export type MeterProps = {
@@ -781,17 +764,17 @@ export type TabberChildrenProps = {
 
 export type TabberListProps = {
   label: string
-} & Pick<TabberChildrenProps, 'handleKeyboardEvents'> &
+} & TabberChildrenProps &
   HTMLDivProps
 
 export type TabberListItemProps = {
   index: number
-} & Pick<TabberChildrenProps, 'isTabSelected' | 'listItemIDs' | 'panelIDs' | 'setListItemRef' | 'setSelectedListItemIndex'> &
+} & TabberChildrenProps &
   HTMLButtonProps
 
 export type TabberPanelProps = {
   index: number
-} & Pick<TabberChildrenProps, 'isTabSelected' | 'listItemIDs' | 'panelIDs'> &
+} & TabberChildrenProps &
   HTMLDivProps
 
 export type ToggleButtonProps = {
@@ -844,5 +827,5 @@ export type TooltipChildrenProps = {
   visible: boolean
 } & Pick<TooltipProps, 'hideDelay'>
 
-export type TooltipElementProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'rootID' | 'setElementRef' | 'popper' | 'setVisible'> & Omit<HTMLDivProps, 'id'>
-export type TooltipTriggerProps = {} & Pick<TooltipChildrenProps, 'elementID' | 'hideDelay' | 'rootID' | 'setTriggerRef' | 'setVisible'> & HTMLDivProps
+export type TooltipElementProps = {} & TooltipChildrenProps & Omit<HTMLDivProps, 'id'>
+export type TooltipTriggerProps = {} & TooltipChildrenProps & HTMLDivProps

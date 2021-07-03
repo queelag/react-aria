@@ -1,5 +1,5 @@
+import { ObjectUtils } from '@queelag/core'
 import { useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React from 'react'
 import { ComponentName } from '../definitions/enums'
 import { ButtonProps } from '../definitions/props'
@@ -9,5 +9,9 @@ import { ButtonProps } from '../definitions/props'
  */
 export function Root(props: ButtonProps) {
   const id = useID(ComponentName.BUTTON, props.id)
-  return <button {...omit(props, 'innerRef')} id={id} ref={props.innerRef} type='button' />
+  return <button {...ObjectUtils.omit(props, 'innerRef')} id={id} ref={props.innerRef} type='button' />
+}
+
+export const AriaButton = {
+  Root
 }

@@ -1,6 +1,5 @@
 import { NumberUtils, ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
-import { min } from 'lodash'
 import React, { Fragment, useState } from 'react'
 import * as Component from '../src/components/Slider'
 import * as Tooltip from '../src/components/Tooltip'
@@ -73,8 +72,14 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
               className={ReactUtils.joinClassNames('absolute bg-blue-100', props.orientation === SliderOrientation.HORIZONTAL ? 'h-1' : 'w-1')}
               style={
                 props.orientation === SliderOrientation.HORIZONTAL
-                  ? { left: args.mode === SliderMode.DUAL_THUMB ? min(props.percentual) + '%' : 0, width: NumberUtils.range(...props.percentual) + '%' }
-                  : { bottom: args.mode === SliderMode.DUAL_THUMB ? min(props.percentual) + '%' : 0, height: NumberUtils.range(...props.percentual) + '%' }
+                  ? {
+                      left: args.mode === SliderMode.DUAL_THUMB ? NumberUtils.pickLowest(...props.percentual) + '%' : 0,
+                      width: NumberUtils.range(...props.percentual) + '%'
+                    }
+                  : {
+                      bottom: args.mode === SliderMode.DUAL_THUMB ? NumberUtils.pickLowest(...props.percentual) + '%' : 0,
+                      height: NumberUtils.range(...props.percentual) + '%'
+                    }
               }
             />
             <Component.FirstThumb {...props} focusable={false}>

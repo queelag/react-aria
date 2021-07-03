@@ -1,6 +1,5 @@
-import { Debounce, noop } from '@queelag/core'
+import { Debounce, noop, ObjectUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
@@ -81,7 +80,7 @@ export function Root(props: MenuProps) {
 
   return (
     <ul
-      {...omit(props, 'itemMenuHideDelay', 'label')}
+      {...ObjectUtils.omit(props, 'itemMenuHideDelay', 'label')}
       aria-label={props.label}
       id={store.id}
       onBlur={onBlur}
@@ -125,7 +124,13 @@ export function Item(props: MenuItemProps) {
   }
 
   return (
-    <li {...omit(props, MENU_CHILDREN_PROPS_KEYS, 'index', 'popperOptions')} id={id} ref={ref} role='none' style={{ ...props.style, position: 'relative' }}>
+    <li
+      {...ObjectUtils.omit(props, ...MENU_CHILDREN_PROPS_KEYS, 'index', 'popperOptions')}
+      id={id}
+      ref={ref}
+      role='none'
+      style={{ ...props.style, position: 'relative' }}
+    >
       {props.children({
         autoOpen: props.autoOpen,
         deleteItemAnchorRef: props.deleteItemAnchorRef,
@@ -172,7 +177,7 @@ export function ItemAnchor(props: MenuItemAnchorProps) {
 
   return (
     <a
-      {...omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...MENU_ITEM_CHILDREN_PROPS_KEYS)}
       aria-expanded={props.expanded}
       id={id}
       onClick={onClick}
@@ -197,7 +202,7 @@ export function ItemMenu(props: MenuItemMenuProps) {
   return (
     <ul
       {...props.popper.attributes.popper}
-      {...omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...MENU_ITEM_CHILDREN_PROPS_KEYS)}
       aria-label={props.parentID}
       id={id}
       ref={ref}
@@ -209,7 +214,7 @@ export function ItemMenu(props: MenuItemMenuProps) {
 
 export function ItemMenuItem(props: MenuItemMenuItemProps) {
   const id = useID(ComponentName.MENU_ITEM_MENU_ITEM, props.id)
-  return <li {...omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS)} id={id} role='none' />
+  return <li {...ObjectUtils.omit(props, ...MENU_ITEM_CHILDREN_PROPS_KEYS)} id={id} role='none' />
 }
 
 export function ItemMenuItemAnchor(props: MenuItemMenuItemAnchorProps) {
@@ -226,5 +231,14 @@ export function ItemMenuItemAnchor(props: MenuItemMenuItemAnchorProps) {
     return () => props.deleteItemMenuItemAnchorRef(props.index)
   }, [])
 
-  return <a {...omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS, 'index')} id={id} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
+  return <a {...ObjectUtils.omit(props, ...MENU_ITEM_CHILDREN_PROPS_KEYS, 'index')} id={id} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
+}
+
+export const AriaMenu = {
+  Root,
+  Item,
+  ItemAnchor,
+  ItemMenu,
+  ItemMenuItem,
+  ItemMenuItemAnchor
 }

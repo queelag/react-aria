@@ -1,6 +1,5 @@
-import { StoreUtils } from '@queelag/core'
+import { ObjectUtils, StoreUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName, ListBoxSelectMode } from '../definitions/enums'
@@ -43,7 +42,7 @@ export function Root(props: ListBoxProps) {
 
   return (
     <div
-      {...omit(props, 'collapsable', 'onSelectListItem', 'popperOptions', 'selectMode', 'selectedListItemIndexes')}
+      {...ObjectUtils.omit(props, 'collapsable', 'onSelectListItem', 'popperOptions', 'selectMode', 'selectedListItemIndexes')}
       id={store.id}
       onKeyDown={onKeyDown}
       style={{ ...props.style, position: 'relative' }}
@@ -86,7 +85,7 @@ export function Button(props: ListBoxButtonProps) {
 
   return (
     <button
-      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
       aria-expanded={props.collapsable && props.expanded}
       aria-haspopup={props.collapsable ? 'listbox' : undefined}
       id={id}
@@ -112,7 +111,7 @@ export function List(props: ListBoxListProps) {
   return (
     <ul
       {...(props.collapsable && props.popper.attributes.popper)}
-      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
       aria-activedescendant={props.focusedListItemID}
       aria-multiselectable={props.selectMode === ListBoxSelectMode.MULTIPLE}
       id={id}
@@ -148,7 +147,7 @@ export function ListItem(props: ListBoxListItemProps) {
 
   return (
     <li
-      {...omit(props, 'index', ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, 'index', ...ROOT_CHILDREN_PROPS_KEYS)}
       aria-selected={props.isListItemSelected(props.index)}
       id={id}
       onClick={onClick}
@@ -158,4 +157,11 @@ export function ListItem(props: ListBoxListItemProps) {
       style={{ ...props.style, cursor: 'pointer' }}
     />
   )
+}
+
+export const AriaListBox = {
+  Root,
+  Button,
+  List,
+  ListItem
 }

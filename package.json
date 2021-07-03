@@ -19,7 +19,6 @@
     "@testing-library/user-event": "^13.1.9",
     "@types/chance": "^1.1.2",
     "@types/jest": "^26.0.22",
-    "@types/lodash": "^4.14.170",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.7",
     "autoprefixer": "^10.2.6",
@@ -38,7 +37,6 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
-    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-popper": "^2.2.5"

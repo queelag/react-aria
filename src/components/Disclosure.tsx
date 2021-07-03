@@ -1,5 +1,5 @@
+import { ObjectUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { Fragment, MouseEvent, useEffect, useMemo } from 'react'
 import { ComponentName } from '../definitions/enums'
 import {
@@ -48,10 +48,24 @@ export function SectionHeaderButton(props: DisclosureSectionHeaderButtonProps) {
   }
 
   return (
-    <button {...omit(props, DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)} aria-controls={props.panelID} aria-expanded={props.expanded} id={id} onClick={onClick} />
+    <button
+      {...ObjectUtils.omit(props, ...DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)}
+      aria-controls={props.panelID}
+      aria-expanded={props.expanded}
+      id={id}
+      onClick={onClick}
+    />
   )
 }
 
 export function SectionPanel(props: DisclosureSectionPanelProps) {
-  return <dd {...omit(props, DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)} id={props.panelID} />
+  return <dd {...ObjectUtils.omit(props, ...DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)} id={props.panelID} />
+}
+
+export const AriaDisclosure = {
+  Root,
+  Section,
+  SectionHeader,
+  SectionHeaderButton,
+  SectionPanel
 }

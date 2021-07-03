@@ -1,4 +1,4 @@
-import { ID, IDUtils, Logger, noop, OptionalID, tc } from '@queelag/core'
+import { ID, IDUtils, Logger, noop, tc } from '@queelag/core'
 import { ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
@@ -15,7 +15,7 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
 
   constructor(
     update: () => void,
-    id: OptionalID,
+    id: ID = '',
     onCollapse: () => any = noop,
     onSelectListBoxItem: (indexes: number[]) => any = noop,
     selectedListBoxItemIndexes: number[] = []

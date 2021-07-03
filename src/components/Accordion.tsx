@@ -1,6 +1,5 @@
-import { Logger } from '@queelag/core'
+import { Logger, ObjectUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { ComponentName } from '../definitions/enums'
 import { AccordionProps, AccordionSectionHeaderProps, AccordionSectionPanelProps, AccordionSectionProps } from '../definitions/props'
@@ -47,7 +46,7 @@ export function Section(props: AccordionSectionProps) {
   }, [props.isExpanded])
 
   return (
-    <div {...omit(props, 'expandSection', 'expandedSections', 'isCollapsable', 'isExpanded', 'setSectionHeaderRef')} id={id} ref={ref}>
+    <div {...ObjectUtils.omit(props, 'expandSection', 'expandedSections', 'isCollapsable', 'isExpanded', 'setSectionHeaderRef')} id={id} ref={ref}>
       {props.children({ contentID, expand, expanded: props.expandedSections.get(id) || false, headerID, setHeaderRef })}
     </div>
   )
@@ -69,7 +68,7 @@ export function SectionHeader(props: AccordionSectionHeaderProps) {
 
   return (
     <button
-      {...omit(props, 'contentID', 'expand', 'expanded', 'headerID', 'setHeaderRef')}
+      {...ObjectUtils.omit(props, 'contentID', 'expand', 'expanded', 'headerID', 'setHeaderRef')}
       aria-controls={props.contentID}
       aria-expanded={props.expanded}
       id={props.headerID}
@@ -82,6 +81,18 @@ export function SectionHeader(props: AccordionSectionHeaderProps) {
 
 export function SectionPanel(props: AccordionSectionPanelProps) {
   return (
-    <div {...omit(props, 'contentID', 'expand', 'expanded', 'headerID', 'setHeaderRef')} aria-labelledby={props.headerID} id={props.contentID} role='region' />
+    <div
+      {...ObjectUtils.omit(props, 'contentID', 'expand', 'expanded', 'headerID', 'setHeaderRef')}
+      aria-labelledby={props.headerID}
+      id={props.contentID}
+      role='region'
+    />
   )
+}
+
+export const AriaAccordion = {
+  Root,
+  Section,
+  SectionHeader,
+  SectionPanel
 }

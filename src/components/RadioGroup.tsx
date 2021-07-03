@@ -1,6 +1,5 @@
-import { StoreUtils } from '@queelag/core'
+import { ObjectUtils, StoreUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { ComponentName } from '../definitions/enums'
 import { RadioGroupChildrenProps, RadioGroupItemProps, RadioGroupProps } from '../definitions/props'
@@ -53,7 +52,7 @@ export function Item(props: RadioGroupItemProps) {
 
   return (
     <div
-      {...omit(props, RADIO_GROUP_CHILDREN_PROPS_KEYS, 'index')}
+      {...ObjectUtils.omit(props, ...RADIO_GROUP_CHILDREN_PROPS_KEYS, 'index')}
       aria-checked={props.isItemChecked(props.index)}
       id={id}
       onClick={onClick}
@@ -62,4 +61,9 @@ export function Item(props: RadioGroupItemProps) {
       tabIndex={props.checkedItemIndex < 0 || props.isItemChecked(props.index) ? 0 : -1}
     />
   )
+}
+
+export const AriaRadioGroup = {
+  Root,
+  Item
 }

@@ -1,6 +1,6 @@
 import { useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React from 'react'
+import { ObjectUtils } from '@queelag/core'
 import { ComponentName } from '../definitions/enums'
 import { BreadcrumbListItemLinkProps, BreadcrumbListItemProps, BreadcrumbListProps, BreadcrumbProps } from '../definitions/props'
 
@@ -24,5 +24,12 @@ export function ListItem(props: BreadcrumbListItemProps) {
 
 export function ListItemLink(props: BreadcrumbListItemLinkProps) {
   const id = useID(ComponentName.BREADCRUMB_LIST_ITEM_LINK, props.id)
-  return <a {...omit(props, 'isCurrent')} aria-current={props.isCurrent ? 'page' : undefined} id={id} />
+  return <a {...ObjectUtils.omit(props, 'isCurrent')} aria-current={props.isCurrent ? 'page' : undefined} id={id} />
+}
+
+export const AriaBreadcrumb = {
+  Root,
+  List,
+  ListItem,
+  ListItemLink
 }

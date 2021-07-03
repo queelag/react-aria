@@ -1,6 +1,5 @@
-import { Logger } from '@queelag/core'
+import { Logger, ObjectUtils } from '@queelag/core'
 import { useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { KeyboardEvent, useRef } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { CheckBoxProps } from '../definitions/props'
@@ -32,7 +31,7 @@ export function Root(props: CheckBoxProps) {
 
   return (
     <div
-      {...omit(props, 'checked')}
+      {...ObjectUtils.omit(props, 'checked')}
       aria-checked={props.checked}
       id={id}
       onKeyDown={onKeyDown}
@@ -42,4 +41,8 @@ export function Root(props: CheckBoxProps) {
       tabIndex={0}
     />
   )
+}
+
+export const AriaCheckBox = {
+  Root
 }

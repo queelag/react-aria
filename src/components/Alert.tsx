@@ -10,3 +10,7 @@ export function Root(props: AlertProps) {
   const id = useID(ComponentName.ALERT, props.id)
   return <div {...props} id={id} role='alert' />
 }
+
+export const AriaAlert = {
+  Root
+}

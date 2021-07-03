@@ -1,6 +1,5 @@
-import { StoreUtils } from '@queelag/core'
+import { ObjectUtils, StoreUtils } from '@queelag/core'
 import { useForceUpdate } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { TabberChildrenProps, TabberListItemProps, TabberListProps, TabberPanelProps, TabberProps } from '../definitions/props'
 import TabberStore from '../stores/tabber.store'
@@ -25,7 +24,7 @@ export function Root(props: TabberProps) {
   }, [props.activation, props.size])
 
   return (
-    <div {...omit(props, 'listLabel', 'size')}>
+    <div {...ObjectUtils.omit(props, 'size')}>
       {props.children({
         handleKeyboardEvents: store.handleKeyboardEvents,
         isTabSelected: store.isTabSelected,
@@ -45,7 +44,7 @@ export function List(props: TabberListProps) {
     props.onKeyDown && props.onKeyDown(event)
   }
 
-  return <div {...omit(props, TABBER_CHILDREN_PROPS_KEYS)} aria-label={props.label} onKeyDown={onKeyDown} role='tablist' />
+  return <div {...ObjectUtils.omit(props, ...TABBER_CHILDREN_PROPS_KEYS)} aria-label={props.label} onKeyDown={onKeyDown} role='tablist' />
 }
 
 export function ListItem(props: TabberListItemProps) {
@@ -60,7 +59,7 @@ export function ListItem(props: TabberListItemProps) {
 
   return (
     <button
-      {...omit(props, TABBER_CHILDREN_PROPS_KEYS, 'index')}
+      {...ObjectUtils.omit(props, ...TABBER_CHILDREN_PROPS_KEYS, 'index')}
       aria-controls={props.panelIDs[props.index]}
       aria-selected={props.isTabSelected(props.index)}
       id={props.listItemIDs[props.index]}
@@ -75,7 +74,7 @@ export function ListItem(props: TabberListItemProps) {
 export function Panel(props: TabberPanelProps) {
   return (
     <div
-      {...omit(props, TABBER_CHILDREN_PROPS_KEYS, 'index')}
+      {...ObjectUtils.omit(props, ...TABBER_CHILDREN_PROPS_KEYS, 'index')}
       aria-hidden={!props.isTabSelected(props.index)}
       aria-labelledby={props.panelIDs[props.index]}
       id={props.listItemIDs[props.index]}
@@ -83,4 +82,11 @@ export function Panel(props: TabberPanelProps) {
       tabIndex={props.isTabSelected(props.index) ? 0 : undefined}
     />
   )
+}
+
+export const AriaTabber = {
+  Root,
+  List,
+  ListItem,
+  Panel
 }

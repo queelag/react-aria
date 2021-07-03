@@ -1,6 +1,5 @@
-import { StoreUtils } from '@queelag/core'
+import { ObjectUtils, StoreUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
-import { omit } from 'lodash'
 import React, { FocusEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { CarouselLive, ComponentName } from '../definitions/enums'
 import {
@@ -77,7 +76,7 @@ export function Root(props: CarouselProps) {
 
   return (
     <section
-      {...omit(props, 'activeSlideIndex', 'automaticRotationDuration', 'label', 'live', 'onChangeActiveSlideIndex', 'rotationMode')}
+      {...ObjectUtils.omit(props, 'activeSlideIndex', 'automaticRotationDuration', 'label', 'live', 'onChangeActiveSlideIndex', 'rotationMode')}
       aria-label={props.label}
       aria-roledescription='carousel'
       id={store.id}
@@ -104,7 +103,7 @@ export function Root(props: CarouselProps) {
 }
 
 export function Slides(props: CarouselSlidesProps) {
-  return <div {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-live={props.liveTemporary || props.live} id={props.slidesID} />
+  return <div {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)} aria-live={props.liveTemporary || props.live} id={props.slidesID} />
 }
 
 export function Slide(props: CarouselSlideProps) {
@@ -118,7 +117,7 @@ export function Slide(props: CarouselSlideProps) {
 
   return (
     <div
-      {...omit(props, ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
       aria-label={`${props.index + 1} of ${props.slides}`}
       aria-roledescription='slide'
       id={id}
@@ -154,7 +153,7 @@ export function ButtonLive(props: CarouselButtonLiveProps) {
     props.onClick && props.onClick(event)
   }
 
-  return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label={findLabelByLive()} id={id} onClick={onClick} type='button' />
+  return <button {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)} aria-label={findLabelByLive()} id={id} onClick={onClick} type='button' />
 }
 
 export function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
@@ -166,7 +165,14 @@ export function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
   }
 
   return (
-    <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-controls={props.slidesID} aria-label='Previous Slide' id={id} onClick={onClick} type='button' />
+    <button
+      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
+      aria-controls={props.slidesID}
+      aria-label='Previous Slide'
+      id={id}
+      onClick={onClick}
+      type='button'
+    />
   )
 }
 
@@ -178,5 +184,23 @@ export function ButtonNextSlide(props: CarouselButtonNextProps) {
     props.onClick && props.onClick(event)
   }
 
-  return <button {...omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-controls={props.slidesID} aria-label='Next Slide' id={id} onClick={onClick} type='button' />
+  return (
+    <button
+      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
+      aria-controls={props.slidesID}
+      aria-label='Next Slide'
+      id={id}
+      onClick={onClick}
+      type='button'
+    />
+  )
+}
+
+export const AriaCarousel = {
+  Root,
+  Slides,
+  Slide,
+  ButtonLive,
+  ButtonPreviousSlide,
+  ButtonNextSlide
 }

@@ -6,6 +6,7 @@ import { ComponentName, ListBoxSelectMode } from '../definitions/enums'
 import { ListBoxButtonProps, ListBoxChildrenProps, ListBoxListItemProps, ListBoxListProps, ListBoxProps } from '../definitions/props'
 import ListBoxStore from '../stores/list.box.store'
 
+const ROOT_PROPS_KEYS: (keyof ListBoxProps)[] = ['collapsable', 'onSelectListItem', 'popperOptions', 'selectMode', 'selectedListItemIndexes']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
   'collapsable',
   'deleteListItemRef',
@@ -41,12 +42,7 @@ export function Root(props: ListBoxProps) {
   }, [props.onSelectListItem, props.selectMode, props.selectedListItemIndexes])
 
   return (
-    <div
-      {...ObjectUtils.omit(props, 'collapsable', 'onSelectListItem', 'popperOptions', 'selectMode', 'selectedListItemIndexes')}
-      id={store.id}
-      onKeyDown={onKeyDown}
-      style={{ ...props.style, position: 'relative' }}
-    >
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
       {props.children({
         collapsable: props.collapsable,
         deleteListItemRef: store.deleteListItemRef,
@@ -85,7 +81,7 @@ export function Button(props: ListBoxButtonProps) {
 
   return (
     <button
-      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-expanded={props.collapsable && props.expanded}
       aria-haspopup={props.collapsable ? 'listbox' : undefined}
       id={id}
@@ -111,7 +107,7 @@ export function List(props: ListBoxListProps) {
   return (
     <ul
       {...(props.collapsable && props.popper.attributes.popper)}
-      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-activedescendant={props.focusedListItemID}
       aria-multiselectable={props.selectMode === ListBoxSelectMode.MULTIPLE}
       id={id}
@@ -147,7 +143,7 @@ export function ListItem(props: ListBoxListItemProps) {
 
   return (
     <li
-      {...ObjectUtils.omit(props, 'index', ...ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, [...ROOT_CHILDREN_PROPS_KEYS, 'index'])}
       aria-selected={props.isListItemSelected(props.index)}
       id={id}
       onClick={onClick}

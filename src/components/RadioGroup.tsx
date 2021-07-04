@@ -52,7 +52,7 @@ export function Item(props: RadioGroupItemProps) {
 
   return (
     <div
-      {...ObjectUtils.omit(props, ...RADIO_GROUP_CHILDREN_PROPS_KEYS, 'index')}
+      {...ObjectUtils.omit(props, [...RADIO_GROUP_CHILDREN_PROPS_KEYS, 'index'])}
       aria-checked={props.isItemChecked(props.index)}
       id={id}
       onClick={onClick}

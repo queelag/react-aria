@@ -4,6 +4,8 @@ import React, { KeyboardEvent, useRef } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { CheckBoxProps } from '../definitions/props'
 
+const ROOT_PROPS_KEYS: (keyof CheckBoxProps)[] = ['checked']
+
 /**
  * The most common type of checkbox, it allows the user to toggle between two choices -- checked and not checked.
  */
@@ -31,7 +33,7 @@ export function Root(props: CheckBoxProps) {
 
   return (
     <div
-      {...ObjectUtils.omit(props, 'checked')}
+      {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)}
       aria-checked={props.checked}
       id={id}
       onKeyDown={onKeyDown}

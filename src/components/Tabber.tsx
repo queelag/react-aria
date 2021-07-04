@@ -4,6 +4,7 @@ import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 're
 import { TabberChildrenProps, TabberListItemProps, TabberListProps, TabberPanelProps, TabberProps } from '../definitions/props'
 import TabberStore from '../stores/tabber.store'
 
+const TABBER_PROPS_KEYS: (keyof TabberProps)[] = ['size']
 const TABBER_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
   'handleKeyboardEvents',
   'isTabSelected',
@@ -24,7 +25,7 @@ export function Root(props: TabberProps) {
   }, [props.activation, props.size])
 
   return (
-    <div {...ObjectUtils.omit(props, 'size')}>
+    <div {...ObjectUtils.omit(props, TABBER_PROPS_KEYS)}>
       {props.children({
         handleKeyboardEvents: store.handleKeyboardEvents,
         isTabSelected: store.isTabSelected,
@@ -44,7 +45,7 @@ export function List(props: TabberListProps) {
     props.onKeyDown && props.onKeyDown(event)
   }
 
-  return <div {...ObjectUtils.omit(props, ...TABBER_CHILDREN_PROPS_KEYS)} aria-label={props.label} onKeyDown={onKeyDown} role='tablist' />
+  return <div {...ObjectUtils.omit(props, TABBER_CHILDREN_PROPS_KEYS)} aria-label={props.label} onKeyDown={onKeyDown} role='tablist' />
 }
 
 export function ListItem(props: TabberListItemProps) {
@@ -59,7 +60,7 @@ export function ListItem(props: TabberListItemProps) {
 
   return (
     <button
-      {...ObjectUtils.omit(props, ...TABBER_CHILDREN_PROPS_KEYS, 'index')}
+      {...ObjectUtils.omit(props, [...TABBER_CHILDREN_PROPS_KEYS, 'index'])}
       aria-controls={props.panelIDs[props.index]}
       aria-selected={props.isTabSelected(props.index)}
       id={props.listItemIDs[props.index]}
@@ -74,7 +75,7 @@ export function ListItem(props: TabberListItemProps) {
 export function Panel(props: TabberPanelProps) {
   return (
     <div
-      {...ObjectUtils.omit(props, ...TABBER_CHILDREN_PROPS_KEYS, 'index')}
+      {...ObjectUtils.omit(props, [...TABBER_CHILDREN_PROPS_KEYS, 'index'])}
       aria-hidden={!props.isTabSelected(props.index)}
       aria-labelledby={props.panelIDs[props.index]}
       id={props.listItemIDs[props.index]}

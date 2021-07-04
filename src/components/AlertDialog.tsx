@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { ComponentName, Key } from '../definitions/enums'
 import { AlertDialogChildrenProps, AlertDialogDescriptionProps, AlertDialogProps, AlertDialogTitleProps } from '../definitions/props'
 
+const ALERT_DIALOG_PROPS_KEYS: (keyof AlertDialogProps)[] = ['hasDescription', 'hasTitle', 'onClose']
 const ALERT_DIALOG_CHILDREN_PROPS_KEYS: (keyof AlertDialogChildrenProps)[] = ['descriptionID', 'titleID']
 
 /**
@@ -35,7 +36,7 @@ export function Root(props: AlertDialogProps) {
 
   return createPortal(
     <div
-      {...ObjectUtils.omit(props, 'hasDescription', 'hasTitle', 'onClose')}
+      {...ObjectUtils.omit(props, ALERT_DIALOG_PROPS_KEYS)}
       aria-describedby={props.hasDescription ? descriptionID : undefined}
       aria-labelledby={props.hasTitle ? titleID : undefined}
       id={id}
@@ -51,11 +52,11 @@ export function Root(props: AlertDialogProps) {
 }
 
 export function Title(props: AlertDialogTitleProps) {
-  return <span {...ObjectUtils.omit(props, ...ALERT_DIALOG_CHILDREN_PROPS_KEYS)} id={props.titleID}></span>
+  return <span {...ObjectUtils.omit(props, ALERT_DIALOG_CHILDREN_PROPS_KEYS)} id={props.titleID}></span>
 }
 
 export function Description(props: AlertDialogDescriptionProps) {
-  return <span {...ObjectUtils.omit(props, ...ALERT_DIALOG_CHILDREN_PROPS_KEYS)} id={props.descriptionID}></span>
+  return <span {...ObjectUtils.omit(props, ALERT_DIALOG_CHILDREN_PROPS_KEYS)} id={props.descriptionID}></span>
 }
 
 export const AriaAlertDialog = {

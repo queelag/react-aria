@@ -49,7 +49,7 @@ export function SectionHeaderButton(props: DisclosureSectionHeaderButtonProps) {
 
   return (
     <button
-      {...ObjectUtils.omit(props, ...DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)}
       aria-controls={props.panelID}
       aria-expanded={props.expanded}
       id={id}
@@ -59,7 +59,7 @@ export function SectionHeaderButton(props: DisclosureSectionHeaderButtonProps) {
 }
 
 export function SectionPanel(props: DisclosureSectionPanelProps) {
-  return <dd {...ObjectUtils.omit(props, ...DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)} id={props.panelID} />
+  return <dd {...ObjectUtils.omit(props, DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)} id={props.panelID} />
 }
 
 export const AriaDisclosure = {

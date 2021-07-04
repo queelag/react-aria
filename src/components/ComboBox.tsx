@@ -14,6 +14,15 @@ import {
 } from '../definitions/props'
 import ComboBoxStore from '../stores/combo.box.store'
 
+const ROOT_PROPS_KEYS: (keyof ComboBoxProps)[] = [
+  'autocomplete',
+  'listBoxLabel',
+  'onCollapse',
+  'onEscape',
+  'onSelectListBoxItem',
+  'popperOptions',
+  'selectedListBoxItemIndexes'
+]
 const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
   'autocomplete',
   'deleteListBoxItemRef',
@@ -50,21 +59,7 @@ export function Root(props: ComboBoxProps) {
   }, [props.onCollapse, props.onSelectListBoxItem, props.selectedListBoxItemIndexes])
 
   return (
-    <div
-      {...ObjectUtils.omit(
-        props,
-        'autocomplete',
-        'listBoxLabel',
-        'onCollapse',
-        'onEscape',
-        'onSelectListBoxItem',
-        'popperOptions',
-        'selectedListBoxItemIndexes'
-      )}
-      id={store.id}
-      onKeyDown={onKeyDown}
-      style={{ ...props.style, position: 'relative' }}
-    >
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
       {props.children({
         autocomplete: props.autocomplete,
         deleteListBoxItemRef: store.deleteListBoxItemRef,
@@ -92,7 +87,7 @@ export function Group(props: ComboBoxGroupProps) {
 
   useEffect(() => props.setGroupRef(ref), [])
 
-  return <div {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)} id={id} ref={ref} />
+  return <div {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} id={id} ref={ref} />
 }
 
 export function Input(props: ComboBoxInputProps) {
@@ -117,7 +112,7 @@ export function Input(props: ComboBoxInputProps) {
 
   return (
     <input
-      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-activedescendant={props.focusedListBoxItemID}
       aria-autocomplete={props.autocomplete ? 'list' : 'none'}
       aria-controls={props.listBoxID}
@@ -151,7 +146,7 @@ export function Button(props: ComboBoxButtonProps) {
 
   return (
     <button
-      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-label='Open'
       id={id}
       onClick={onClick}
@@ -170,7 +165,7 @@ export function ListBox(props: ComboBoxListBoxProps) {
   return (
     <ul
       {...props.popper.attributes.popper}
-      {...ObjectUtils.omit(props, ...ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-label={props.listBoxLabel}
       id={props.listBoxID}
       ref={ref}
@@ -203,7 +198,7 @@ export function ListBoxItem(props: ComboBoxListBoxItemProps) {
 
   return (
     <li
-      {...ObjectUtils.omit(props, 'index', ...ROOT_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, [...ROOT_CHILDREN_PROPS_KEYS, 'index'])}
       aria-selected={props.isListBoxItemSelected(props.index)}
       id={id}
       onClick={onClick}

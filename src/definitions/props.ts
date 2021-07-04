@@ -1,5 +1,5 @@
 import { ID } from '@queelag/core'
-import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, Ref, TouchEvent } from 'react'
+import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, TouchEvent } from 'react'
 import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, SliderMode, SliderOrientation, TabberActivation } from './enums'
 import { PopperData, PopperOptions, SliderPercentual, SliderThumbIndex, SliderValue } from './types'
 
@@ -79,9 +79,7 @@ export type BreadcrumbListItemLinkProps = {
   isCurrent: boolean
 } & HTMLAnchorProps
 
-export type ButtonProps = {
-  innerRef?: Ref<HTMLButtonElement>
-} & HTMLButtonProps
+export type ButtonProps = HTMLButtonProps
 
 export type CarouselProps = {
   /**

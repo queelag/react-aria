@@ -6,6 +6,7 @@ import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitio
 import { SliderThumbIndex } from '../definitions/types'
 import SliderStore from '../stores/slider.store'
 
+const SLIDER_PROPS_KEYS: (keyof SliderProps)[] = ['maximum', 'minimum', 'onChangeValue', 'step', 'value']
 const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
   'handleKeyboardInteractions',
   'maximum',
@@ -72,7 +73,7 @@ export function Root(props: SliderProps) {
   }, [props.value])
 
   return (
-    <div {...ObjectUtils.omit(props, 'maximum', 'minimum', 'onChangeValue', 'step', 'value')} id={store.id} onClick={onClick} ref={ref}>
+    <div {...ObjectUtils.omit(props, SLIDER_PROPS_KEYS)} id={store.id} onClick={onClick} ref={ref}>
       {props.children({
         handleKeyboardInteractions: store.handleKeyboardInteractions,
         maximum: store.maximum,
@@ -119,7 +120,7 @@ const Thumb = (index: SliderThumbIndex) => (props: SliderThumbProps) => {
 
   return (
     <div
-      {...ObjectUtils.omit(props, ...SLIDER_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, SLIDER_CHILDREN_PROPS_KEYS)}
       aria-orientation={props.orientation}
       aria-valuemax={props.maximum}
       aria-valuemin={props.minimum}

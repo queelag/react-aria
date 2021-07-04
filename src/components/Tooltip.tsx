@@ -6,6 +6,7 @@ import { ComponentName } from '../definitions/enums'
 import { TooltipChildrenProps, TooltipElementProps, TooltipProps, TooltipTriggerProps } from '../definitions/props'
 import TooltipStore from '../stores/tooltip.store'
 
+const TOOLTIP_PROPS_KEYS: (keyof TooltipProps)[] = ['hideDelay', 'popperOptions']
 const TOOLTIP_CHILDREN_PROPS_KEYS: (keyof TooltipChildrenProps)[] = [
   'elementID',
   'hideDelay',
@@ -31,7 +32,7 @@ export function Root(props: TooltipProps) {
   }
 
   return (
-    <div {...ObjectUtils.omit(props, 'hideDelay', 'popperOptions')} id={store.id} onKeyDown={onKeyDown}>
+    <div {...ObjectUtils.omit(props, TOOLTIP_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown}>
       {props.children({
         elementID: store.elementID,
         hideDelay: store.hideDelay,
@@ -64,7 +65,7 @@ export function Element(props: TooltipElementProps) {
   return (
     <div
       {...props.popper.attributes.popper}
-      {...ObjectUtils.omit(props, ...TOOLTIP_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, TOOLTIP_CHILDREN_PROPS_KEYS)}
       id={props.elementID}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -102,7 +103,7 @@ export function Trigger(props: TooltipTriggerProps) {
 
   return (
     <div
-      {...ObjectUtils.omit(props, ...TOOLTIP_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, TOOLTIP_CHILDREN_PROPS_KEYS)}
       aria-describedby={props.elementID}
       id={id}
       onBlur={onBlur}

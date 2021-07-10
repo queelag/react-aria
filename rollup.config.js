@@ -4,9 +4,15 @@ import { terser } from 'rollup-plugin-terser'
 export default {
   external: ['@popperjs/core', '@queelag/core', '@queelag/react-core', 'lodash', 'react', 'react-dom', 'react-popper'],
   input: 'src/index.ts',
-  plugins: [terser(), typescript()],
-  output: {
-    file: 'dist/index.js',
-    format: 'esm'
-  }
+  output: [
+    {
+      file: 'dist/index.cjs',
+      format: 'cjs'
+    },
+    {
+      file: 'dist/index.mjs',
+      format: 'esm'
+    }
+  ],
+  plugins: [terser(), typescript()]
 }

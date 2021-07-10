@@ -154,7 +154,7 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
   setPercentualByValue(index: SliderThumbIndex, value: number): void {
     let percentual: number
 
-    percentual = NumberUtils.limit(NumberUtils.toFixedNumber(((value - this.minimum) * 100) / (this.maximum - this.minimum), this.stepDecimals), 0, 100)
+    percentual = NumberUtils.limit(NumberUtils.toFixed(((value - this.minimum) * 100) / (this.maximum - this.minimum), this.stepDecimals), 0, 100)
     if (!NumberUtils.isMultipleOf(percentual, this.step, this.stepDecimals)) return
 
     this.setPercentual(index, percentual)
@@ -185,7 +185,7 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
     let value: number
 
     value = NumberUtils.limit(
-      NumberUtils.toFixedNumber(((this.maximum - this.minimum) * percentual) / 100 + this.minimum, this.stepDecimals),
+      NumberUtils.toFixed(((this.maximum - this.minimum) * percentual) / 100 + this.minimum, this.stepDecimals),
       this.minimum,
       this.maximum
     )
@@ -220,12 +220,12 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
         break
     }
 
-    percentual = NumberUtils.limit(NumberUtils.toFixedNumber(percentual, this.stepDecimals), 0, 100)
+    percentual = NumberUtils.limit(NumberUtils.toFixed(percentual, this.stepDecimals), 0, 100)
     if (!NumberUtils.isMultipleOf(percentual, this.step, this.stepDecimals) && !round) return -1
 
     if (round) {
       percentual = NumberUtils.limit(
-        NumberUtils.toFixedNumber(Math[percentual > this.percentual[index] ? 'floor' : 'ceil'](percentual / this.step) * this.step, this.stepDecimals),
+        NumberUtils.toFixed(Math[percentual > this.percentual[index] ? 'floor' : 'ceil'](percentual / this.step) * this.step, this.stepDecimals),
         0,
         100
       )

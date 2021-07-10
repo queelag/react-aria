@@ -1,9 +1,11 @@
 {
-  "name": "@queelag/react-aria",
-  "version": "1.0.0",
-  "main": "index.js",
   "author": "Dario Sechi",
-  "license": "MIT",
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-popper": "^2.2.5"
+  },
   "devDependencies": {
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
@@ -35,12 +37,10 @@
     "typescript": "4.3.5",
     "webpack": "^5.42.0"
   },
-  "dependencies": {
-    "@popperjs/core": "^2.9.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-popper": "^2.2.5"
-  },
+  "license": "MIT",
+  "main": "index.cjs",
+  "module": "index.mjs",
+  "name": "@queelag/react-aria",
   "scripts": {
     "test": "yarn jest --coverage",
     "build": "rm -rf declarations && rm -rf dist && yarn tsc && yarn api-extractor run --local && yarn rollup -c rollup.config.js",
@@ -48,5 +48,7 @@
     "deploy": "yarn test && yarn build && yarn tarball && yarn publish dist/*.tgz --access public && git push",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
-  }
+  },
+  "sideEffects": false,
+  "version": "1.0.0"
 }

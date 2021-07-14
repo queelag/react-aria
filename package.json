@@ -2,8 +2,6 @@
   "author": "Dario Sechi",
   "dependencies": {
     "@popperjs/core": "^2.9.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "react-popper": "^2.2.5"
   },
   "devDependencies": {
@@ -39,11 +37,15 @@
   },
   "license": "MIT",
   "main": "index.cjs",
-  "module": "index.mjs",
+  "module": "index.js",
   "name": "@queelag/react-aria",
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
   "scripts": {
     "test": "yarn jest --coverage",
-    "build": "rm -rf declarations && rm -rf dist && yarn tsc && yarn api-extractor run --local && yarn rollup -c rollup.config.js",
+    "build": "yarn rollup -c && yarn api-extractor run --local",
     "tarball": "yarn version && cp package.json dist/. && cd dist && yarn pack",
     "deploy": "yarn test && yarn build && yarn tarball && yarn publish dist/*.tgz --access public && git push",
     "storybook": "start-storybook -p 6006",

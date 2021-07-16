@@ -14,12 +14,13 @@ module.exports = {
           loader: 'postcss-loader',
           options: {
             postcssOptions: {
+              ident: 'postcss',
               plugins: [require('tailwindcss'), require('autoprefixer')]
             }
           }
         }
       ],
-      include: path.resolve(__dirname, './stories')
+      include: path.resolve(__dirname, '../')
     })
     return config
   }

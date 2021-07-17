@@ -118,12 +118,12 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
 export const Slider = Template.bind({})
 Slider.args = {
   label: 'Slider',
-  minimum: 100,
-  maximum: 200,
+  minimum: 0,
+  maximum: 100,
   mode: SliderMode.SINGLE_THUMB,
   orientation: SliderOrientation.HORIZONTAL,
   step: 1,
-  value: [100, 150]
+  value: [50, 0]
 }
 
 export default {

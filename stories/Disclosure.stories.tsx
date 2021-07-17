@@ -1,9 +1,9 @@
-import { KeyboardArrowDownRounded } from '@material-ui/icons'
 import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React, { Fragment, useState } from 'react'
+import { IconChevronDown } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/Disclosure'
 import { DisclosureProps, DisclosureSectionChildrenProps } from '../src/definitions/props'
 
@@ -32,7 +32,7 @@ const Template: Story<DisclosureProps> = (args: DisclosureProps) => {
                 >
                   <span className='font-medium'>{v.title}</span>
                   <motion.div animate={{ rotate: props.expanded ? 180 : 0 }}>
-                    <KeyboardArrowDownRounded />
+                    <IconChevronDown />
                   </motion.div>
                 </Component.SectionHeaderButton>
               </Component.SectionHeader>

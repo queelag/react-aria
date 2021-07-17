@@ -1,7 +1,7 @@
-import { InfoOutlined } from '@material-ui/icons'
 import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import React, { Fragment } from 'react'
+import { IconInfo } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/Tooltip'
 import { TooltipChildrenProps, TooltipProps } from '../src/definitions/props'
 
@@ -13,7 +13,7 @@ const Template: Story<TooltipProps> = (args: TooltipProps) => {
         {(props: TooltipChildrenProps) => (
           <Fragment>
             <Component.Trigger {...props} className='flex justify-center items-center outline-none rounded-full focus:ring-2 ring-blue-400'>
-              <InfoOutlined />
+              <IconInfo />
             </Component.Trigger>
             <Component.Element {...props}>
               <div

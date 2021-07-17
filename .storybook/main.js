@@ -19,8 +19,9 @@ module.exports = {
           }
         }
       ],
-      include: path.resolve(__dirname, './stories')
+      include: path.resolve(__dirname, '../stories')
     })
+
     return config
   }
 }

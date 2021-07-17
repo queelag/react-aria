@@ -1,4 +1,4 @@
-import { KeyboardArrowDownRounded } from '@material-ui/icons'
+import { IconChevronDown } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import Chance from 'chance'
 import { motion } from 'framer-motion'
@@ -24,7 +24,7 @@ const Template: Story<AccordionProps> = (args: AccordionProps) => {
                     <div className='flex justify-between items-center p-6 space-x-6'>
                       <span className='font-medium'>{v.title}</span>
                       <motion.div animate={{ rotate: props.expanded ? 180 : 0 }}>
-                        <KeyboardArrowDownRounded />
+                        <IconChevronDown />
                       </motion.div>
                     </div>
                   </Component.SectionHeader>

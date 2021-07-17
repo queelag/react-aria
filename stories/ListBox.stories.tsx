@@ -1,8 +1,8 @@
-import { DoneRounded } from '@material-ui/icons'
 import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import React, { Fragment, useState } from 'react'
+import { IconCheck } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/ListBox'
 import { ListBoxSelectMode } from '../src/definitions/enums'
 import { ListBoxChildrenProps, ListBoxProps } from '../src/definitions/props'
@@ -50,7 +50,7 @@ const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
                 <Component.ListItem
                   {...props}
                   className={ReactUtils.joinClassNames(
-                    'flex justify-between p-6 space-x-6 transition-all duration-100 hover:bg-gray-100',
+                    'flex justify-between items-center p-6 space-x-6 transition-all duration-100 hover:bg-gray-100',
                     props.isListItemFocused(k) && 'bg-gray-100',
                     props.isListItemSelected(k) && 'bg-gray-50'
                   )}
@@ -58,7 +58,7 @@ const Template: Story<ListBoxProps> = (args: ListBoxProps) => {
                   key={k}
                 >
                   <span>{v}</span>
-                  {props.isListItemSelected(k) && <DoneRounded />}
+                  {props.isListItemSelected(k) && <IconCheck />}
                 </Component.ListItem>
               ))}
             </Component.List>

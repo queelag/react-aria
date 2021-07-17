@@ -1,7 +1,7 @@
-import { CheckRounded } from '@material-ui/icons'
 import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
+import { IconCheck } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/CheckBox'
 import { CheckBoxProps } from '../src/definitions/props'
 
@@ -21,7 +21,7 @@ const Template: Story<CheckBoxProps> = (args: CheckBoxProps) => {
           //   'focus:ring-2 ring-offset-2 ring-blue-400'
         )}
       >
-        {checked && <CheckRounded />}
+        {checked && <IconCheck />}
       </div>
       <span className='font-medium'>{checked ? 'Checked' : 'Not Checked'}</span>
     </Component.Root>

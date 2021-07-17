@@ -1,8 +1,8 @@
-import { RadioButtonCheckedRounded, RadioButtonUncheckedRounded } from '@material-ui/icons'
 import { noop, ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import React, { useState } from 'react'
+import { IconCircle, IconDisc } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/RadioGroup'
 import { RadioGroupChildrenProps, RadioGroupProps } from '../src/definitions/props'
 
@@ -16,14 +16,14 @@ const Template: Story<RadioGroupProps> = (args: RadioGroupProps) => {
           <Component.Item
             {...props}
             className={ReactUtils.joinClassNames(
-              'p-6 space-x-6 rounded-md border border-gray-200 cursor-pointer outline-none',
+              'flex items-center p-6 space-x-6 rounded-md border border-gray-200 cursor-pointer outline-none',
               'hover:bg-gray-100 active:bg-gray-50 focus:bg-gray-100',
               props.isItemChecked(k) && 'bg-gray-50'
             )}
             index={k}
             key={k}
           >
-            {props.isItemChecked(k) ? <RadioButtonCheckedRounded /> : <RadioButtonUncheckedRounded />}
+            {props.isItemChecked(k) ? <IconDisc /> : <IconCircle />}
             <span>{v}</span>
           </Component.Item>
         ))

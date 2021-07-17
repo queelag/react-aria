@@ -1,9 +1,9 @@
-import { DoneRounded, KeyboardArrowDownRounded } from '@material-ui/icons'
 import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React, { ChangeEvent, Fragment, useState } from 'react'
+import { IconCheck, IconChevronDown } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/ComboBox'
 import { ComboBoxChildrenProps, ComboBoxProps } from '../src/definitions/props'
 
@@ -56,7 +56,7 @@ const StyledTemplate: Story<ComboBoxProps> = (args: ComboBoxProps) => {
                 value={filter || value}
               />
               <Component.Button {...props} className={ReactUtils.joinClassNames('absolute top-0 right-0 w-12 min-h-full flex justify-center items-center')}>
-                <KeyboardArrowDownRounded />
+                <IconChevronDown />
               </Component.Button>
             </Component.Group>
             <motion.div animate={{ opacity: props.expanded ? 1 : 0 }} className={ReactUtils.joinClassNames(!props.expanded && 'pointer-events-none')}>
@@ -67,7 +67,7 @@ const StyledTemplate: Story<ComboBoxProps> = (args: ComboBoxProps) => {
                     <Component.ListBoxItem
                       {...props}
                       className={ReactUtils.joinClassNames(
-                        'flex justify-between p-6 transition-all duration-200',
+                        'flex justify-between items-center p-6 transition-all duration-200',
                         'hover:bg-gray-100',
                         props.isListBoxItemFocused(k) && 'bg-gray-100',
                         v === value && 'bg-gray-50'
@@ -77,7 +77,7 @@ const StyledTemplate: Story<ComboBoxProps> = (args: ComboBoxProps) => {
                       onClick={() => onClick(v)}
                     >
                       <span className='font-medium'>{v}</span>
-                      {v === value && <DoneRounded />}
+                      {v === value && <IconCheck />}
                     </Component.ListBoxItem>
                   ))}
               </Component.ListBox>

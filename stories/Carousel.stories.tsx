@@ -1,9 +1,9 @@
-import { ChevronLeftRounded, ChevronRightRounded, PauseRounded, PlayArrowRounded } from '@material-ui/icons'
 import { ReactUtils } from '@queelag/core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React, { Fragment } from 'react'
+import { IconChevronLeft, IconChevronRight, IconPause, IconPlay } from '../../react-feather-icons/dist'
 import { CarouselLive, CarouselRotationMode } from '../src'
 import * as Component from '../src/components/Carousel'
 import { CarouselChildrenProps, CarouselProps } from '../src/definitions/props'
@@ -39,11 +39,7 @@ const StyledTemplate: Story<CarouselProps> = (args: CarouselProps) => {
               'hover:bg-gray-800 active:bg-gray-700'
             )}
           >
-            {props.live === CarouselLive.OFF ? (
-              <PauseRounded className='text-white' style={{ fontSize: 10 }} />
-            ) : (
-              <PlayArrowRounded className='text-white' style={{ fontSize: 15 }} />
-            )}
+            {props.live === CarouselLive.OFF ? <IconPause className='text-white' size={10} /> : <IconPlay className='text-white' size={10} />}
           </Component.ButtonLive>
           <Component.ButtonPreviousSlide
             {...props}
@@ -53,7 +49,7 @@ const StyledTemplate: Story<CarouselProps> = (args: CarouselProps) => {
               'hover:bg-gray-800 active:bg-gray-700'
             )}
           >
-            <ChevronLeftRounded className='text-white' style={{ fontSize: 15 }} />
+            <IconChevronLeft className='text-white' style={{ fontSize: 15 }} />
           </Component.ButtonPreviousSlide>
           <Component.ButtonNextSlide
             {...props}
@@ -63,7 +59,7 @@ const StyledTemplate: Story<CarouselProps> = (args: CarouselProps) => {
               'hover:bg-gray-800 active:bg-gray-700'
             )}
           >
-            <ChevronRightRounded className='text-white' style={{ fontSize: 15 }} />
+            <IconChevronRight className='text-white' style={{ fontSize: 15 }} />
           </Component.ButtonNextSlide>
         </Fragment>
       )}

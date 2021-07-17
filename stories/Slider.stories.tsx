@@ -73,12 +73,12 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
               style={
                 props.orientation === SliderOrientation.HORIZONTAL
                   ? {
-                      left: args.mode === SliderMode.DUAL_THUMB ? NumberUtils.pickLowest(...props.percentual) + '%' : 0,
-                      width: NumberUtils.range(...props.percentual) + '%'
+                      left: args.mode === SliderMode.DUAL_THUMB ? NumberUtils.pickLowest(props.percentual) + '%' : 0,
+                      width: NumberUtils.distance(...props.percentual) + '%'
                     }
                   : {
-                      bottom: args.mode === SliderMode.DUAL_THUMB ? NumberUtils.pickLowest(...props.percentual) + '%' : 0,
-                      height: NumberUtils.range(...props.percentual) + '%'
+                      bottom: args.mode === SliderMode.DUAL_THUMB ? NumberUtils.pickLowest(props.percentual) + '%' : 0,
+                      height: NumberUtils.distance(...props.percentual) + '%'
                     }
               }
             />

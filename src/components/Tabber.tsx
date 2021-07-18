@@ -17,7 +17,7 @@ const TABBER_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
 
 export function Root(props: TabberProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new TabberStore(update, props.id, props.activation, props.size), [])
+  const store = useMemo(() => new TabberStore({ ...props, update }), [])
 
   useEffect(() => {
     StoreUtils.shouldUpdateKey(store, 'size', props.size) && store.setSize(props.size)

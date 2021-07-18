@@ -25,7 +25,7 @@ export function Root(props: DisclosureProps) {
 
 export function Section(props: DisclosureSectionProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new DisclosureSectionStore(update), [])
+  const store = useMemo(() => new DisclosureSectionStore({ ...props, update }), [])
 
   useEffect(() => {
     props.expanded && store.setExpanded(true)

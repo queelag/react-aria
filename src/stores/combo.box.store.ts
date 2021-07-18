@@ -1,7 +1,8 @@
 import { ID, IDUtils, Logger, noop, tc } from '@queelag/core'
-import { ComponentStore } from '@queelag/react-core'
+import { ComponentProps, ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
+import { ComboBoxProps } from '../definitions/props'
 
 class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   expanded: boolean
@@ -13,14 +14,8 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   listBoxRef: MutableRefObject<HTMLUListElement>
   selectedListBoxItemIndexes: number[]
 
-  constructor(
-    update: () => void,
-    id: ID = '',
-    onCollapse: () => any = noop,
-    onSelectListBoxItem: (indexes: number[]) => any = noop,
-    selectedListBoxItemIndexes: number[] = []
-  ) {
-    super(ComponentName.COMBO_BOX, id, undefined, update)
+  constructor(props: ComboBoxProps & ComponentProps<HTMLDivElement>) {
+    super(ComponentName.COMBO_BOX, props)
 
     this.expanded = false
     this.focusedListBoxItemIndex = -1
@@ -29,9 +24,9 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
     this.listBoxID = IDUtils.prefixed(ComponentName.COMBO_BOX_LIST_BOX)
     this.listBoxItemsRef = new Map()
     this.listBoxRef = { current: document.createElement('ul') }
-    this.onCollapse = onCollapse
-    this.onSelectListBoxItem = onSelectListBoxItem
-    this.selectedListBoxItemIndexes = selectedListBoxItemIndexes
+    this.onCollapse = props.onCollapse
+    this.onSelectListBoxItem = props.onSelectListBoxItem || noop
+    this.selectedListBoxItemIndexes = props.selectedListBoxItemIndexes || []
   }
 
   onSelectListBoxItem(indexes: number[]): void {}

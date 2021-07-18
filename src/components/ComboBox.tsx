@@ -46,7 +46,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
  */
 export function Root(props: ComboBoxProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new ComboBoxStore(update, props.id, props.onCollapse, props.onSelectListBoxItem, props.selectedListBoxItemIndexes), [])
+  const store = useMemo(() => new ComboBoxStore({ ...props, update }), [])
   const popper = usePopper(store.groupRef.current, store.listBoxRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {

@@ -12,7 +12,7 @@ const RADIO_GROUP_CHILDREN_PROPS_KEYS: (keyof RadioGroupChildrenProps)[] = ['del
  */
 export function Root(props: RadioGroupProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new RadioGroupStore(update, props.id, props.checkedItemIndex, props.onCheckItem), [])
+  const store = useMemo(() => new RadioGroupStore({ ...props, update }), [])
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     store.handleKeyboardInteractions(event)

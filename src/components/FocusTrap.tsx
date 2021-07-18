@@ -12,7 +12,7 @@ const ROOT_PROPS_KEYS: (keyof FocusTrapProps)[] = ['autoFocus', 'restoreFocus']
 export function Root(props: FocusTrapProps) {
   const update = useForceUpdate()
   const ref = useRef(document.createElement('div'))
-  const store = useMemo(() => new FocusTrapStore(ref, update, props.id), [])
+  const store = useMemo(() => new FocusTrapStore({ ...props, ref, update }), [])
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     store.handleKeyboardInteractions(event)

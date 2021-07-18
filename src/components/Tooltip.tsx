@@ -23,7 +23,7 @@ const TOOLTIP_CHILDREN_PROPS_KEYS: (keyof TooltipChildrenProps)[] = [
  */
 export function Root(props: TooltipProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new TooltipStore(update, props.hideDelay, props.id), [])
+  const store = useMemo(() => new TooltipStore({ ...props, update }), [])
   const popper = usePopper(store.triggerRef.current, store.elementRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {

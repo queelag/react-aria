@@ -1,7 +1,8 @@
 import { ID, IDUtils, Logger, rc } from '@queelag/core'
-import { ComponentStore } from '@queelag/react-core'
+import { ComponentProps, ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, TabberActivation } from '../definitions/enums'
+import { TabberProps } from '../definitions/props'
 
 class TabberStore extends ComponentStore<HTMLDivElement> {
   activation: TabberActivation
@@ -11,17 +12,17 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
   selectedListItemIndex: number
   size: number
 
-  constructor(update: () => void, id: ID = '', activation: TabberActivation = TabberActivation.AUTOMATIC, size: number) {
-    super(ComponentName.TABBER, id, undefined, update)
+  constructor(props: TabberProps & ComponentProps<HTMLDivElement>) {
+    super(ComponentName.TABBER, props)
 
-    this.activation = activation
+    this.activation = props.activation || TabberActivation.AUTOMATIC
     this.listItemIDs = []
     this.listItemRefs = new Map()
     this.panelIDs = []
     this.selectedListItemIndex = 0
     this.size = 0
 
-    this.setSize(size)
+    this.setSize(props.size)
   }
 
   handleKeyboardEvents = (event: KeyboardEvent): void => {

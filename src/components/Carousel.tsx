@@ -33,19 +33,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof CarouselChildrenProps)[] = [
  */
 export function Root(props: CarouselProps) {
   const update = useForceUpdate()
-  const store = useMemo(
-    () =>
-      new CarouselStore(
-        update,
-        props.id,
-        props.activeSlideIndex,
-        props.automaticRotationDuration,
-        props.live,
-        props.onChangeActiveSlideIndex,
-        props.rotationMode
-      ),
-    []
-  )
+  const store = useMemo(() => new CarouselStore({ ...props, update }), [])
   const slidesID = useID(ComponentName.CAROUSEL_SLIDES)
 
   const onBlur = (event: FocusEvent<HTMLDivElement>) => {

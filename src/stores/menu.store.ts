@@ -1,5 +1,5 @@
 import { ID, Logger } from '@queelag/core'
-import { ComponentStore } from '@queelag/react-core'
+import { ComponentProps, ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 
@@ -11,8 +11,8 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
   itemMenusRef: Map<ID, MutableRefObject<HTMLUListElement>>
   itemMenuItemAnchorsRef: Map<number, Map<number, MutableRefObject<HTMLAnchorElement>>>
 
-  constructor(update: () => void, id?: ID) {
-    super(ComponentName.MENU, id, undefined, update)
+  constructor(props: ComponentProps<HTMLUListElement>) {
+    super(ComponentName.MENU, props)
 
     this.expandedItemIndex = -1
     this.focusedItemIndex = 0

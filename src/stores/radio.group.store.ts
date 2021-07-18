@@ -1,18 +1,19 @@
-import { ID, Logger, noop } from '@queelag/core'
-import { ComponentStore } from '@queelag/react-core'
+import { Logger, noop } from '@queelag/core'
+import { ComponentProps, ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
+import { RadioGroupProps } from '../definitions/props'
 
 class RadioGroupStore extends ComponentStore<HTMLDivElement> {
   itemsRef: Map<number, MutableRefObject<HTMLDivElement>>
   checkedItemIndex: number
 
-  constructor(update: () => void, id: ID = '', checkedItemIndex: number = -1, onCheckItem: (index: number) => any = noop) {
-    super(ComponentName.RADIO_GROUP, id, undefined, update)
+  constructor(props: RadioGroupProps & ComponentProps<HTMLDivElement>) {
+    super(ComponentName.RADIO_GROUP, props)
 
     this.itemsRef = new Map()
-    this.checkedItemIndex = checkedItemIndex
-    this.onCheckItem = onCheckItem
+    this.checkedItemIndex = props.checkedItemIndex || -1
+    this.onCheckItem = props.onCheckItem || noop
   }
 
   onCheckItem(index: number): void {}

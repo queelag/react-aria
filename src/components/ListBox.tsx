@@ -29,7 +29,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
  */
 export function Root(props: ListBoxProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new ListBoxStore(update, props.id, props.onSelectListItem, props.selectMode), [])
+  const store = useMemo(() => new ListBoxStore({ ...props, update }), [])
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {

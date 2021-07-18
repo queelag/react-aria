@@ -53,7 +53,7 @@ const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
  */
 export function Root(props: MenuProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new MenuStore(update, props.id), [])
+  const store = useMemo(() => new MenuStore({ ...props, update }), [])
 
   const onBlur = (event: FocusEvent<HTMLUListElement>) => {
     Debounce.handle(store.id, () => store.setExpandedItemIndex(-1), store.itemMenuHideDelay)

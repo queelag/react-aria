@@ -1,6 +1,6 @@
 import { Logger } from '@queelag/core'
-import { ComponentStore } from '@queelag/react-core'
-import { KeyboardEvent, MutableRefObject } from 'react'
+import { ComponentProps, ComponentStore } from '@queelag/react-core'
+import { KeyboardEvent } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import DOMUtils from '../utils/dom.utils'
 
@@ -8,8 +8,8 @@ class FocusTrapStore extends ComponentStore<HTMLDivElement> {
   focusables: Element[]
   originalFocused: Element
 
-  constructor(ref: MutableRefObject<HTMLDivElement>, update: () => void, id?: string) {
-    super(ComponentName.FOCUS_TRAP, id, ref, update)
+  constructor(props: ComponentProps<HTMLDivElement>) {
+    super(ComponentName.FOCUS_TRAP, props)
 
     this.focusables = []
     this.originalFocused = document.createElement('div')
@@ -17,7 +17,11 @@ class FocusTrapStore extends ComponentStore<HTMLDivElement> {
 
   readFocusables(): void {
     this.focusables = [...this.element.querySelectorAll('a, button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])')].filter(
-      (v: Element) => !v.hasAttribute('disabled')
+      (v: Element) =>
+        v.hasAttribute('disabled') === false &&
+        v.getAttribute('tabindex') !== '-1' &&
+        getComputedStyle(v).display !== 'none' &&
+        getComputedStyle(v).visibility !== 'hidden'
     )
     Logger.debug(this.id, 'readFocusables', `The focusable elements have been set`, this.focusables)
   }

@@ -1,7 +1,8 @@
-import { ID, Logger, noop, NumberUtils, ObjectUtils } from '@queelag/core'
-import { ComponentStore } from '@queelag/react-core'
-import React, { MutableRefObject } from 'react'
+import { Logger, noop, NumberUtils, ObjectUtils } from '@queelag/core'
+import { ComponentProps, ComponentStore } from '@queelag/react-core'
+import React from 'react'
 import { ComponentName, Key, SliderMode, SliderOrientation } from '../definitions/enums'
+import { SliderProps } from '../definitions/props'
 import { SliderPercentual, SliderThumbIndex, SliderValue } from '../definitions/types'
 
 class SliderStore extends ComponentStore<HTMLDivElement> {
@@ -15,32 +16,21 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
   thumbMovable: boolean
   value: SliderValue
 
-  constructor(
-    ref: MutableRefObject<HTMLDivElement>,
-    update: () => void,
-    id: ID = '',
-    maximum: number,
-    minimum: number,
-    mode: SliderMode = SliderMode.SINGLE_THUMB,
-    onChangeValue: (value: SliderValue) => void = noop,
-    orientation: SliderOrientation = SliderOrientation.HORIZONTAL,
-    step: number = 1,
-    value: SliderValue = [minimum, maximum]
-  ) {
-    super(ComponentName.SLIDER, id, ref, update)
+  constructor(props: SliderProps & ComponentProps<HTMLDivElement>) {
+    super(ComponentName.SLIDER, props)
 
-    this.maximum = maximum
-    this.minimum = minimum
-    this.mode = mode
-    this.onChangeValue = onChangeValue
-    this.orientation = orientation
+    this.maximum = props.maximum
+    this.minimum = props.minimum
+    this.mode = props.mode || SliderMode.SINGLE_THUMB
+    this.onChangeValue = props.onChangeValue || noop
+    this.orientation = props.orientation || SliderOrientation.HORIZONTAL
     this.percentual = [0, 0]
     this.step = 0
     this.stepDecimals = 0
     this.thumbMovable = false
-    this.value = JSON.parse(JSON.stringify(value))
+    this.value = JSON.parse(JSON.stringify(props.value))
 
-    this.setStepSize(step)
+    this.setStepSize(props.step || 1)
   }
 
   onChangeValue(value: SliderValue): void {}

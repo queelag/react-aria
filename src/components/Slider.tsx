@@ -26,10 +26,7 @@ const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
 export function Root(props: SliderProps) {
   const update = useForceUpdate()
   const ref = useRef(document.createElement('div'))
-  const store = useMemo(
-    () => new SliderStore(ref, update, props.id, props.maximum, props.minimum, props.mode, props.onChangeValue, props.orientation, props.step, props.value),
-    []
-  )
+  const store = useMemo(() => new SliderStore({ ...props, ref, update }), [])
 
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
     switch (store.mode) {

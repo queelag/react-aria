@@ -1,7 +1,8 @@
 import { ID, Logger, noop } from '@queelag/core'
-import { ComponentStore } from '@queelag/react-core'
+import { ComponentProps, ComponentStore } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, ListBoxSelectMode } from '../definitions/enums'
+import { ListBoxProps } from '../definitions/props'
 
 class ListBoxStore extends ComponentStore<HTMLDivElement> {
   buttonRef: MutableRefObject<HTMLButtonElement>
@@ -12,16 +13,16 @@ class ListBoxStore extends ComponentStore<HTMLDivElement> {
   selectMode: ListBoxSelectMode
   selectedListItemIndexes: number[]
 
-  constructor(update: () => void, id: ID = '', onSelectListItem: (indexes: number[]) => void = noop, selectMode: ListBoxSelectMode = ListBoxSelectMode.SINGLE) {
-    super(ComponentName.LIST_BOX, id, undefined, update)
+  constructor(props: ListBoxProps & ComponentProps<HTMLDivElement>) {
+    super(ComponentName.LIST_BOX, props)
 
     this.buttonRef = { current: document.createElement('button') }
     this.expanded = false
     this.focusedListItemIndex = -1
     this.listItemsRef = new Map()
     this.listRef = { current: document.createElement('ul') }
-    this.onSelectListItem = onSelectListItem
-    this.selectMode = selectMode
+    this.onSelectListItem = props.onSelectListItem || noop
+    this.selectMode = props.selectMode || ListBoxSelectMode.SINGLE
     this.selectedListItemIndexes = []
   }
 

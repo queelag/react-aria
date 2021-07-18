@@ -30,7 +30,7 @@ const MENU_BUTTON_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
  */
 export function Root(props: MenuButtonProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new MenuButtonStore(update, props.id), [])
+  const store = useMemo(() => new MenuButtonStore({ ...props, update }), [])
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
 
   const onBlur = (event: FocusEvent<HTMLDivElement>) => {

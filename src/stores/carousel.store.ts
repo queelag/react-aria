@@ -1,7 +1,8 @@
 import { Logger, noop, rc } from '@queelag/core'
-import { ComponentStore } from '@queelag/react-core'
+import { ComponentProps, ComponentStore } from '@queelag/react-core'
 import { MutableRefObject } from 'react'
 import { CarouselLive, CarouselRotationMode, ComponentName } from '../definitions/enums'
+import { CarouselProps } from '../definitions/props'
 
 class CarouselStore extends ComponentStore<HTMLElement> {
   activeSlideIndex: number
@@ -13,24 +14,16 @@ class CarouselStore extends ComponentStore<HTMLElement> {
   rotationMode: CarouselRotationMode
   slideElementRefs: Map<number, MutableRefObject<HTMLDivElement>>
 
-  constructor(
-    update: () => void,
-    id?: string,
-    activeSlideIndex: number = 0,
-    automaticRotationDuration: number = 2000,
-    live: CarouselLive = CarouselLive.OFF,
-    onChangeActiveSlideIndex: (index: number) => any = noop,
-    rotationMode: CarouselRotationMode = CarouselRotationMode.INFINITE
-  ) {
-    super(ComponentName.CAROUSEL, id, undefined, update)
+  constructor(props: CarouselProps & ComponentProps<HTMLElement>) {
+    super(ComponentName.CAROUSEL, props)
 
-    this.activeSlideIndex = activeSlideIndex
-    this.automaticRotationDuration = automaticRotationDuration
+    this.activeSlideIndex = props.activeSlideIndex || 0
+    this.automaticRotationDuration = props.automaticRotationDuration || 2500
     this.automaticRotationInterval = 0
-    this.rotationMode = rotationMode
-    this.live = live
+    this.rotationMode = props.rotationMode || CarouselRotationMode.INFINITE
+    this.live = props.live || CarouselLive.OFF
     this.mouseEntered = false
-    this.onChangeActiveSlideIndex = onChangeActiveSlideIndex
+    this.onChangeActiveSlideIndex = props.onChangeActiveSlideIndex || noop
     this.slideElementRefs = new Map()
 
     this.toggleAutomaticRotation()

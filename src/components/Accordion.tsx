@@ -20,7 +20,7 @@ const ACCORDION_SECTION_CHILDREN_PROPS_KEYS: (keyof AccordionSectionChildrenProp
  */
 export function Root(props: AccordionProps) {
   const update = useForceUpdate()
-  const store = useMemo(() => new AccordionStore(update, props.id), [])
+  const store = useMemo(() => new AccordionStore({ ...props, update }), [])
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     store.handleKeyboardInteractions(event)

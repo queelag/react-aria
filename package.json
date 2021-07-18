@@ -42,9 +42,13 @@
   "main": "index.cjs",
   "module": "index.js",
   "name": "@queelag/react-aria",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": "https://github.com/queelag/react-aria",
   "scripts": {
     "test": "yarn jest --coverage",
-    "build": "yarn rollup -c && yarn api-extractor run --local",
+    "build": "rm -rf dist && yarn rollup -c && yarn api-extractor run --local",
     "tarball": "yarn version && cp package.json dist/. && cd dist && yarn pack",
     "deploy": "yarn test && yarn build && yarn tarball && yarn publish dist/*.tgz --access public && git push",
     "storybook": "start-storybook -p 6006",

@@ -1,7 +1,7 @@
+import { IconInfo } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import React from 'react'
-import { IconInfo } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/Alert'
 import { AlertProps } from '../src/definitions/props'
 

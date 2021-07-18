@@ -1,7 +1,7 @@
 import { ReactUtils } from '@queelag/core'
+import { IconInfo } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import React, { Fragment } from 'react'
-import { IconInfo } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/Tooltip'
 import { TooltipChildrenProps, TooltipProps } from '../src/definitions/props'
 

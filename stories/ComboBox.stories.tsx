@@ -1,9 +1,9 @@
 import { ReactUtils } from '@queelag/core'
+import { IconCheck, IconChevronDown } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React, { ChangeEvent, Fragment, useState } from 'react'
-import { IconCheck, IconChevronDown } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/ComboBox'
 import { ComboBoxChildrenProps, ComboBoxProps } from '../src/definitions/props'
 

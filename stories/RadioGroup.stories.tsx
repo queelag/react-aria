@@ -1,8 +1,8 @@
 import { noop, ReactUtils } from '@queelag/core'
+import { IconCircle, IconDisc } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import React, { useState } from 'react'
-import { IconCircle, IconDisc } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/RadioGroup'
 import { RadioGroupChildrenProps, RadioGroupProps } from '../src/definitions/props'
 

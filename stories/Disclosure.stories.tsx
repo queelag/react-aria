@@ -1,9 +1,9 @@
 import { ReactUtils } from '@queelag/core'
+import { IconChevronDown } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import { motion } from 'framer-motion'
 import React, { Fragment, useState } from 'react'
-import { IconChevronDown } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/Disclosure'
 import { DisclosureProps, DisclosureSectionChildrenProps } from '../src/definitions/props'
 

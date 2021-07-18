@@ -29,6 +29,8 @@
     "chance": "^1.1.7",
     "framer-motion": "^4.1.17",
     "jest": "^27.0.6",
+    "mobx": "^6.3.2",
+    "mobx-react": "^7.2.0",
     "postcss": "^8.3.5",
     "postcss-loader": "^6.1.1",
     "prettier": "^2.3.2",

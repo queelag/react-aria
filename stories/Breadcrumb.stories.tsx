@@ -1,7 +1,7 @@
+import { IconChevronRight } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import React, { Fragment } from 'react'
-import { IconChevronRight } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/Breadcrumb'
 import { BreadcrumbProps } from '../src/definitions/props'
 

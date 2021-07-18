@@ -1,7 +1,7 @@
 import { ReactUtils } from '@queelag/core'
+import { IconVolume2, IconVolumeX } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
-import { IconVolume2, IconVolumeX } from '../../react-feather-icons/dist'
 import * as Component from '../src/components/ToggleButton'
 import { ToggleButtonProps } from '../src/definitions/props'
 

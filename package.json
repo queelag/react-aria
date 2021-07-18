@@ -7,6 +7,9 @@
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@microsoft/api-extractor": "^7.17.1",
+    "@queelag/core": "^1.0.0",
+    "@queelag/react-core": "^1.0.4",
+    "@queelag/react-feather-icons": "^1.0.2",
     "@rollup/plugin-typescript": "^8.2.1",
     "@storybook/addon-actions": "^6.4.0-alpha.18",
     "@storybook/addon-essentials": "^6.4.0-alpha.18",
@@ -42,6 +45,12 @@
   "main": "index.cjs",
   "module": "index.js",
   "name": "@queelag/react-aria",
+  "peerDependencies": {
+    "@queelag/core": ">= 1.0.0",
+    "@queelag/react-core": ">= 1.0.4",
+    "react": ">= 17.0.2",
+    "react-dom": ">= 17.0.2"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },

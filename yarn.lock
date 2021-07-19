@@ -1586,28 +1586,28 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
-"@queelag/core@^1.0.0":
-  version "1.0.0"
-  resolved "https://npm.pkg.github.com/download/@queelag/core/1.0.0/d83e8239aff7a149082f2896381bd3d50a106e8b131cc5e57e340aad1fb7f057#273102f3eadc1f1c8aae8ce52d04ed0bb92fd472"
-  integrity sha512-mpecWZLGlF2lHSSt9IoXUtKIKQSr1bCR1ghYcmG/2spKAlm70jKmCY5tzqLY7Ai5xHjmAxGe5XRWOBG9DfKw9w==
+"@queelag/core@^1.0.1":
+  version "1.0.1"
+  resolved "https://npm.pkg.github.com/download/@queelag/core/1.0.1/36645a22ba1bf64bbb262368ccde4f33d73e43f6baf7eaad173943dd6702b7b8#a756897941171555b2ecda3f7905e83fdcd9ecac"
+  integrity sha512-iYTw3/88Qwm4d1ZCP6Zs+bJbFyU1N/HeZbyO7VR05gt4EpSvYAwnx87gSca4ZaLA+maknRJvvvSeyCAlZjRRyw==
   dependencies:
     axios "^0.21.1"
     js-cookie "^2.2.1"
     nanoid "^3.1.23"
 
-"@queelag/react-core@^1.0.5":
-  version "1.0.5"
-  resolved "https://npm.pkg.github.com/download/@queelag/react-core/1.0.5/2d007ff2e4facb2a7f978e5f42e46b231609103b76ef47215577ed013fee8f58#162656e453582b350a16e398d5e946a5609a28e6"
-  integrity sha512-HSSBTRKmyt8wM+wUn/iGAblHsjk3Q7KactNTPD+eu2tBGEs+uRCtK5SVvqxPGUhfxX7r9OhbYY03R4a3T98wbA==
+"@queelag/react-core@^1.0.6":
+  version "1.0.6"
+  resolved "https://npm.pkg.github.com/download/@queelag/react-core/1.0.6/86d61185cc8102d798247fa1a66e1eb19ab1c07cdfcf0fdccc6874c8ea3c4298#aad08430634e4f179972654891871e62aad6b741"
+  integrity sha512-gehkoaPm0fj1GaHmRgpvawDRC9h0mDqmmPbAV7o7YgEjMZIa8xa1bzIXdq3SOGjL6i1VeVt1q+q0scw3DXzwiQ==
   dependencies:
     react-window "^1.8.6"
     rfc4648 "^1.5.0"
     squircleyjs "^1.1.0"
 
-"@queelag/react-feather-icons@^1.0.3":
-  version "1.0.3"
-  resolved "https://npm.pkg.github.com/download/@queelag/react-feather-icons/1.0.3/b8facac816eb8e3d2f673b9c797846e4c76593ab1dfc228cb8eb163837337ae5#e6dbc3230612f5f7af9bea3792586d333cd092ee"
-  integrity sha512-HAxCSauUgpviA6h8iglJND6AAgE37CmIzA/69b/BcyLNBiQuwlSlELzIdfyp2pTti6rhVHwWTsLyuXDMJ9PV9Q==
+"@queelag/react-feather-icons@^1.0.4":
+  version "1.0.4"
+  resolved "https://npm.pkg.github.com/download/@queelag/react-feather-icons/1.0.4/18fb2de09502fe12bd83c12681673640279a86704869a6fd0ec90fb67207ea4d#5a86fa7fb4db90b9308cc411c2006db11ce8298c"
+  integrity sha512-xPCxBxKsgYa9YwuP9kIkWvmo24gMyaqnh4Jn3SbjV3qV23MEjvZ9g4ZwgQjqCEkAjsLdJRMeHiMsSCEN7f6ntA==
 
 "@reach/router@^1.3.4":
   version "1.3.4"
@@ -2744,7 +2744,7 @@
     jest-diff "^26.0.0"
     pretty-format "^26.0.0"
 
-"@types/json-schema@*", "@types/json-schema@^7.0.4", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.7":
+"@types/json-schema@*", "@types/json-schema@^7.0.4", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.8":
   version "7.0.8"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.8.tgz#edf1bf1dbf4e04413ca8e5b17b3b7d7d54b59818"
   integrity sha512-YSBPTLTVm2e2OoQIDYx8HaeWJ5tTToLH67kXR7zYNGupXMEHa2++G8k+DczX2cFVgalypqtyZIcU19AFcmOpmg==
@@ -10242,11 +10242,11 @@ schema-utils@^2.6.5, schema-utils@^2.7.0:
     ajv-keywords "^3.5.2"
 
 schema-utils@^3.0.0, schema-utils@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-3.1.0.tgz#95986eb604f66daadeed56e379bfe7a7f963cdb9"
-  integrity sha512-tTEaeYkyIhEZ9uWgAjDerWov3T9MgX8dhhy2r0IGeeX4W8ngtGl1++dUve/RUqzuaASSh7shwCDJjEzthxki8w==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-3.1.1.tgz#bc74c4b6b6995c1d88f76a8b77bea7219e0c8281"
+  integrity sha512-Y5PQxS4ITlC+EahLuXaY86TXfR7Dc5lw294alXOq86JAHCihAIZfqv8nNCWvaEJvaC51uN9hbLGeV0cFBdH+Fw==
   dependencies:
-    "@types/json-schema" "^7.0.7"
+    "@types/json-schema" "^7.0.8"
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 

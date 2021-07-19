@@ -1,5 +1,5 @@
 import { ID, Logger, noop } from '@queelag/core'
-import { ComponentProps, ComponentStore } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, ListBoxSelectMode } from '../definitions/enums'
 import { ListBoxProps } from '../definitions/props'
@@ -13,7 +13,7 @@ class ListBoxStore extends ComponentStore<HTMLDivElement> {
   selectMode: ListBoxSelectMode
   selectedListItemIndexes: number[]
 
-  constructor(props: ListBoxProps & ComponentProps<HTMLDivElement>) {
+  constructor(props: ListBoxProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.LIST_BOX, props)
 
     this.buttonRef = { current: document.createElement('button') }

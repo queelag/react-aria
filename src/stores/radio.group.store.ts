@@ -1,5 +1,5 @@
 import { Logger, noop } from '@queelag/core'
-import { ComponentProps, ComponentStore } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { RadioGroupProps } from '../definitions/props'
@@ -8,7 +8,7 @@ class RadioGroupStore extends ComponentStore<HTMLDivElement> {
   itemsRef: Map<number, MutableRefObject<HTMLDivElement>>
   checkedItemIndex: number
 
-  constructor(props: RadioGroupProps & ComponentProps<HTMLDivElement>) {
+  constructor(props: RadioGroupProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.RADIO_GROUP, props)
 
     this.itemsRef = new Map()

@@ -1,5 +1,5 @@
 import { Logger, noop, NumberUtils, ObjectUtils } from '@queelag/core'
-import { ComponentProps, ComponentStore } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import React from 'react'
 import { ComponentName, Key, SliderMode, SliderOrientation } from '../definitions/enums'
 import { SliderProps } from '../definitions/props'
@@ -16,7 +16,7 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
   thumbMovable: boolean
   value: SliderValue
 
-  constructor(props: SliderProps & ComponentProps<HTMLDivElement>) {
+  constructor(props: SliderProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.SLIDER, props)
 
     this.maximum = props.maximum

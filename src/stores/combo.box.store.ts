@@ -1,5 +1,5 @@
 import { ID, IDUtils, Logger, noop, tc } from '@queelag/core'
-import { ComponentProps, ComponentStore } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { ComboBoxProps } from '../definitions/props'
@@ -14,7 +14,7 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   listBoxRef: MutableRefObject<HTMLUListElement>
   selectedListBoxItemIndexes: number[]
 
-  constructor(props: ComboBoxProps & ComponentProps<HTMLDivElement>) {
+  constructor(props: ComboBoxProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.COMBO_BOX, props)
 
     this.expanded = false

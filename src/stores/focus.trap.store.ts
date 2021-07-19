@@ -1,5 +1,5 @@
 import { Logger } from '@queelag/core'
-import { ComponentProps, ComponentStore } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import DOMUtils from '../utils/dom.utils'
@@ -8,7 +8,7 @@ class FocusTrapStore extends ComponentStore<HTMLDivElement> {
   focusables: Element[]
   originalFocused: Element
 
-  constructor(props: ComponentProps<HTMLDivElement>) {
+  constructor(props: ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.FOCUS_TRAP, props)
 
     this.focusables = []

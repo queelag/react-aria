@@ -1,5 +1,5 @@
 import { Logger, noop, rc } from '@queelag/core'
-import { ComponentProps, ComponentStore } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { MutableRefObject } from 'react'
 import { CarouselLive, CarouselRotationMode, ComponentName } from '../definitions/enums'
 import { CarouselProps } from '../definitions/props'
@@ -14,7 +14,7 @@ class CarouselStore extends ComponentStore<HTMLElement> {
   rotationMode: CarouselRotationMode
   slideElementRefs: Map<number, MutableRefObject<HTMLDivElement>>
 
-  constructor(props: CarouselProps & ComponentProps<HTMLElement>) {
+  constructor(props: CarouselProps & ComponentStoreProps<HTMLElement>) {
     super(ComponentName.CAROUSEL, props)
 
     this.activeSlideIndex = props.activeSlideIndex || 0

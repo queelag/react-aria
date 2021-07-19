@@ -1,5 +1,5 @@
 import { ID, IDUtils, Logger, rc } from '@queelag/core'
-import { ComponentProps, ComponentStore } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, TabberActivation } from '../definitions/enums'
 import { TabberProps } from '../definitions/props'
@@ -12,7 +12,7 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
   selectedListItemIndex: number
   size: number
 
-  constructor(props: TabberProps & ComponentProps<HTMLDivElement>) {
+  constructor(props: TabberProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.TABBER, props)
 
     this.activation = props.activation || TabberActivation.AUTOMATIC

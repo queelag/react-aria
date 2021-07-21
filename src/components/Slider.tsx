@@ -118,7 +118,7 @@ const Thumb = (index: SliderThumbIndex) => (props: SliderThumbProps) => {
   return (
     <div
       {...ObjectUtils.omit(props, SLIDER_CHILDREN_PROPS_KEYS)}
-      aria-orientation={props.orientation}
+      aria-orientation={props.orientation?.toLowerCase() as any}
       aria-valuemax={props.maximum}
       aria-valuemin={props.minimum}
       aria-valuenow={props.value[index]}

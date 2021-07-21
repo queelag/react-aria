@@ -1,4 +1,5 @@
-import { noop, ReactUtils } from '@queelag/core'
+import { noop } from '@queelag/core'
+import { ReactUtils } from '@queelag/react-core'
 import { IconCircle, IconDisc } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'

@@ -1,6 +1,7 @@
 import { ID } from '@queelag/core'
+import { Orientation } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, TouchEvent } from 'react'
-import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, SliderMode, SliderOrientation, TabberActivation } from './enums'
+import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, SliderMode, TabberActivation } from './enums'
 import { PopperData, PopperOptions, SliderPercentual, SliderThumbIndex, SliderValue } from './types'
 
 export type AccordionProps = {
@@ -712,7 +713,7 @@ export type SliderProps = {
   minimum: number
   mode?: SliderMode
   onChangeValue?: (value: SliderValue) => any
-  orientation?: SliderOrientation
+  orientation?: Orientation
   step?: number
   /**
    * The current value of the Slider.

@@ -1586,22 +1586,22 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
-"@queelag/core@^1.0.1":
-  version "1.0.1"
-  resolved "https://npm.pkg.github.com/download/@queelag/core/1.0.1/36645a22ba1bf64bbb262368ccde4f33d73e43f6baf7eaad173943dd6702b7b8#a756897941171555b2ecda3f7905e83fdcd9ecac"
-  integrity sha512-iYTw3/88Qwm4d1ZCP6Zs+bJbFyU1N/HeZbyO7VR05gt4EpSvYAwnx87gSca4ZaLA+maknRJvvvSeyCAlZjRRyw==
+"@queelag/core@^1.0.3":
+  version "1.0.3"
+  resolved "https://npm.pkg.github.com/download/@queelag/core/1.0.3/b813693325b9d773f8021742f7a62e129fda8e5618a23aea300741504ef5baf9#fef37c5c593c48e4db8689ac8ac55c437aeb6539"
+  integrity sha512-/gZ9uY6ccKLw8OWYJjjOJjly2uowDRckEfV72Rk28ZIvz9byrbXwRNHnT3GyxsEfW5FxJLYmkK44bBFT5InLcg==
   dependencies:
     axios "^0.21.1"
     js-cookie "^2.2.1"
     nanoid "^3.1.23"
+    rfc4648 "^1.5.0"
 
-"@queelag/react-core@^1.0.6":
-  version "1.0.6"
-  resolved "https://npm.pkg.github.com/download/@queelag/react-core/1.0.6/86d61185cc8102d798247fa1a66e1eb19ab1c07cdfcf0fdccc6874c8ea3c4298#aad08430634e4f179972654891871e62aad6b741"
-  integrity sha512-gehkoaPm0fj1GaHmRgpvawDRC9h0mDqmmPbAV7o7YgEjMZIa8xa1bzIXdq3SOGjL6i1VeVt1q+q0scw3DXzwiQ==
+"@queelag/react-core@^1.0.9":
+  version "1.0.9"
+  resolved "https://npm.pkg.github.com/download/@queelag/react-core/1.0.9/56c492fbbee526e1bd68f1e07ff896e1f00635c4af7075e0d517da5bcae8fb3b#134e3c4ef3cc7d89364228b9a272bf1f141ef27e"
+  integrity sha512-OZ5sQ0EtOtwPKfasUQOX45aiSM5kofldx/pl2FYNkP4BezVoNkdS10fyqaGXBikPCGBVB5YerjDAalSuzLq09A==
   dependencies:
     react-window "^1.8.6"
-    rfc4648 "^1.5.0"
     squircleyjs "^1.1.0"
 
 "@queelag/react-feather-icons@^1.0.4":

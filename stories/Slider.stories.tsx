@@ -1,4 +1,5 @@
-import { NumberUtils, ReactUtils } from '@queelag/core'
+import { NumberUtils } from '@queelag/core'
+import { Orientation, ReactUtils } from '@queelag/react-core'
 import { Meta, Story } from '@storybook/react'
 import React, { Fragment, useState } from 'react'
 import * as Component from '../src/components/Slider'
@@ -7,13 +8,13 @@ import { SliderMode, SliderOrientation } from '../src/definitions/enums'
 import { HTMLDivProps, SliderChildrenProps, SliderProps, TooltipChildrenProps } from '../src/definitions/props'
 import { SliderValue } from '../src/definitions/types'
 
-function ThumbTooltip(props: HTMLDivProps & { orientation: SliderOrientation; value: number }) {
+function ThumbTooltip(props: HTMLDivProps & { orientation: Orientation; value: number }) {
   return (
     <Tooltip.Root
       {...props}
       popperOptions={{
         modifiers: [{ name: 'offset', options: { offset: [0, 12] } }],
-        placement: props.orientation === SliderOrientation.HORIZONTAL ? 'bottom' : 'right'
+        placement: props.orientation === Orientation.HORIZONTAL ? 'bottom' : 'right'
       }}
     >
       {(childrenProps: TooltipChildrenProps) => (
@@ -25,11 +26,11 @@ function ThumbTooltip(props: HTMLDivProps & { orientation: SliderOrientation; va
             <div
               className={ReactUtils.joinClassNames(
                 'tear w-full h-full flex justify-center items-center font-semibold bg-gray-100 transform',
-                props.orientation === SliderOrientation.HORIZONTAL ? 'rotate-45' : '-rotate-45'
+                props.orientation === Orientation.HORIZONTAL ? 'rotate-45' : '-rotate-45'
               )}
               style={{ fontSize: 8 }}
             >
-              <span className={ReactUtils.joinClassNames('transform', props.orientation === SliderOrientation.HORIZONTAL ? '-rotate-45' : 'rotate-45')}>
+              <span className={ReactUtils.joinClassNames('transform', props.orientation === Orientation.HORIZONTAL ? '-rotate-45' : 'rotate-45')}>
                 {props.value}
               </span>
             </div>
@@ -56,22 +57,17 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
     <div className='p-6'>
       <Component.Root
         {...args}
-        className={ReactUtils.joinClassNames(
-          'relative flex justify-center items-center',
-          args.orientation === SliderOrientation.HORIZONTAL ? 'h-6 max-w-lg' : 'w-6'
-        )}
+        className={ReactUtils.joinClassNames('relative flex justify-center items-center', args.orientation === Orientation.HORIZONTAL ? 'h-6 max-w-lg' : 'w-6')}
         onChangeValue={onChangeValue}
         value={value}
       >
         {(props: SliderChildrenProps) => (
           <Fragment>
+            <div className={ReactUtils.joinClassNames('rounded-full bg-gray-100', props.orientation === Orientation.HORIZONTAL ? 'h-1 w-full' : 'h-64 w-1')} />
             <div
-              className={ReactUtils.joinClassNames('rounded-full bg-gray-100', props.orientation === SliderOrientation.HORIZONTAL ? 'h-1 w-full' : 'h-64 w-1')}
-            />
-            <div
-              className={ReactUtils.joinClassNames('absolute bg-blue-100', props.orientation === SliderOrientation.HORIZONTAL ? 'h-1' : 'w-1')}
+              className={ReactUtils.joinClassNames('absolute bg-blue-100', props.orientation === Orientation.HORIZONTAL ? 'h-1' : 'w-1')}
               style={
-                props.orientation === SliderOrientation.HORIZONTAL
+                props.orientation === Orientation.HORIZONTAL
                   ? {
                       left: args.mode === SliderMode.DUAL_THUMB ? NumberUtils.pickLowest(props.percentual) + '%' : 0,
                       width: NumberUtils.distance(...props.percentual) + '%'
@@ -87,9 +83,9 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
                 className='absolute z-20'
                 orientation={props.orientation}
                 style={{
-                  bottom: props.orientation === SliderOrientation.VERTICAL ? props.percentual[0] + '%' : 0,
-                  left: props.orientation === SliderOrientation.HORIZONTAL ? props.percentual[0] + '%' : 0,
-                  transform: props.orientation === SliderOrientation.HORIZONTAL ? 'translateX(-50%)' : 'translateY(50%)'
+                  bottom: props.orientation === Orientation.VERTICAL ? props.percentual[0] + '%' : 0,
+                  left: props.orientation === Orientation.HORIZONTAL ? props.percentual[0] + '%' : 0,
+                  transform: props.orientation === Orientation.HORIZONTAL ? 'translateX(-50%)' : 'translateY(50%)'
                 }}
                 value={props.value[0]}
               />
@@ -100,9 +96,9 @@ const Template: Story<SliderProps> = (args: SliderProps) => {
                   className='absolute z-20'
                   orientation={props.orientation}
                   style={{
-                    bottom: props.orientation === SliderOrientation.VERTICAL ? props.percentual[1] + '%' : 0,
-                    left: props.orientation === SliderOrientation.HORIZONTAL ? props.percentual[1] + '%' : 0,
-                    transform: props.orientation === SliderOrientation.HORIZONTAL ? 'translateX(-50%)' : 'translateY(50%)'
+                    bottom: props.orientation === Orientation.VERTICAL ? props.percentual[1] + '%' : 0,
+                    left: props.orientation === Orientation.HORIZONTAL ? props.percentual[1] + '%' : 0,
+                    transform: props.orientation === Orientation.HORIZONTAL ? 'translateX(-50%)' : 'translateY(50%)'
                   }}
                   value={props.value[1]}
                 />

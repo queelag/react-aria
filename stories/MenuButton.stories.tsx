@@ -1,4 +1,4 @@
-import { ReactUtils } from '@queelag/core'
+import { ReactUtils } from '@queelag/react-core'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'
 import React, { Fragment, useState } from 'react'

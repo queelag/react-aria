@@ -1,4 +1,4 @@
-import { ReactUtils } from '@queelag/core'
+import { ReactUtils } from '@queelag/react-core'
 import { IconCheck } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
 import { Chance } from 'chance'

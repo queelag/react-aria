@@ -1,7 +1,7 @@
 import { Logger, noop, NumberUtils, ObjectUtils } from '@queelag/core'
-import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps, Orientation } from '@queelag/react-core'
 import React from 'react'
-import { ComponentName, Key, SliderMode, SliderOrientation } from '../definitions/enums'
+import { ComponentName, Key, SliderMode } from '../definitions/enums'
 import { SliderProps } from '../definitions/props'
 import { SliderPercentual, SliderThumbIndex, SliderValue } from '../definitions/types'
 
@@ -9,7 +9,6 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
   maximum: number
   minimum: number
   mode: SliderMode
-  orientation: SliderOrientation
   percentual: SliderPercentual
   step: number
   stepDecimals: number
@@ -23,7 +22,6 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
     this.minimum = props.minimum
     this.mode = props.mode || SliderMode.SINGLE_THUMB
     this.onChangeValue = props.onChangeValue || noop
-    this.orientation = props.orientation || SliderOrientation.HORIZONTAL
     this.percentual = [0, 0]
     this.step = 0
     this.stepDecimals = 0
@@ -202,10 +200,10 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
     let percentual: number
 
     switch (this.orientation) {
-      case SliderOrientation.HORIZONTAL:
+      case Orientation.HORIZONTAL:
         percentual = ((x - this.elementOffsetLeft) / this.elementWidth) * 100
         break
-      case SliderOrientation.VERTICAL:
+      case Orientation.VERTICAL:
         percentual = ((this.elementOffsetBottom - y) / this.elementHeight) * 100
         break
     }

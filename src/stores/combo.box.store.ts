@@ -46,12 +46,20 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
 
     switch (event.key) {
       case Key.ARROW_DOWN:
-        this.isCollapsed && this.setExpanded(true, this.id, 'handleKeyboardInteractions')
+        if (this.isCollapsed) {
+          this.setExpanded(true, this.id, 'handleKeyboardInteractions')
+          break
+        }
+
         this.setFocusedListBoxItemIndex(this.focusedListBoxItemIndex < this.listBoxItemsRef.size - 1 ? this.focusedListBoxItemIndex + 1 : 0)
 
         break
       case Key.ARROW_UP:
-        this.isCollapsed && this.setExpanded(true, this.id, 'handleKeyboardInteractions')
+        if (this.isCollapsed) {
+          this.setExpanded(true, this.id, 'handleKeyboardInteractions')
+          break
+        }
+
         this.setFocusedListBoxItemIndex(this.focusedListBoxItemIndex > 0 ? this.focusedListBoxItemIndex - 1 : this.listBoxItemsRef.size - 1)
 
         break
@@ -82,12 +90,13 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
     Logger.debug(id, caller, `The combobox has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
     if (this.isCollapsed) {
-      this.setFocusedListBoxItemIndex(-1)
+      // this.setFocusedListBoxItemIndex(-1)
       this.onCollapse()
     }
 
     if (this.isExpanded) {
       this.inputRef.current.focus()
+      this.setFocusedListBoxItemIndex(this.selectedListBoxItemIndexes[0] || 0)
     }
 
     this.update()
@@ -96,6 +105,9 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   setFocusedListBoxItemIndex = (index: number): void => {
     this.focusedListBoxItemIndex = index
     Logger.debug(this.id, 'setFocusedListBoxItemID', `The focused listbox item index has been set to ${index}.`)
+
+    this.listBoxRef.current.scrollTo({ behavior: 'smooth', top: this.focusedListBoxItemRef.current.offsetTop })
+    Logger.debug(this.id, 'setFocusedListBoxItemID', 'The focused listbox item has been scrolled into view.')
 
     this.update()
   }
@@ -146,7 +158,11 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   }
 
   get focusedListBoxItemID(): ID {
-    return (this.listBoxItemsRef.get(this.focusedListBoxItemIndex) || { current: document.createElement('div') }).current.id
+    return (this.listBoxItemsRef.get(this.focusedListBoxItemIndex) || { current: document.createElement('li') }).current.id
+  }
+
+  get focusedListBoxItemRef(): MutableRefObject<HTMLLIElement> {
+    return this.listBoxItemsRef.get(this.focusedListBoxItemIndex) || { current: document.createElement('li') }
   }
 
   get isCollapsed(): boolean {

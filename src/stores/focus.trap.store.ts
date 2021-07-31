@@ -56,7 +56,8 @@ class FocusTrapStore extends ComponentStore<HTMLDivElement> {
         let focusedIndex: number
 
         event.preventDefault()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+        event.stopPropagation()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         focusedIndex = this.focusables.findIndex((v: Element) => v === document.activeElement)
         if (focusedIndex < 0) return Logger.error(this.id, 'handleKeyboardInteractions', 'Failed to find the focused element index')

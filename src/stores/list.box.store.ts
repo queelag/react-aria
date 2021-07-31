@@ -37,7 +37,8 @@ class ListBoxStore extends ComponentStore<HTMLDivElement> {
       case Key.HOME:
       case Key.END:
         event.preventDefault()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+        event.stopPropagation()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }

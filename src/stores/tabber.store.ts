@@ -39,6 +39,9 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
       case Key.HOME:
       case Key.SPACE:
         event.preventDefault()
+        event.stopPropagation()
+        Logger.debug(this.id, 'handleKeyboardEvents', `The default event has been prevented and the propagation has been stopped.`)
+
         break
     }
 

@@ -47,7 +47,8 @@ class AccordionStore extends ComponentStore<HTMLDivElement> {
       case Key.END:
       case Key.HOME:
         event.preventDefault()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+        event.stopPropagation()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }

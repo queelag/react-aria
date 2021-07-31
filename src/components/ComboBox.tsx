@@ -1,4 +1,4 @@
-import { ObjectUtils, StoreUtils } from '@queelag/core'
+import { Logger, ObjectUtils, StoreUtils } from '@queelag/core'
 import { useForceUpdate, useID } from '@queelag/react-core'
 import React, { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { usePopper } from 'react-popper'
@@ -57,6 +57,11 @@ export function Root(props: ComboBoxProps) {
   useEffect(() => {
     StoreUtils.updateKeys(store, props, ['onCollapse', 'onSelectListBoxItem', 'selectedListBoxItemIndexes'], update)
   }, [props.onCollapse, props.onSelectListBoxItem, props.selectedListBoxItemIndexes])
+
+  useEffect(() => {
+    store.listBoxRef.current.scrollTo({ behavior: 'smooth', top: store.focusedListBoxItemRef.current.offsetTop })
+    Logger.debug(store.id, 'useEffect', 'The focused listbox item has been scrolled into view.')
+  }, [store.listBoxRef.current])
 
   return (
     <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
@@ -134,6 +139,7 @@ export function Button(props: ComboBoxButtonProps) {
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
+    Logger.debug(id, 'onClick', `The event propagation has been stopped.`)
 
     props.setExpanded(!props.expanded, id, 'onClick')
     props.onClick && props.onClick(event)

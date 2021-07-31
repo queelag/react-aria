@@ -222,7 +222,7 @@ export type ComboBoxChildrenProps = {
   /**
    * The ID of the focused ListBoxItem.
    */
-  focusedListBoxItemID?: ID
+  focusedListBoxItemID: ID
   /**
    * The method which tells you if a ListBoxItem with a certain index is focused or not.
    */

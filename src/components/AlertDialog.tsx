@@ -20,7 +20,8 @@ export function Root(props: AlertDialogProps) {
     switch (event.key) {
       case Key.ESCAPE:
         event.preventDefault()
-        Logger.debug(id, 'handleKeyboardInteractions', `The default event has been prevented.`)
+        event.stopPropagation()
+        Logger.debug(id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         props.onClose()
         Logger.debug(id, 'handleKeyboardEvents', event.key, 'The alert dialog has been closed.')

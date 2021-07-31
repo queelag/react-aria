@@ -25,7 +25,8 @@ class TooltipStore extends ComponentStore<HTMLDivElement> {
     switch (event.key) {
       case Key.ESCAPE:
         event.preventDefault()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented.`)
+        event.stopPropagation()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         this.setVisible(false)
 

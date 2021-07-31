@@ -26,7 +26,8 @@ class RadioGroupStore extends ComponentStore<HTMLDivElement> {
       case Key.ARROW_LEFT:
       case Key.SPACE:
         event.preventDefault()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+        event.stopPropagation()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }

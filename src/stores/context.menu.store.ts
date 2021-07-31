@@ -32,7 +32,8 @@ class ContextMenuStore extends ComponentStore<HTMLDivElement> {
       case Key.SPACE:
       case Key.ESCAPE:
         event.preventDefault()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+        event.stopPropagation()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }

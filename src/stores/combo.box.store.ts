@@ -39,7 +39,8 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
       case Key.ENTER:
       case Key.ESCAPE:
         event.preventDefault()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented`)
+        event.stopPropagation()
+        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }
@@ -106,9 +107,6 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
     this.focusedListBoxItemIndex = index
     Logger.debug(this.id, 'setFocusedListBoxItemID', `The focused listbox item index has been set to ${index}.`)
 
-    this.listBoxRef.current.scrollTo({ behavior: 'smooth', top: this.focusedListBoxItemRef.current.offsetTop })
-    Logger.debug(this.id, 'setFocusedListBoxItemID', 'The focused listbox item has been scrolled into view.')
-
     this.update()
   }
 
@@ -135,8 +133,10 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   }
 
   setListBoxRef = (ref: MutableRefObject<HTMLUListElement>): void => {
-    this.listBoxRef = ref
+    this.listBoxRef.current = ref.current || this.listBoxRef.current
     Logger.debug(this.id, 'setListBoxRef', `The listbox ref has been set.`)
+
+    this.update()
   }
 
   deleteListBoxItemRef = (index: number): void => {

@@ -274,6 +274,71 @@ export type ComboBoxListBoxItemProps = {
 } & ComboBoxChildrenProps &
   HTMLLIProps
 
+export type ContextMenuProps = {
+  children: (props: ContextMenuChildrenProps) => ReactNode
+  /**
+   * The popper options.
+   */
+  popperOptions?: PopperOptions<any>
+} & Omit<HTMLDivProps, 'children'>
+
+export type ContextMenuChildrenProps = {
+  /**
+   * The ID of the Trigger element.
+   */
+  triggerID: ID
+  /**
+   * The method which takes care of deleting the ref of the ListItemAnchor element when unmounted.
+   */
+  deleteListItemAnchorRef: (index: number) => void
+  /**
+   * Indicates whether the Menu is expanded or collapsed.
+   */
+  expanded: boolean
+  /**
+   * The ID of the List element.
+   */
+  listID: ID
+  /**
+   * The popper data.
+   */
+  popper: PopperData
+  /**
+   * The method which sets the expanded value.
+   */
+  setExpanded: (expanded: boolean) => void
+  /**
+   * The method which sets the ref of the List element.
+   */
+  setListRef: (ref: MutableRefObject<HTMLUListElement>) => void
+  /**
+   * The method which sets the ref of the ListItemAnchor element.
+   */
+  setListItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
+  /**
+   * The method which sets the ref of the Trigger element.
+   */
+  setTriggerRef: (ref: MutableRefObject<HTMLDivElement>) => void
+  /**
+   * The ref of the Trigger element.
+   */
+  triggerRef: MutableRefObject<HTMLDivElement>
+}
+
+export type ContextMenuBackdropProps = ContextMenuChildrenProps & Omit<HTMLDivProps, 'id'>
+export type ContextMenuListProps = ContextMenuChildrenProps & Omit<HTMLUListProps, 'id'>
+export type ContextMenuListItemProps = ContextMenuChildrenProps & HTMLLIProps
+
+export type ContextMenuListItemAnchorProps = {
+  /**
+   * The index of the ListItemAnchor element.
+   */
+  index: number
+} & ContextMenuChildrenProps &
+  HTMLAnchorProps
+
+export type ContextMenuTriggerProps = ContextMenuChildrenProps & Omit<HTMLDivProps, 'id'>
+
 export type DialogProps = {
   children: (props: DialogChildrenProps) => ReactNode
   /**

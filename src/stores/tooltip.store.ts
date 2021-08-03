@@ -37,11 +37,15 @@ class TooltipStore extends ComponentStore<HTMLDivElement> {
   setElementRef = (ref: MutableRefObject<HTMLDivElement>): void => {
     this.elementRef = ref
     Logger.debug(this.id, 'setElementRef', `The element ref has been set.`)
+
+    this.update()
   }
 
   setTriggerRef = (ref: MutableRefObject<HTMLDivElement>): void => {
     this.triggerRef = ref
     Logger.debug(this.id, 'setTriggerRef', `The trigger ref has been set.`)
+
+    this.update()
   }
 
   setVisible = (visible: boolean): void => {

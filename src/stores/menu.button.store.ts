@@ -127,11 +127,15 @@ class MenuButtonStore extends ComponentStore<HTMLDivElement> {
   setButtonRef = (ref: MutableRefObject<HTMLButtonElement>): void => {
     this.buttonRef = ref
     Logger.debug(this.id, 'setButtonRef', `The button ref has been set.`)
+
+    this.update()
   }
 
   setListRef = (ref: MutableRefObject<HTMLUListElement>): void => {
     this.listRef = ref
     Logger.debug(this.id, 'setListRef', `The list ref has been set.`)
+
+    this.update()
   }
 
   setListItemAnchorRef = (index: number, ref: MutableRefObject<HTMLAnchorElement>): void => {

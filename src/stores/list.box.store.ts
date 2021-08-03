@@ -128,11 +128,15 @@ class ListBoxStore extends ComponentStore<HTMLDivElement> {
   setButtonRef = (ref: MutableRefObject<HTMLButtonElement>): void => {
     this.buttonRef = ref
     Logger.debug(this.id, 'setButtonRef', `The button ref has been set.`)
+
+    this.update()
   }
 
   setListRef = (ref: MutableRefObject<HTMLUListElement>): void => {
     this.listRef = ref
     Logger.debug(this.id, 'setListRef', `The list ref has been set.`)
+
+    this.update()
   }
 
   setListItemRef = (index: number, ref: MutableRefObject<HTMLLIElement>): void => {

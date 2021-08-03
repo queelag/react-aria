@@ -179,6 +179,8 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
   setItemMenuRef = (id: ID, ref: MutableRefObject<HTMLUListElement>): void => {
     this.itemMenusRef.set(id, ref)
     Logger.debug(this.id, 'setItemMenuRef', `The ref of the item menu child of ${id} has been set.`)
+
+    this.update()
   }
 
   deleteItemMenuRef = (id: ID): void => {

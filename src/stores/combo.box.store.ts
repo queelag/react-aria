@@ -120,6 +120,8 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   setGroupRef = (ref: MutableRefObject<HTMLDivElement>): void => {
     this.groupRef = ref
     Logger.debug(this.id, 'setGroupRef', `The group ref has been set.`)
+
+    this.update()
   }
 
   setInputRef = (ref: MutableRefObject<HTMLInputElement>): void => {

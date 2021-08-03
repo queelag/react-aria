@@ -2,7 +2,8 @@ import { ID } from '@queelag/core'
 import { Orientation } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, TouchEvent } from 'react'
 import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, SliderMode, TabberActivation } from './enums'
-import { PopperData, PopperOptions, SliderPercentual, SliderThumbIndex, SliderValue } from './types'
+import { PopperData, PopperOptions } from './interfaces'
+import { SliderPercentual, SliderThumbIndex, SliderValue } from './types'
 
 export type AccordionProps = {
   children: (props: AccordionChildrenProps) => ReactNode
@@ -79,8 +80,6 @@ export type BreadcrumbListItemLinkProps = {
    */
   isCurrent: boolean
 } & HTMLAnchorProps
-
-export type ButtonProps = HTMLButtonProps
 
 export type CarouselProps = {
   /**

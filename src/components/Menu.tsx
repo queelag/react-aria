@@ -1,6 +1,6 @@
 import { Debounce, noop, ObjectUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, MutableRefObject, useEffect, useMemo, useRef } from 'react'
+import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, KeyboardEvent, MouseEvent, MutableRefObject, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import {
@@ -15,14 +15,16 @@ import {
 } from '../definitions/props'
 import MenuStore from '../stores/menu.store'
 
-const MENU_PROPS_KEYS: (keyof MenuProps)[] = ['itemMenuHideDelay', 'label']
+const MENU_PROPS_KEYS: (keyof MenuProps)[] = ['autoOpen', 'itemMenuHideDelay', 'label']
 
 const MENU_CHILDREN_PROPS_KEYS: (keyof MenuChildrenProps)[] = [
+  'autoOpen',
   'deleteItemAnchorRef',
   'deleteItemMenuRef',
   'deleteItemMenuItemAnchorRef',
   'expandedItemIndex',
   'findItemMenuRef',
+  'focusItemAnchor',
   'focusedItemIndex',
   'isItemExpanded',
   'setExpandedItemIndex',
@@ -33,6 +35,7 @@ const MENU_CHILDREN_PROPS_KEYS: (keyof MenuChildrenProps)[] = [
 ]
 
 const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
+  'autoOpen',
   'deleteItemAnchorRef',
   'deleteItemMenuRef',
   'deleteItemMenuItemAnchorRef',
@@ -43,6 +46,7 @@ const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
   'parentID',
   'parentIndex',
   'popper',
+  'setExpandedItemIndex',
   'setItemAnchorRef',
   'setItemMenuRef',
   'setItemMenuItemAnchorRef'
@@ -52,8 +56,7 @@ const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
  * A menu is a widget that offers a list of choices to the user, such as a set of actions or functions. Menu widgets behave like native operating system menus, such as the menus that pull down from the menubars commonly found at the top of many desktop application windows.
  */
 export function Root(props: MenuProps) {
-  const update = useForceUpdate()
-  const store = useMemo(() => new MenuStore({ ...props, update }), [])
+  const store = useComponentStore(MenuStore, props)
 
   const onBlur = (event: FocusEvent<HTMLUListElement>) => {
     Debounce.handle(store.id, () => store.setExpandedItemIndex(-1), store.itemMenuHideDelay)
@@ -114,7 +117,7 @@ export function Root(props: MenuProps) {
 
 export function Item(props: MenuItemProps) {
   const id = useID(ComponentName.MENU_ITEM, props.id)
-  const ref = useRef(document.createElement('li'))
+  const ref = useSafeRef('li')
   const popper = usePopper(ref.current, props.findItemMenuRef(id).current, props.popperOptions)
 
   const deleteItemMenuItemAnchorRef = (index: number): void => {
@@ -156,7 +159,7 @@ export function Item(props: MenuItemProps) {
 
 export function ItemAnchor(props: MenuItemAnchorProps) {
   const id = useID(ComponentName.MENU_ITEM_ANCHOR, props.id)
-  const ref = useRef(document.createElement('a'))
+  const ref = useSafeRef('a')
 
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     props.autoOpen === false && props.setExpandedItemIndex(props.expanded ? -1 : props.parentIndex, 0)
@@ -194,12 +197,12 @@ export function ItemAnchor(props: MenuItemAnchorProps) {
 
 export function ItemMenu(props: MenuItemMenuProps) {
   const id = useID(ComponentName.MENU_ITEM_MENU, props.id)
-  const ref = useRef(document.createElement('ul'))
+  const ref = useSafeRef('ul')
 
   useEffect(() => {
     props.setItemMenuRef(props.parentID, ref)
     return () => props.deleteItemMenuRef(props.parentID)
-  }, [])
+  }, [props.parentID])
 
   return (
     <ul
@@ -221,7 +224,7 @@ export function ItemMenuItem(props: MenuItemMenuItemProps) {
 
 export function ItemMenuItemAnchor(props: MenuItemMenuItemAnchorProps) {
   const id = useID(ComponentName.MENU_ITEM_MENU_ITEM_ANCHOR, props.id)
-  const ref = useRef(document.createElement('a'))
+  const ref = useSafeRef('a')
 
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     props.setExpandedItemIndex(-1, 0)

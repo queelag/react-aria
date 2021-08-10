@@ -1,6 +1,6 @@
 import { ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
+import React, { KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
 import { ComponentName } from '../definitions/enums'
 import { RadioGroupChildrenProps, RadioGroupItemProps, RadioGroupProps } from '../definitions/props'
 import RadioGroupStore from '../stores/radio.group.store'
@@ -38,7 +38,7 @@ export function Root(props: RadioGroupProps) {
 
 export function Item(props: RadioGroupItemProps) {
   const id = useID(ComponentName.RADIO_GROUP_ITEM, props.id)
-  const ref = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
 
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
     props.setCheckedItemIndex(props.index)

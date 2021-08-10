@@ -1,6 +1,6 @@
 import { Debounce, noop, ObjectUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import { TooltipChildrenProps, TooltipElementProps, TooltipProps, TooltipTriggerProps } from '../definitions/props'
@@ -48,7 +48,7 @@ export function Root(props: TooltipProps) {
 }
 
 export function Element(props: TooltipElementProps) {
-  const ref = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
 
   const onMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
     Debounce.handle(props.rootID, noop, 0)
@@ -77,7 +77,7 @@ export function Element(props: TooltipElementProps) {
 
 export function Trigger(props: TooltipTriggerProps) {
   const id = useID(ComponentName.TOOLTIP_TRIGGER, props.id)
-  const ref = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
 
   const onBlur = (event: FocusEvent<HTMLDivElement>) => {
     props.setVisible(false)

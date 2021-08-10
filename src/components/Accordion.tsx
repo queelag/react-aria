@@ -1,6 +1,6 @@
 import { Logger, ObjectUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { KeyboardEvent, MouseEvent, MutableRefObject, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
+import React, { KeyboardEvent, MouseEvent, MutableRefObject, useEffect, useMemo } from 'react'
 import { ComponentName } from '../definitions/enums'
 import {
   AccordionChildrenProps,
@@ -38,7 +38,7 @@ export function Section(props: AccordionSectionProps) {
   const id = useID(ComponentName.ACCORDION_SECTION, props.id)
   const contentID = useID(ComponentName.ACCORDION_SECTION_PANEL)
   const headerID = useID(ComponentName.ACCORDION_SECTION_HEADER)
-  const ref = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
 
   const expand = (expanded: boolean) => {
     props.expandSection(expanded, id, typeof props.isCollapsable === 'boolean' ? props.isCollapsable : true)
@@ -63,7 +63,7 @@ export function Section(props: AccordionSectionProps) {
 }
 
 export function SectionHeader(props: AccordionSectionHeaderProps) {
-  const ref = useRef(document.createElement('button'))
+  const ref = useSafeRef('button')
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     props.expand(!props.expanded)

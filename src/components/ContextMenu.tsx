@@ -1,6 +1,6 @@
 import { Logger, ObjectUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import {
@@ -92,8 +92,8 @@ export function Backdrop(props: ContextMenuBackdropProps) {
 }
 
 export function Trigger(props: ContextMenuTriggerProps) {
-  const ref = useRef(document.createElement('div'))
-  const childRef = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
+  const childRef = useSafeRef('div')
 
   const onContextMenu = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault()
@@ -126,7 +126,7 @@ export function Trigger(props: ContextMenuTriggerProps) {
 }
 
 export function List(props: ContextMenuListProps) {
-  const ref = useRef(document.createElement('ul'))
+  const ref = useSafeRef('ul')
 
   useEffect(() => props.setListRef(ref), [])
 
@@ -149,7 +149,7 @@ export function ListItem(props: ContextMenuListItemProps) {
 }
 
 export function ListItemAnchor(props: ContextMenuListItemAnchorProps) {
-  const ref = useRef(document.createElement('a'))
+  const ref = useSafeRef('a')
 
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     props.setExpanded(false)

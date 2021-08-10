@@ -1,5 +1,5 @@
 import { ID, Logger, noop } from '@queelag/core'
-import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, ListBoxSelectMode } from '../definitions/enums'
 import { ListBoxProps } from '../definitions/props'
@@ -16,11 +16,11 @@ class ListBoxStore extends ComponentStore<HTMLDivElement> {
   constructor(props: ListBoxProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.LIST_BOX, props)
 
-    this.buttonRef = { current: document.createElement('button') }
+    this.buttonRef = ReactUtils.createDummyRef('button')
     this.expanded = false
     this.focusedListItemIndex = -1
     this.listItemsRef = new Map()
-    this.listRef = { current: document.createElement('ul') }
+    this.listRef = ReactUtils.createDummyRef('ul')
     this.onSelectListItem = props.onSelectListItem || noop
     this.selectMode = props.selectMode || ListBoxSelectMode.SINGLE
     this.selectedListItemIndexes = []
@@ -204,7 +204,7 @@ class ListBoxStore extends ComponentStore<HTMLDivElement> {
   }
 
   get focusedListItemID(): ID {
-    return (this.listItemsRef.get(this.focusedListItemIndex) || { current: document.createElement('div') }).current.id
+    return (this.listItemsRef.get(this.focusedListItemIndex) || ReactUtils.createDummyRef('div')).current.id
   }
 
   get isCollapsed(): boolean {

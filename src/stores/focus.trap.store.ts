@@ -1,4 +1,4 @@
-import { Logger } from '@queelag/core'
+import { Logger, SSR } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
@@ -12,7 +12,7 @@ class FocusTrapStore extends ComponentStore<HTMLDivElement> {
     super(ComponentName.FOCUS_TRAP, props)
 
     this.focusables = []
-    this.originalFocused = document.createElement('div')
+    this.originalFocused = SSR.createElement('div')
   }
 
   readFocusables(): void {
@@ -27,7 +27,7 @@ class FocusTrapStore extends ComponentStore<HTMLDivElement> {
   }
 
   readOriginalFocused(): void {
-    this.originalFocused = document.activeElement || document.createElement('div')
+    this.originalFocused = document.activeElement || SSR.createElement('div')
     Logger.debug(this.id, 'readOriginalFocused', `The original focused element has been set`)
   }
 

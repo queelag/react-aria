@@ -1,5 +1,5 @@
 import { ID, Logger } from '@queelag/core'
-import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 
@@ -225,15 +225,15 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
   }
 
   findItemAnchorRef(index: number): MutableRefObject<HTMLAnchorElement> {
-    return this.itemAnchorsRef.get(index) || { current: document.createElement('a') }
+    return this.itemAnchorsRef.get(index) || ReactUtils.createDummyRef('a')
   }
 
   findItemMenuItemAnchorRef(parentIndex: number, index: number): MutableRefObject<HTMLAnchorElement> {
-    return this.itemMenuItemAnchorsRef.get(parentIndex)?.get(index) || { current: document.createElement('a') }
+    return this.itemMenuItemAnchorsRef.get(parentIndex)?.get(index) || ReactUtils.createDummyRef('a')
   }
 
   findItemMenuRef = (id: ID): MutableRefObject<HTMLUListElement> => {
-    return this.itemMenusRef.get(id) || { current: document.createElement('ul') }
+    return this.itemMenusRef.get(id) || ReactUtils.createDummyRef('ul')
   }
 
   isItemExpanded = (index: number): boolean => {

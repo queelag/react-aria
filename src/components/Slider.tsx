@@ -1,6 +1,6 @@
 import { ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { KeyboardEvent, MouseEvent, TouchEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
+import React, { KeyboardEvent, MouseEvent, TouchEvent, useEffect, useMemo } from 'react'
 import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
 import { SliderThumbIndex } from '../definitions/types'
@@ -25,7 +25,7 @@ const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
  */
 export function Root(props: SliderProps) {
   const update = useForceUpdate()
-  const ref = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
   const store = useMemo(() => new SliderStore({ ...props, ref, update }), [])
 
   const onClick = (event: MouseEvent<HTMLDivElement>) => {

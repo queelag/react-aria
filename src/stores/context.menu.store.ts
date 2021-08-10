@@ -1,5 +1,5 @@
 import { ID, IDUtils, Logger } from '@queelag/core'
-import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 
@@ -15,10 +15,10 @@ class ContextMenuStore extends ComponentStore<HTMLDivElement> {
     super(ComponentName.CONTEXT_MENU, props)
 
     this.triggerID = IDUtils.prefixed(ComponentName.CONTEXT_MENU_TRIGGER)
-    this.triggerRef = { current: document.createElement('div') }
+    this.triggerRef = ReactUtils.createDummyRef('div')
     this.expanded = false
     this.listID = IDUtils.prefixed(ComponentName.CONTEXT_MENU_LIST)
-    this.listRef = { current: document.createElement('ul') }
+    this.listRef = ReactUtils.createDummyRef('ul')
     this.listItemAnchorsRef = new Map()
   }
 

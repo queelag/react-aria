@@ -1,6 +1,6 @@
 import { Logger, ObjectUtils } from '@queelag/core'
-import { useID } from '@queelag/react-core'
-import React, { KeyboardEvent, useRef } from 'react'
+import { useID, useSafeRef } from '@queelag/react-core'
+import React, { KeyboardEvent } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { CheckBoxProps } from '../definitions/props'
 
@@ -11,7 +11,7 @@ const ROOT_PROPS_KEYS: (keyof CheckBoxProps)[] = ['checked']
  */
 export function Root(props: CheckBoxProps) {
   const id = useID(ComponentName.CHECK_BOX, props.id)
-  const ref = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
 
   const handleKeyboardInteractions = (event: KeyboardEvent<HTMLDivElement>) => {
     switch (event.key) {

@@ -1,6 +1,6 @@
 import { Logger, ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
+import React, { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import {
@@ -88,7 +88,7 @@ export function Root(props: ComboBoxProps) {
 
 export function Group(props: ComboBoxGroupProps) {
   const id = useID(ComponentName.COMBO_BOX_GROUP, props.id)
-  const ref = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
 
   useEffect(() => props.setGroupRef(ref), [])
 
@@ -97,7 +97,7 @@ export function Group(props: ComboBoxGroupProps) {
 
 export function Input(props: ComboBoxInputProps) {
   const id = useID(ComponentName.COMBO_BOX_INPUT, props.id)
-  const ref = useRef(document.createElement('input'))
+  const ref = useSafeRef('input')
 
   const onBlur = (event: FocusEvent<HTMLInputElement>) => {
     props.setExpanded(false, id, 'onBlur')
@@ -164,7 +164,7 @@ export function Button(props: ComboBoxButtonProps) {
 }
 
 export function ListBox(props: ComboBoxListBoxProps) {
-  const ref = useRef(document.createElement('ul'))
+  const ref = useSafeRef('ul')
 
   useEffect(() => props.setListBoxRef(ref), [])
 
@@ -184,7 +184,7 @@ export function ListBox(props: ComboBoxListBoxProps) {
 
 export function ListBoxItem(props: ComboBoxListBoxItemProps) {
   const id = useID(ComponentName.COMBO_BOX_LIST_BOX_ITEM, props.id)
-  const ref = useRef(document.createElement('li'))
+  const ref = useSafeRef('li')
 
   const onClick = (event: MouseEvent<HTMLLIElement>) => {
     props.setSelectedListBoxItemIndex(props.index, !props.isListBoxItemSelected(props.index))

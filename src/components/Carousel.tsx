@@ -1,6 +1,6 @@
 import { ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { FocusEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, MouseEvent, useEffect, useMemo } from 'react'
 import { CarouselLive, ComponentName } from '../definitions/enums'
 import {
   CarouselButtonLiveProps,
@@ -97,7 +97,7 @@ export function Slides(props: CarouselSlidesProps) {
 
 export function Slide(props: CarouselSlideProps) {
   const id = useID(ComponentName.CAROUSEL_SLIDE, props.id)
-  const ref = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
 
   useEffect(() => {
     props.setSlideElementRef(props.index, ref)

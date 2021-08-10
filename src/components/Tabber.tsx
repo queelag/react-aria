@@ -1,6 +1,6 @@
 import { ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate } from '@queelag/react-core'
-import React, { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useSafeRef } from '@queelag/react-core'
+import React, { KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
 import { TabberChildrenProps, TabberListItemProps, TabberListProps, TabberPanelProps, TabberProps } from '../definitions/props'
 import TabberStore from '../stores/tabber.store'
 
@@ -49,7 +49,7 @@ export function List(props: TabberListProps) {
 }
 
 export function ListItem(props: TabberListItemProps) {
-  const ref = useRef(document.createElement('button'))
+  const ref = useSafeRef('button')
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     props.setSelectedListItemIndex(props.index)

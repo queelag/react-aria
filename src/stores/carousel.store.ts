@@ -1,5 +1,5 @@
 import { Logger, noop, rc } from '@queelag/core'
-import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { MutableRefObject } from 'react'
 import { CarouselLive, CarouselRotationMode, ComponentName } from '../definitions/enums'
 import { CarouselProps } from '../definitions/props'
@@ -150,9 +150,10 @@ class CarouselStore extends ComponentStore<HTMLElement> {
 
     ref = this.slideElementRefs.get(index)
     if (!ref)
-      return rc(() => Logger.error(this.id, 'findSlideElementRefByIndex', `Failed to find the ref of the slide with index ${index}.`), {
-        current: document.createElement('div')
-      })
+      return rc(
+        () => Logger.error(this.id, 'findSlideElementRefByIndex', `Failed to find the ref of the slide with index ${index}.`),
+        ReactUtils.createDummyRef('div')
+      )
 
     return ref
   }

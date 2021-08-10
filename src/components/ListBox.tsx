@@ -1,6 +1,6 @@
 import { ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName, ListBoxSelectMode } from '../definitions/enums'
 import { ListBoxButtonProps, ListBoxChildrenProps, ListBoxListItemProps, ListBoxListProps, ListBoxProps } from '../definitions/props'
@@ -65,7 +65,7 @@ export function Root(props: ListBoxProps) {
 
 export function Button(props: ListBoxButtonProps) {
   const id = useID(ComponentName.LIST_BOX_BUTTON, props.id)
-  const ref = useRef(document.createElement('button'))
+  const ref = useSafeRef('button')
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     props.setExpanded(!props.expanded, id, 'onClick')
@@ -95,7 +95,7 @@ export function Button(props: ListBoxButtonProps) {
 
 export function List(props: ListBoxListProps) {
   const id = useID(ComponentName.LIST_BOX_LIST, props.id)
-  const ref = useRef(document.createElement('ul'))
+  const ref = useSafeRef('ul')
 
   const onBlur = (event: FocusEvent<HTMLUListElement>) => {
     props.setExpanded(false, id, 'onBlur')
@@ -122,7 +122,7 @@ export function List(props: ListBoxListProps) {
 
 export function ListItem(props: ListBoxListItemProps) {
   const id = useID(ComponentName.COMBO_BOX_LIST_BOX_ITEM, props.id)
-  const ref = useRef(document.createElement('li'))
+  const ref = useSafeRef('li')
 
   const onClick = (event: MouseEvent<HTMLLIElement>) => {
     props.setFocusedListItemIndex(props.index)

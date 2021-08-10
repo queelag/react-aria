@@ -1,5 +1,5 @@
 import { ID, IDUtils, Logger, noop, tc } from '@queelag/core'
-import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { ComboBoxProps } from '../definitions/props'
@@ -19,11 +19,11 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
 
     this.expanded = false
     this.focusedListBoxItemIndex = -1
-    this.groupRef = { current: document.createElement('div') }
-    this.inputRef = { current: document.createElement('input') }
+    this.groupRef = ReactUtils.createDummyRef('div')
+    this.inputRef = ReactUtils.createDummyRef('input')
     this.listBoxID = IDUtils.prefixed(ComponentName.COMBO_BOX_LIST_BOX)
     this.listBoxItemsRef = new Map()
-    this.listBoxRef = { current: document.createElement('ul') }
+    this.listBoxRef = ReactUtils.createDummyRef('ul')
     this.onCollapse = props.onCollapse
     this.onSelectListBoxItem = props.onSelectListBoxItem || noop
     this.selectedListBoxItemIndexes = props.selectedListBoxItemIndexes || []
@@ -160,11 +160,11 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   }
 
   get focusedListBoxItemID(): ID {
-    return (this.listBoxItemsRef.get(this.focusedListBoxItemIndex) || { current: document.createElement('li') }).current.id
+    return (this.listBoxItemsRef.get(this.focusedListBoxItemIndex) || ReactUtils.createDummyRef('li')).current.id
   }
 
   get focusedListBoxItemRef(): MutableRefObject<HTMLLIElement> {
-    return this.listBoxItemsRef.get(this.focusedListBoxItemIndex) || { current: document.createElement('li') }
+    return this.listBoxItemsRef.get(this.focusedListBoxItemIndex) || ReactUtils.createDummyRef('li')
   }
 
   get isCollapsed(): boolean {

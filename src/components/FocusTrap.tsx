@@ -1,6 +1,6 @@
 import { noop, ObjectUtils } from '@queelag/core'
-import { useForceUpdate } from '@queelag/react-core'
-import React, { KeyboardEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useSafeRef } from '@queelag/react-core'
+import React, { KeyboardEvent, useEffect, useMemo } from 'react'
 import { FocusTrapProps } from '../definitions/props'
 import FocusTrapStore from '../stores/focus.trap.store'
 
@@ -11,7 +11,7 @@ const ROOT_PROPS_KEYS: (keyof FocusTrapProps)[] = ['autoFocus', 'restoreFocus']
  */
 export function Root(props: FocusTrapProps) {
   const update = useForceUpdate()
-  const ref = useRef(document.createElement('div'))
+  const ref = useSafeRef('div')
   const store = useMemo(() => new FocusTrapStore({ ...props, ref, update }), [])
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {

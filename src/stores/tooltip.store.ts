@@ -1,5 +1,5 @@
 import { ID, IDUtils, Logger } from '@queelag/core'
-import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { TooltipProps } from '../definitions/props'
@@ -15,9 +15,9 @@ class TooltipStore extends ComponentStore<HTMLDivElement> {
     super(ComponentName.TOOLTIP, props)
 
     this.elementID = IDUtils.prefixed(ComponentName.TOOLTIP_ELEMENT)
-    this.elementRef = { current: document.createElement('div') }
+    this.elementRef = ReactUtils.createDummyRef('div')
     this.hideDelay = props.hideDelay || 200
-    this.triggerRef = { current: document.createElement('div') }
+    this.triggerRef = ReactUtils.createDummyRef('div')
     this.visible = false
   }
 

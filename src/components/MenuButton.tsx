@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useForceUpdate } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo, useRef } from 'react'
+import { useForceUpdate, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
 import { usePopper } from 'react-popper'
 import {
   MenuButtonButtonProps,
@@ -67,7 +67,7 @@ export function Root(props: MenuButtonProps) {
 }
 
 export function Button(props: MenuButtonButtonProps) {
-  const ref = useRef(document.createElement('button'))
+  const ref = useSafeRef('button')
 
   const onClick = () => {
     props.setExpanded(!props.expanded)
@@ -90,7 +90,7 @@ export function Button(props: MenuButtonButtonProps) {
 }
 
 export function List(props: MenuButtonListProps) {
-  const ref = useRef(document.createElement('ul'))
+  const ref = useSafeRef('ul')
 
   useEffect(() => props.setListRef(ref), [])
 
@@ -113,7 +113,7 @@ export function ListItem(props: MenuButtonListItemProps) {
 }
 
 export function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
-  const ref = useRef(document.createElement('a'))
+  const ref = useSafeRef('a')
 
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     props.setExpanded(false)

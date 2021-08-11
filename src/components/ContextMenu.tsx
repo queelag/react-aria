@@ -1,6 +1,6 @@
 import { Logger, ObjectUtils } from '@queelag/core'
-import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
+import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import {
@@ -32,8 +32,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ContextMenuChildrenProps)[] = [
  * A menu trigger is a trigger that opens a menu. It is often styled as a typical push trigger with a downward pointing arrow or triangle to hint that activating the trigger will display a menu.
  */
 export function Root(props: ContextMenuProps) {
-  const update = useForceUpdate()
-  const store = useMemo(() => new ContextMenuStore({ ...props, update }), [])
+  const store = useComponentStore(ContextMenuStore, props)
   const popper = usePopper(store.triggerRef.current, store.listRef.current, { ...props.popperOptions, placement: 'bottom-start' })
 
   const onBlur = (event: FocusEvent<HTMLDivElement>) => {
@@ -47,7 +46,7 @@ export function Root(props: ContextMenuProps) {
   }
 
   return (
-    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onBlur={onBlur} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onBlur={onBlur} onKeyDown={onKeyDown} style={{ position: 'relative', ...props.style }}>
       {props.children({
         deleteListItemAnchorRef: store.deleteListItemAnchorRef,
         expanded: store.expanded,
@@ -86,7 +85,7 @@ export function Backdrop(props: ContextMenuBackdropProps) {
       id={id}
       onClick={onClick}
       onContextMenu={onContextMenu}
-      style={{ ...props.style, bottom: 0, left: 0, right: 0, position: 'absolute', top: 0 }}
+      style={{ bottom: 0, left: 0, right: 0, position: 'absolute', top: 0, ...props.style }}
     />
   )
 }
@@ -116,7 +115,6 @@ export function Trigger(props: ContextMenuTriggerProps) {
       id={props.triggerID}
       onContextMenu={onContextMenu}
       ref={ref}
-      style={{ ...props.style }}
       aria-haspopup
     >
       {props.children}

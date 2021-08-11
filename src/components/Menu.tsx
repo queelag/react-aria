@@ -2,7 +2,7 @@ import { Debounce, noop, ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, MutableRefObject, useEffect } from 'react'
 import { usePopper } from 'react-popper'
-import { ComponentName } from '../definitions/enums'
+import { ComponentName, MenuPopperReferenceElement } from '../definitions/enums'
 import {
   MenuChildrenProps,
   MenuItemAnchorProps,
@@ -15,7 +15,7 @@ import {
 } from '../definitions/props'
 import MenuStore from '../stores/menu.store'
 
-const MENU_PROPS_KEYS: (keyof MenuProps)[] = ['autoOpen', 'itemMenuHideDelay', 'label']
+const MENU_PROPS_KEYS: (keyof MenuProps)[] = ['autoOpen', 'itemMenuHideDelay', 'label', 'popperReferenceElement']
 
 const MENU_CHILDREN_PROPS_KEYS: (keyof MenuChildrenProps)[] = [
   'autoOpen',
@@ -27,6 +27,7 @@ const MENU_CHILDREN_PROPS_KEYS: (keyof MenuChildrenProps)[] = [
   'focusItemAnchor',
   'focusedItemIndex',
   'isItemExpanded',
+  'popper',
   'setExpandedItemIndex',
   'setFocusedItemIndex',
   'setItemAnchorRef',
@@ -93,7 +94,9 @@ export function Root(props: MenuProps) {
       onKeyDown={onKeyDown}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      ref={store.ref}
       role='menubar'
+      style={{ position: store.isPopperReferenceElementRoot ? 'relative' : undefined, ...props.style }}
     >
       {props.children({
         autoOpen: typeof props.autoOpen === 'boolean' ? props.autoOpen : true,
@@ -105,6 +108,7 @@ export function Root(props: MenuProps) {
         focusItemAnchor: store.focusItemAnchor,
         focusedItemIndex: store.focusedItemIndex,
         isItemExpanded: store.isItemExpanded,
+        rootRef: store.isPopperReferenceElementRoot ? store.ref : undefined,
         setExpandedItemIndex: store.setExpandedItemIndex,
         setFocusedItemIndex: store.setFocusedItemIndex,
         setItemAnchorRef: store.setItemAnchorRef,
@@ -118,7 +122,7 @@ export function Root(props: MenuProps) {
 export function Item(props: MenuItemProps) {
   const id = useID(ComponentName.MENU_ITEM, props.id)
   const ref = useSafeRef('li')
-  const popper = usePopper(ref.current, props.findItemMenuRef(id).current, props.popperOptions)
+  const popper = usePopper(props.rootRef ? props.rootRef.current : ref.current, props.findItemMenuRef(id).current, props.popperOptions)
 
   const deleteItemMenuItemAnchorRef = (index: number): void => {
     props.deleteItemMenuItemAnchorRef(props.index, index)
@@ -134,7 +138,7 @@ export function Item(props: MenuItemProps) {
       id={id}
       ref={ref}
       role='none'
-      style={{ ...props.style, position: 'relative' }}
+      style={{ position: props.popperReferenceElement === MenuPopperReferenceElement.ITEM ? 'relative' : undefined, ...props.style }}
     >
       {props.children({
         autoOpen: props.autoOpen,
@@ -212,7 +216,7 @@ export function ItemMenu(props: MenuItemMenuProps) {
       id={id}
       ref={ref}
       role='menu'
-      style={{ ...props.style, ...props.popper.styles.popper, zIndex: props.expanded ? 1 : 0 }}
+      style={{ zIndex: props.expanded ? 1 : 0, ...props.style, ...props.popper.styles.popper }}
     />
   )
 }

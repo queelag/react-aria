@@ -40,7 +40,7 @@ export function Root(props: CheckBoxProps) {
       onKeyDown={onKeyDown}
       ref={ref}
       role='checkbox'
-      style={{ ...props.style, cursor: 'pointer' }}
+      style={{ cursor: 'pointer', ...props.style }}
       tabIndex={0}
     />
   )

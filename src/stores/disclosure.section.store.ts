@@ -1,12 +1,13 @@
 import { ID, IDUtils, Logger } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { ComponentName } from '../definitions/enums'
+import { DisclosureSectionProps } from '../definitions/props'
 
 class DisclosureSectionStore extends ComponentStore<HTMLElement> {
   expanded: boolean
   panelID: ID
 
-  constructor(props: ComponentStoreProps<HTMLElement>) {
+  constructor(props: DisclosureSectionProps & ComponentStoreProps<HTMLElement>) {
     super(ComponentName.DISCLOSURE_SECTION, props)
 
     this.expanded = false

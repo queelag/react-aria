@@ -1,6 +1,6 @@
 import { Debounce, noop, ObjectUtils } from '@queelag/core'
-import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
+import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import { TooltipChildrenProps, TooltipElementProps, TooltipProps, TooltipTriggerProps } from '../definitions/props'
@@ -22,8 +22,7 @@ const TOOLTIP_CHILDREN_PROPS_KEYS: (keyof TooltipChildrenProps)[] = [
  * A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it. It typically appears after a small delay and disappears when Escape is pressed or on mouse out.
  */
 export function Root(props: TooltipProps) {
-  const update = useForceUpdate()
-  const store = useMemo(() => new TooltipStore({ ...props, update }), [])
+  const store = useComponentStore(TooltipStore, props)
   const popper = usePopper(store.triggerRef.current, store.elementRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {

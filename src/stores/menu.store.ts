@@ -1,7 +1,8 @@
 import { ID, Logger } from '@queelag/core'
-import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
+import { ComponentStore, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
-import { ComponentName, Key } from '../definitions/enums'
+import { ComponentName, Key, MenuPopperReferenceElement } from '../definitions/enums'
+import { MenuProps } from '../definitions/props'
 
 class MenuStore extends ComponentStore<HTMLUListElement> {
   expandedItemIndex: number
@@ -10,8 +11,10 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
   itemMenuHideDelay: number
   itemMenusRef: Map<ID, MutableRefObject<HTMLUListElement>>
   itemMenuItemAnchorsRef: Map<number, Map<number, MutableRefObject<HTMLAnchorElement>>>
+  itemsRef: Map<number, MutableRefObject<HTMLLIElement>>
+  popperReferenceElement: MenuPopperReferenceElement
 
-  constructor(props: ComponentStoreProps<HTMLUListElement>) {
+  constructor(props: MenuProps) {
     super(ComponentName.MENU, props)
 
     this.expandedItemIndex = -1
@@ -20,6 +23,8 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
     this.itemMenuHideDelay = 200
     this.itemMenusRef = new Map()
     this.itemMenuItemAnchorsRef = new Map()
+    this.itemsRef = new Map()
+    this.popperReferenceElement = props.popperReferenceElement || MenuPopperReferenceElement.ITEM
   }
 
   handleKeyboardInteractions(event: KeyboardEvent): void {
@@ -248,6 +253,14 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
     return [...(this.itemMenuItemAnchorsRef.get(this.expandedItemIndex)?.values() || [])].findIndex(
       (v: MutableRefObject<HTMLAnchorElement>) => v.current === document.activeElement
     )
+  }
+
+  get isPopperReferenceElementItem(): boolean {
+    return this.popperReferenceElement === MenuPopperReferenceElement.ITEM
+  }
+
+  get isPopperReferenceElementRoot(): boolean {
+    return this.popperReferenceElement === MenuPopperReferenceElement.ROOT
   }
 }
 

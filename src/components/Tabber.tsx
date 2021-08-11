@@ -1,11 +1,11 @@
-import { ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useSafeRef } from '@queelag/react-core'
-import React, { KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
+import { ObjectUtils } from '@queelag/core'
+import { COMPONENT_STORE_KEYS, useComponentStore, useSafeRef } from '@queelag/react-core'
+import React, { KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { TabberChildrenProps, TabberListItemProps, TabberListProps, TabberPanelProps, TabberProps } from '../definitions/props'
 import TabberStore from '../stores/tabber.store'
 
-const TABBER_PROPS_KEYS: (keyof TabberProps)[] = ['size']
-const TABBER_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
+const ROOT_PROPS_KEYS: (keyof TabberProps)[] = ['listItemsLength']
+const ROOT_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
   'handleKeyboardEvents',
   'isTabSelected',
   'listItemIDs',
@@ -15,17 +15,13 @@ const TABBER_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
   'setSelectedListItemIndex'
 ]
 
-export function Root(props: TabberProps) {
-  const update = useForceUpdate()
-  const store = useMemo(() => new TabberStore({ ...props, update }), [])
+const STORE_KEYS: (keyof TabberProps & keyof TabberStore)[] = [...COMPONENT_STORE_KEYS, 'activation', 'listItemsLength']
 
-  useEffect(() => {
-    StoreUtils.shouldUpdateKey(store, 'size', props.size) && store.setSize(props.size)
-    StoreUtils.updateKeys(store, props, ['activation'], update)
-  }, [props.activation, props.size])
+export function Root(props: TabberProps) {
+  const store = useComponentStore(TabberStore, props, STORE_KEYS)
 
   return (
-    <div {...ObjectUtils.omit(props, TABBER_PROPS_KEYS)}>
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)}>
       {props.children({
         handleKeyboardEvents: store.handleKeyboardEvents,
         isTabSelected: store.isTabSelected,
@@ -45,7 +41,7 @@ export function List(props: TabberListProps) {
     props.onKeyDown && props.onKeyDown(event)
   }
 
-  return <div {...ObjectUtils.omit(props, TABBER_CHILDREN_PROPS_KEYS)} aria-label={props.label} onKeyDown={onKeyDown} role='tablist' />
+  return <div {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label={props.label} onKeyDown={onKeyDown} role='tablist' />
 }
 
 export function ListItem(props: TabberListItemProps) {
@@ -60,7 +56,7 @@ export function ListItem(props: TabberListItemProps) {
 
   return (
     <button
-      {...ObjectUtils.omit(props, [...TABBER_CHILDREN_PROPS_KEYS, 'index'])}
+      {...ObjectUtils.omit(props, [...ROOT_CHILDREN_PROPS_KEYS, 'index'])}
       aria-controls={props.panelIDs[props.index]}
       aria-selected={props.isTabSelected(props.index)}
       id={props.listItemIDs[props.index]}
@@ -75,7 +71,7 @@ export function ListItem(props: TabberListItemProps) {
 export function Panel(props: TabberPanelProps) {
   return (
     <div
-      {...ObjectUtils.omit(props, [...TABBER_CHILDREN_PROPS_KEYS, 'index'])}
+      {...ObjectUtils.omit(props, [...ROOT_CHILDREN_PROPS_KEYS, 'index'])}
       aria-hidden={!props.isTabSelected(props.index)}
       aria-labelledby={props.panelIDs[props.index]}
       id={props.listItemIDs[props.index]}

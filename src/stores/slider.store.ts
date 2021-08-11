@@ -6,11 +6,12 @@ import { SliderProps } from '../definitions/props'
 import { SliderPercentual, SliderThumbIndex, SliderValue } from '../definitions/types'
 
 class SliderStore extends ComponentStore<HTMLDivElement> {
+  _step: number = 0
+
   maximum: number
   minimum: number
   mode: SliderMode
   percentual: SliderPercentual
-  step: number
   stepDecimals: number
   thumbMovable: boolean
   value: SliderValue
@@ -23,12 +24,10 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
     this.mode = props.mode || SliderMode.SINGLE_THUMB
     this.onChangeValue = props.onChangeValue || noop
     this.percentual = [0, 0]
-    this.step = 0
+    this.step = props.step || 1
     this.stepDecimals = 0
     this.thumbMovable = false
     this.value = JSON.parse(JSON.stringify(props.value))
-
-    this.setStepSize(props.step || 1)
   }
 
   onChangeValue(value: SliderValue): void {}
@@ -156,11 +155,6 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
     this.update()
   }
 
-  setStepSize(step: number): void {
-    this.step = step
-    this.stepDecimals = (step.toString().match(/\..+/) || [''])[0].slice(1).length
-  }
-
   setValueByCoordinates(index: SliderThumbIndex, x: number, y: number, round: boolean = false): void {
     let percentual: number
 
@@ -244,8 +238,17 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
     return parseFloat(getComputedStyle(this.element).width)
   }
 
+  get step(): number {
+    return this._step
+  }
+
   get isModeSingleThumb(): boolean {
     return this.mode === SliderMode.SINGLE_THUMB
+  }
+
+  set step(step: number) {
+    this._step = step
+    this.stepDecimals = (step.toString().match(/\..+/) || [''])[0].slice(1).length
   }
 }
 

@@ -1,7 +1,7 @@
 import { ID } from '@queelag/core'
 import { Orientation } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, TouchEvent } from 'react'
-import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, SliderMode, TabberActivation } from './enums'
+import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, MenuPopperReferenceElement, SliderMode, TabberActivation } from './enums'
 import { PopperData, PopperOptions } from './interfaces'
 import { SliderPercentual, SliderThumbIndex, SliderValue } from './types'
 
@@ -513,6 +513,7 @@ export type MenuProps = {
    * The label of the Menu element.
    */
   label: string
+  popperReferenceElement?: MenuPopperReferenceElement
 } & Omit<HTMLUListProps, 'children'>
 
 export type MenuChildrenProps = {
@@ -549,6 +550,14 @@ export type MenuChildrenProps = {
    */
   isItemExpanded: (index: number) => boolean
   /**
+   * The popper data.
+   */
+  popper?: PopperData
+  /**
+   * The ref of the Root element.
+   */
+  rootRef?: MutableRefObject<HTMLUListElement>
+  /**
    * The method which sets the index of the expanded Item element.
    */
   setExpandedItemIndex: (index: number, delay?: number) => void
@@ -568,7 +577,7 @@ export type MenuChildrenProps = {
    * The method which sets the ref of the ItemMenuItemAnchor element.
    */
   setItemMenuItemAnchorRef: (parentIndex: number, index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
-} & Pick<MenuProps, 'autoOpen'>
+} & Pick<MenuProps, 'autoOpen' | 'popperReferenceElement'>
 
 export type MenuItemProps = {
   children: (props: MenuItemChildrenProps) => ReactNode
@@ -621,11 +630,7 @@ export type MenuItemChildrenProps = {
   | 'setItemMenuRef'
 >
 
-export type MenuItemAnchorProps = {
-  children: string
-} & MenuItemChildrenProps &
-  Omit<HTMLAnchorProps, 'children'>
-
+export type MenuItemAnchorProps = {} & MenuItemChildrenProps & HTMLAnchorProps
 export type MenuItemMenuProps = {} & MenuItemChildrenProps & HTMLUListProps
 
 export type MenuItemMenuItemAnchorProps = {
@@ -812,7 +817,7 @@ export type SliderThumbProps = {
 export type TabberProps = {
   activation?: TabberActivation
   children: (props: TabberChildrenProps) => ReactNode
-  size: number
+  listItemsLength: number
 } & Omit<HTMLDivProps, 'children'>
 
 export type TabberChildrenProps = {

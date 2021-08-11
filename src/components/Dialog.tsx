@@ -5,8 +5,8 @@ import { createPortal } from 'react-dom'
 import { ComponentName, Key } from '../definitions/enums'
 import { DialogChildrenProps, DialogDescriptionProps, DialogProps, DialogTitleProps } from '../definitions/props'
 
-const DIALOG_PROPS_KEYS: (keyof DialogProps)[] = ['hasDescription', 'hasTitle', 'onClose']
-const DIALOG_CHILDREN_PROPS_KEYS: (keyof DialogChildrenProps)[] = ['descriptionID', 'titleID']
+const ROOT_PROPS_KEYS: (keyof DialogProps)[] = ['hasDescription', 'hasTitle', 'onClose']
+const ROOT_CHILDREN_PROPS_KEYS: (keyof DialogChildrenProps)[] = ['descriptionID', 'titleID']
 
 /**
  * A dialog is a window overlaid on either the primary window or another dialog window. Windows under a modal dialog are inert. That is, users cannot interact with content outside an active dialog window. Inert content outside an active dialog is typically visually obscured or dimmed so it is difficult to discern, and in some implementations, attempts to interact with the inert content cause the dialog to close.
@@ -37,7 +37,7 @@ export function Root(props: DialogProps) {
 
   return createPortal(
     <div
-      {...ObjectUtils.omit(props, DIALOG_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)}
       aria-describedby={props.hasDescription ? descriptionID : undefined}
       aria-labelledby={props.hasTitle ? titleID : undefined}
       id={id}
@@ -52,11 +52,11 @@ export function Root(props: DialogProps) {
 }
 
 export function Title(props: DialogTitleProps) {
-  return <span {...ObjectUtils.omit(props, DIALOG_CHILDREN_PROPS_KEYS)} id={props.titleID} />
+  return <span {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} id={props.titleID} />
 }
 
 export function Description(props: DialogDescriptionProps) {
-  return <span {...ObjectUtils.omit(props, DIALOG_CHILDREN_PROPS_KEYS)} id={props.descriptionID} />
+  return <span {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} id={props.descriptionID} />
 }
 
 export const AriaDialog = {

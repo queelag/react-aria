@@ -1,13 +1,13 @@
-import { ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
-import React, { KeyboardEvent, MouseEvent, TouchEvent, useEffect, useMemo } from 'react'
+import { ObjectUtils } from '@queelag/core'
+import { COMPONENT_STORE_KEYS, useComponentStore, useID } from '@queelag/react-core'
+import React, { KeyboardEvent, MouseEvent, TouchEvent, useEffect } from 'react'
 import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
 import { SliderThumbIndex } from '../definitions/types'
 import SliderStore from '../stores/slider.store'
 
-const SLIDER_PROPS_KEYS: (keyof SliderProps)[] = ['maximum', 'minimum', 'onChangeValue', 'step', 'value']
-const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
+const ROOT_PROPS_KEYS: (keyof SliderProps)[] = ['maximum', 'minimum', 'onChangeValue', 'step', 'value']
+const ROOT_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
   'handleKeyboardInteractions',
   'maximum',
   'minimum',
@@ -20,13 +20,13 @@ const SLIDER_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
   'value'
 ]
 
+const STORE_KEYS: (keyof SliderProps & keyof SliderStore)[] = [...COMPONENT_STORE_KEYS, 'maximum', 'minimum', 'mode', 'onChangeValue', 'orientation', 'step']
+
 /**
  * A slider is an input where the user selects a value from within a given range. Sliders typically have a slider thumb that can be moved along a bar or track to change the value of the slider.
  */
 export function Root(props: SliderProps) {
-  const update = useForceUpdate()
-  const ref = useSafeRef('div')
-  const store = useMemo(() => new SliderStore({ ...props, ref, update }), [])
+  const store = useComponentStore(SliderStore, props, STORE_KEYS)
 
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
     switch (store.mode) {
@@ -38,11 +38,6 @@ export function Root(props: SliderProps) {
     }
     props.onClick && props.onClick(event)
   }
-
-  useEffect(() => {
-    StoreUtils.shouldUpdateKey(store, 'step', props.step) && store.setStepSize(props.step)
-    StoreUtils.updateKeys(store, props, ['maximum', 'minimum', 'mode', 'onChangeValue', 'orientation'], update)
-  }, [props.maximum, props.minimum, props.mode, props.onChangeValue, props.orientation, props.step])
 
   useEffect(() => {
     if (props.value) {
@@ -70,7 +65,7 @@ export function Root(props: SliderProps) {
   }, [props.value])
 
   return (
-    <div {...ObjectUtils.omit(props, SLIDER_PROPS_KEYS)} id={store.id} onClick={onClick} ref={ref}>
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onClick={onClick} ref={store.ref}>
       {props.children({
         handleKeyboardInteractions: store.handleKeyboardInteractions,
         maximum: store.maximum,
@@ -117,7 +112,7 @@ const Thumb = (index: SliderThumbIndex) => (props: SliderThumbProps) => {
 
   return (
     <div
-      {...ObjectUtils.omit(props, SLIDER_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-orientation={props.orientation?.toLowerCase() as any}
       aria-valuemax={props.maximum}
       aria-valuemin={props.minimum}
@@ -129,7 +124,7 @@ const Thumb = (index: SliderThumbIndex) => (props: SliderThumbProps) => {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
       role='slider'
-      style={{ ...props.style, touchAction: 'none', userSelect: 'none' }}
+      style={{ touchAction: 'none', userSelect: 'none', ...props.style }}
       tabIndex={typeof props.focusable === 'boolean' ? (props.focusable ? 0 : -1) : 0}
     />
   )

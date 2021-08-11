@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useForceUpdate, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
+import { useComponentStore, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import {
   MenuButtonButtonProps,
@@ -12,8 +12,8 @@ import {
 } from '../definitions/props'
 import MenuButtonStore from '../stores/menu.button.store'
 
-const MENU_BUTTON_PROPS_KEYS: (keyof MenuButtonProps)[] = ['popperOptions']
-const MENU_BUTTON_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
+const ROOT_PROPS_KEYS: (keyof MenuButtonProps)[] = ['popperOptions']
+const ROOT_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
   'buttonID',
   'deleteListItemAnchorRef',
   'expanded',
@@ -29,8 +29,7 @@ const MENU_BUTTON_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
  * A menu button is a button that opens a menu. It is often styled as a typical push button with a downward pointing arrow or triangle to hint that activating the button will display a menu.
  */
 export function Root(props: MenuButtonProps) {
-  const update = useForceUpdate()
-  const store = useMemo(() => new MenuButtonStore({ ...props, update }), [])
+  const store = useComponentStore(MenuButtonStore, props)
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
 
   const onBlur = (event: FocusEvent<HTMLDivElement>) => {
@@ -44,13 +43,7 @@ export function Root(props: MenuButtonProps) {
   }
 
   return (
-    <div
-      {...ObjectUtils.omit(props, MENU_BUTTON_PROPS_KEYS)}
-      id={store.id}
-      onBlur={onBlur}
-      onKeyDown={onKeyDown}
-      style={{ ...props.style, position: 'relative' }}
-    >
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onBlur={onBlur} onKeyDown={onKeyDown} style={{ position: 'relative', ...props.style }}>
       {props.children({
         buttonID: store.buttonID,
         deleteListItemAnchorRef: store.deleteListItemAnchorRef,
@@ -77,7 +70,7 @@ export function Button(props: MenuButtonButtonProps) {
 
   return (
     <button
-      {...ObjectUtils.omit(props, MENU_BUTTON_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-controls={props.listID}
       aria-expanded={props.expanded}
       id={props.buttonID}
@@ -97,7 +90,7 @@ export function List(props: MenuButtonListProps) {
   return (
     <ul
       {...props.popper.attributes.popper}
-      {...ObjectUtils.omit(props, MENU_BUTTON_CHILDREN_PROPS_KEYS)}
+      {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       aria-labelledby={props.buttonID}
       id={props.listID}
       ref={ref}
@@ -109,7 +102,7 @@ export function List(props: MenuButtonListProps) {
 }
 
 export function ListItem(props: MenuButtonListItemProps) {
-  return <li {...ObjectUtils.omit(props, MENU_BUTTON_CHILDREN_PROPS_KEYS)} role='none' />
+  return <li {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} role='none' />
 }
 
 export function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
@@ -125,7 +118,7 @@ export function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
     return () => props.deleteListItemAnchorRef(props.index)
   }, [])
 
-  return <a {...ObjectUtils.omit(props, [...MENU_BUTTON_CHILDREN_PROPS_KEYS, 'index'])} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
+  return <a {...ObjectUtils.omit(props, [...ROOT_CHILDREN_PROPS_KEYS, 'index'])} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
 }
 
 export const AriaMenuButton = {

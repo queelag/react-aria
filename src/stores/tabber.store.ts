@@ -5,12 +5,13 @@ import { ComponentName, Key, TabberActivation } from '../definitions/enums'
 import { TabberProps } from '../definitions/props'
 
 class TabberStore extends ComponentStore<HTMLDivElement> {
+  _listItemsLength: number = 0
+
   activation: TabberActivation
   listItemIDs: ID[]
   listItemRefs: Map<number, MutableRefObject<HTMLButtonElement>>
   panelIDs: ID[]
   selectedListItemIndex: number
-  size: number
 
   constructor(props: TabberProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.TABBER, props)
@@ -18,11 +19,9 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
     this.activation = props.activation || TabberActivation.AUTOMATIC
     this.listItemIDs = []
     this.listItemRefs = new Map()
+    this.listItemsLength = props.listItemsLength
     this.panelIDs = []
     this.selectedListItemIndex = 0
-    this.size = 0
-
-    this.setSize(props.size)
   }
 
   handleKeyboardEvents = (event: KeyboardEvent): void => {
@@ -47,13 +46,13 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
 
     switch (event.key) {
       case Key.ARROW_LEFT:
-        focusedListItemIndex = this.focusedListItemIndex > 0 ? this.focusedListItemIndex - 1 : this.size - 1
-        selectedListItemIndex = this.selectedListItemIndex > 0 ? this.selectedListItemIndex - 1 : this.size - 1
+        focusedListItemIndex = this.focusedListItemIndex > 0 ? this.focusedListItemIndex - 1 : this.listItemsLength - 1
+        selectedListItemIndex = this.selectedListItemIndex > 0 ? this.selectedListItemIndex - 1 : this.listItemsLength - 1
 
         break
       case Key.ARROW_RIGHT:
-        focusedListItemIndex = this.focusedListItemIndex < this.size - 1 ? this.focusedListItemIndex + 1 : 0
-        selectedListItemIndex = this.selectedListItemIndex < this.size - 1 ? this.selectedListItemIndex + 1 : 0
+        focusedListItemIndex = this.focusedListItemIndex < this.listItemsLength - 1 ? this.focusedListItemIndex + 1 : 0
+        selectedListItemIndex = this.selectedListItemIndex < this.listItemsLength - 1 ? this.selectedListItemIndex + 1 : 0
 
         break
       case Key.HOME:
@@ -62,8 +61,8 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
 
         break
       case Key.END:
-        focusedListItemIndex = this.size - 1
-        selectedListItemIndex = this.size - 1
+        focusedListItemIndex = this.listItemsLength - 1
+        selectedListItemIndex = this.listItemsLength - 1
 
         break
       case Key.ENTER:
@@ -117,19 +116,6 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
     this.update()
   }
 
-  setSize(size: number): void {
-    for (let i = 0; i < size; i++) {
-      this.listItemIDs[i] = IDUtils.prefixed(ComponentName.TABBER_LIST_ITEM)
-      this.panelIDs[i] = IDUtils.prefixed(ComponentName.TABBER_PANEL)
-    }
-    Logger.debug(this.id, 'setSize', `The list item ids and panel ids have been set based on size ${size}.`)
-
-    this.size = size
-    Logger.debug(this.id, 'setSize', `The size has been set to ${size}.`)
-
-    this.update()
-  }
-
   isTabSelected = (index: number): boolean => {
     return this.selectedListItemIndex === index
   }
@@ -144,6 +130,23 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
     if (index < 0) return rc(() => Logger.error(this.id, 'focusedListItemIndex', `Failed to find the focused list item index.`), 0)
 
     return index
+  }
+
+  get listItemsLength(): number {
+    return this._listItemsLength
+  }
+
+  set listItemsLength(listItemsLength: number) {
+    for (let i = 0; i < listItemsLength; i++) {
+      this.listItemIDs[i] = IDUtils.prefixed(ComponentName.TABBER_LIST_ITEM)
+      this.panelIDs[i] = IDUtils.prefixed(ComponentName.TABBER_PANEL)
+    }
+    Logger.debug(this.id, 'setListItemsLength', `The list item ids and panel ids have been set based on length ${listItemsLength}.`)
+
+    this._listItemsLength = listItemsLength
+    Logger.debug(this.id, 'setListItemsLength', `The list items length has been set to ${listItemsLength}.`)
+
+    this.update()
   }
 }
 

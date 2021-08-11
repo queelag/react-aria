@@ -1,6 +1,6 @@
-import { ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
+import { ObjectUtils } from '@queelag/core'
+import { COMPONENT_STORE_KEYS, useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName, ListBoxSelectMode } from '../definitions/enums'
 import { ListBoxButtonProps, ListBoxChildrenProps, ListBoxListItemProps, ListBoxListProps, ListBoxProps } from '../definitions/props'
@@ -24,12 +24,13 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
   'setSelectedListItemIndex'
 ]
 
+const STORE_KEYS: (keyof ListBoxProps & keyof ListBoxStore)[] = [...COMPONENT_STORE_KEYS, 'onSelectListItem', 'selectMode', 'selectedListItemIndexes']
+
 /**
  * A listbox widget presents a list of options and allows a user to select one or more of them. A listbox that allows a single option to be chosen is a single-select listbox; one that allows multiple options to be selected is a multi-select listbox.
  */
 export function Root(props: ListBoxProps) {
-  const update = useForceUpdate()
-  const store = useMemo(() => new ListBoxStore({ ...props, update }), [])
+  const store = useComponentStore(ListBoxStore, props, STORE_KEYS)
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -37,12 +38,8 @@ export function Root(props: ListBoxProps) {
     props.onKeyDown && props.onKeyDown(event)
   }
 
-  useEffect(() => {
-    StoreUtils.updateKeys(store, props, ['onSelectListItem', 'selectMode', 'selectedListItemIndexes'], update)
-  }, [props.onSelectListItem, props.selectMode, props.selectedListItemIndexes])
-
   return (
-    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} style={{ position: 'relative', ...props.style }}>
       {props.children({
         collapsable: props.collapsable,
         deleteListItemRef: store.deleteListItemRef,
@@ -150,7 +147,7 @@ export function ListItem(props: ListBoxListItemProps) {
       onMouseDown={onMouseDown}
       ref={ref}
       role='option'
-      style={{ ...props.style, cursor: 'pointer' }}
+      style={{ cursor: 'pointer', ...props.style }}
     />
   )
 }

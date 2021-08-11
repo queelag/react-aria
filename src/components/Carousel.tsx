@@ -1,6 +1,6 @@
-import { ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, MouseEvent, useEffect, useMemo } from 'react'
+import { ObjectUtils } from '@queelag/core'
+import { COMPONENT_STORE_KEYS, useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, MouseEvent, useEffect } from 'react'
 import { CarouselLive, ComponentName } from '../definitions/enums'
 import {
   CarouselButtonLiveProps,
@@ -28,12 +28,20 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof CarouselChildrenProps)[] = [
   'slidesID'
 ]
 
+const STORE_KEYS: (keyof CarouselProps & keyof CarouselStore)[] = [
+  ...COMPONENT_STORE_KEYS,
+  'activeSlideIndex',
+  'automaticRotationDuration',
+  'live',
+  'onChangeActiveSlideIndex',
+  'rotationMode'
+]
+
 /**
  * A carousel presents a set of items, referred to as slides, by sequentially displaying a subset of one or more slides. Typically, one slide is displayed at a time, and users can activate a next or previous slide control that hides the current slide and "rotates" the next or previous slide into view. In some implementations, rotation automatically starts when the page loads, and it may also automatically stop once all the slides have been displayed. While a slide may contain any type of content, image carousels where each slide contains nothing more than a single image are common.
  */
 export function Root(props: CarouselProps) {
-  const update = useForceUpdate()
-  const store = useMemo(() => new CarouselStore({ ...props, update }), [])
+  const store = useComponentStore(CarouselStore, props, STORE_KEYS, 'section')
   const slidesID = useID(ComponentName.CAROUSEL_SLIDES)
 
   const onBlur = (event: FocusEvent<HTMLDivElement>) => {
@@ -55,11 +63,6 @@ export function Root(props: CarouselProps) {
     store.handleBlurEvent()
     props.onMouseLeave && props.onMouseLeave(event)
   }
-
-  useEffect(() => {
-    StoreUtils.shouldUpdateKey(store, 'live', props.live) && store.setLive(props.live)
-    StoreUtils.updateKeys(store, props, ['activeSlideIndex', 'automaticRotationDuration', 'onChangeActiveSlideIndex', 'rotationMode'], update)
-  }, [props.activeSlideIndex, props.automaticRotationDuration, props.live, props.onChangeActiveSlideIndex, props.rotationMode])
 
   useEffect(() => store.disableAutomaticRotation, [])
 

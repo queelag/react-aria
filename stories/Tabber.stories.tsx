@@ -63,7 +63,7 @@ const Template: Story<TabberProps> = (args: TabberProps) => (
 
 export const Tabber: Story<TabberProps> = Template.bind({})
 Tabber.args = {
-  size: items.length
+  listItemsLength: items.length
 }
 
 export default {

@@ -24,6 +24,7 @@ export {
   DisclosureStatus,
   Key,
   ListBoxSelectMode,
+  MenuPopperReferenceElement,
   SliderMode,
   SliderOrientation,
   TabberActivation

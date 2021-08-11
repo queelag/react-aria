@@ -1,6 +1,6 @@
-import { Logger, ObjectUtils, StoreUtils } from '@queelag/core'
-import { useForceUpdate, useID, useSafeRef } from '@queelag/react-core'
-import React, { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect, useMemo } from 'react'
+import { Logger, ObjectUtils } from '@queelag/core'
+import { COMPONENT_STORE_KEYS, useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import React, { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import {
@@ -41,12 +41,13 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
   'setSelectedListBoxItemIndex'
 ]
 
+const STORE_KEYS: (keyof ComboBoxProps & keyof ComboBoxStore)[] = [...COMPONENT_STORE_KEYS, 'onCollapse', 'onSelectListBoxItem', 'selectedListBoxItemIndexes']
+
 /**
  * A combobox is an input widget with an associated popup that enables users to select a value for the combobox from a collection of possible values. In some implementations, the popup presents allowed values, while in other implementations, the popup presents suggested values, and users may either select one of the suggestions or type a value.
  */
 export function Root(props: ComboBoxProps) {
-  const update = useForceUpdate()
-  const store = useMemo(() => new ComboBoxStore({ ...props, update }), [])
+  const store = useComponentStore(ComboBoxStore, props, STORE_KEYS)
   const popper = usePopper(store.groupRef.current, store.listBoxRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -55,16 +56,12 @@ export function Root(props: ComboBoxProps) {
   }
 
   useEffect(() => {
-    StoreUtils.updateKeys(store, props, ['onCollapse', 'onSelectListBoxItem', 'selectedListBoxItemIndexes'], update)
-  }, [props.onCollapse, props.onSelectListBoxItem, props.selectedListBoxItemIndexes])
-
-  useEffect(() => {
     store.listBoxRef.current.scrollTo({ behavior: 'smooth', top: store.focusedListBoxItemRef.current.offsetTop })
     Logger.debug(store.id, 'useEffect', 'The focused listbox item has been scrolled into view.')
   }, [store.listBoxRef.current])
 
   return (
-    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} style={{ ...props.style, position: 'relative' }}>
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} style={{ position: 'relative', ...props.style }}>
       {props.children({
         autocomplete: props.autocomplete,
         deleteListBoxItemRef: store.deleteListBoxItemRef,
@@ -211,7 +208,7 @@ export function ListBoxItem(props: ComboBoxListBoxItemProps) {
       onMouseDown={onMouseDown}
       ref={ref}
       role='option'
-      style={{ ...props.style, cursor: 'pointer' }}
+      style={{ cursor: 'pointer', ...props.style }}
     />
   )
 }

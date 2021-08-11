@@ -109,6 +109,11 @@ export enum Key {
   TAB = 'Tab'
 }
 
+export enum MenuPopperReferenceElement {
+  ROOT = 'ROOT',
+  ITEM = 'ITEM'
+}
+
 export enum SliderMode {
   DUAL_THUMB = 'DUAL_THUMB',
   SINGLE_THUMB = 'SINGLE_THUMB'

@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useForceUpdate, useID } from '@queelag/react-core'
-import React, { Fragment, MouseEvent, useEffect, useMemo } from 'react'
+import { useComponentStore, useID } from '@queelag/react-core'
+import React, { Fragment, MouseEvent, useEffect } from 'react'
 import { ComponentName } from '../definitions/enums'
 import {
   DisclosureProps,
@@ -12,7 +12,7 @@ import {
 } from '../definitions/props'
 import DisclosureSectionStore from '../stores/disclosure.section.store'
 
-const DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS: (keyof DisclosureSectionChildrenProps)[] = ['expanded', 'panelID', 'setExpanded']
+const SECTION_CHILDREN_PROPS_KEYS: (keyof DisclosureSectionChildrenProps)[] = ['expanded', 'panelID', 'setExpanded']
 
 /**
  * A disclosure is a button that controls visibility of a section of content. When the controlled content is hidden, it is often styled as a typical push button with a right-pointing arrow or triangle to hint that activating the button will display additional content. When the content is visible, the arrow or triangle typically points down.
@@ -24,8 +24,7 @@ export function Root(props: DisclosureProps) {
 }
 
 export function Section(props: DisclosureSectionProps) {
-  const update = useForceUpdate()
-  const store = useMemo(() => new DisclosureSectionStore({ ...props, update }), [])
+  const store = useComponentStore(DisclosureSectionStore, props)
 
   useEffect(() => {
     props.expanded && store.setExpanded(true)
@@ -48,18 +47,12 @@ export function SectionHeaderButton(props: DisclosureSectionHeaderButtonProps) {
   }
 
   return (
-    <button
-      {...ObjectUtils.omit(props, DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)}
-      aria-controls={props.panelID}
-      aria-expanded={props.expanded}
-      id={id}
-      onClick={onClick}
-    />
+    <button {...ObjectUtils.omit(props, SECTION_CHILDREN_PROPS_KEYS)} aria-controls={props.panelID} aria-expanded={props.expanded} id={id} onClick={onClick} />
   )
 }
 
 export function SectionPanel(props: DisclosureSectionPanelProps) {
-  return <dd {...ObjectUtils.omit(props, DISCLOSURE_SECTION_CHILDREN_PROPS_KEYS)} id={props.panelID} />
+  return <dd {...ObjectUtils.omit(props, SECTION_CHILDREN_PROPS_KEYS)} id={props.panelID} />
 }
 
 export const AriaDisclosure = {

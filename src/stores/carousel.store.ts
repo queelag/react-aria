@@ -5,10 +5,11 @@ import { CarouselLive, CarouselRotationMode, ComponentName } from '../definition
 import { CarouselProps } from '../definitions/props'
 
 class CarouselStore extends ComponentStore<HTMLElement> {
+  _live: CarouselLive = CarouselLive.OFF
+
   activeSlideIndex: number
   automaticRotationDuration: number
   automaticRotationInterval: number
-  live: CarouselLive
   liveTemporary?: CarouselLive
   mouseEntered: boolean
   rotationMode: CarouselRotationMode
@@ -67,10 +68,6 @@ class CarouselStore extends ComponentStore<HTMLElement> {
 
   setLive = (live: CarouselLive): void => {
     this.live = live
-    Logger.debug(this.id, 'setLive', `The live has been set to ${live}.`)
-
-    this.toggleAutomaticRotation()
-    this.update()
   }
 
   setSlideElementRef = (index: number, ref: MutableRefObject<HTMLDivElement>): void => {
@@ -162,12 +159,24 @@ class CarouselStore extends ComponentStore<HTMLElement> {
     return this.activeSlideIndex === index
   }
 
+  get live(): CarouselLive {
+    return this._live
+  }
+
   get isLiveOff(): boolean {
     return this.live === CarouselLive.OFF
   }
 
   get isRotationModeInfinite(): boolean {
     return this.rotationMode === CarouselRotationMode.INFINITE
+  }
+
+  set live(live: CarouselLive) {
+    this._live = live
+    Logger.debug(this.id, 'setLive', `The live has been set to ${live}.`)
+
+    this.toggleAutomaticRotation()
+    this.update()
   }
 }
 

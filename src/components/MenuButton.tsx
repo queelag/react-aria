@@ -21,8 +21,8 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
   'popper',
   'setButtonRef',
   'setExpanded',
-  'setListItemAnchorRef',
-  'setListRef'
+  'setListRef',
+  'setListItemAnchorRef'
 ]
 
 /**

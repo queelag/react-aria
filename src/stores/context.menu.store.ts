@@ -2,6 +2,7 @@ import { ID, IDUtils, Logger } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
+import { ContextMenuProps } from '../definitions/props'
 
 class ContextMenuStore extends ComponentStore<HTMLDivElement> {
   triggerID: ID
@@ -11,7 +12,7 @@ class ContextMenuStore extends ComponentStore<HTMLDivElement> {
   listRef: MutableRefObject<HTMLUListElement>
   listItemAnchorsRef: Map<number, MutableRefObject<HTMLAnchorElement>>
 
-  constructor(props: ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: ContextMenuProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.CONTEXT_MENU, props)
 
     this.triggerID = IDUtils.prefixed(ComponentName.CONTEXT_MENU_TRIGGER)

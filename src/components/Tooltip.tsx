@@ -17,12 +17,13 @@ const TOOLTIP_CHILDREN_PROPS_KEYS: (keyof TooltipChildrenProps)[] = [
   'setVisible',
   'visible'
 ]
+const STORE_KEYS: (keyof TooltipProps & keyof TooltipStore)[] = ['hideDelay']
 
 /**
  * A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it. It typically appears after a small delay and disappears when Escape is pressed or on mouse out.
  */
 export function Root(props: TooltipProps) {
-  const store = useComponentStore(TooltipStore, props)
+  const store = useComponentStore(TooltipStore, props, STORE_KEYS)
   const popper = usePopper(store.triggerRef.current, store.elementRef.current, props.popperOptions)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {

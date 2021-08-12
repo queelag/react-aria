@@ -1,12 +1,12 @@
 import { ObjectUtils } from '@queelag/core'
-import { COMPONENT_STORE_KEYS, useComponentStore, useID } from '@queelag/react-core'
+import { useComponentStore, useID } from '@queelag/react-core'
 import React, { KeyboardEvent, MouseEvent, TouchEvent, useEffect } from 'react'
 import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
 import { SliderThumbIndex } from '../definitions/types'
 import SliderStore from '../stores/slider.store'
 
-const ROOT_PROPS_KEYS: (keyof SliderProps)[] = ['maximum', 'minimum', 'onChangeValue', 'step', 'value']
+const ROOT_PROPS_KEYS: (keyof SliderProps)[] = ['label', 'maximum', 'minimum', 'mode', 'onChangeValue', 'orientation', 'step', 'value']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
   'handleKeyboardInteractions',
   'maximum',
@@ -19,8 +19,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
   'percentual',
   'value'
 ]
-
-const STORE_KEYS: (keyof SliderProps & keyof SliderStore)[] = [...COMPONENT_STORE_KEYS, 'maximum', 'minimum', 'mode', 'onChangeValue', 'orientation', 'step']
+const STORE_KEYS: (keyof SliderProps & keyof SliderStore)[] = ['maximum', 'minimum', 'mode', 'onChangeValue', 'orientation', 'step']
 
 /**
  * A slider is an input where the user selects a value from within a given range. Sliders typically have a slider thumb that can be moved along a bar or track to change the value of the slider.

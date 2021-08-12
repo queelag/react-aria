@@ -2,6 +2,7 @@ import { ID, IDUtils, Logger } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
+import { MenuButtonProps } from '../definitions/props'
 
 class MenuButtonStore extends ComponentStore<HTMLDivElement> {
   buttonID: ID
@@ -11,7 +12,7 @@ class MenuButtonStore extends ComponentStore<HTMLDivElement> {
   listRef: MutableRefObject<HTMLUListElement>
   listItemAnchorsRef: Map<number, MutableRefObject<HTMLAnchorElement>>
 
-  constructor(props: ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: MenuButtonProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.MENU_BUTTON, props)
 
     this.buttonID = IDUtils.prefixed(ComponentName.MENU_BUTTON_BUTTON)

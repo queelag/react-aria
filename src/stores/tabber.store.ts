@@ -137,6 +137,10 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
   }
 
   set listItemsLength(listItemsLength: number) {
+    if (!this.panelIDs) {
+      this.panelIDs = []
+    }
+
     for (let i = 0; i < listItemsLength; i++) {
       this.listItemIDs[i] = IDUtils.prefixed(ComponentName.TABBER_LIST_ITEM)
       this.panelIDs[i] = IDUtils.prefixed(ComponentName.TABBER_PANEL)

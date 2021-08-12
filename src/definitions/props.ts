@@ -5,11 +5,11 @@ import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, MenuPopperRefere
 import { PopperData, PopperOptions } from './interfaces'
 import { SliderPercentual, SliderThumbIndex, SliderValue } from './types'
 
-export type AccordionProps = {
+export interface AccordionProps extends Omit<HTMLDivProps, 'children'> {
   children: (props: AccordionChildrenProps) => ReactNode
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type AccordionChildrenProps = {
+export interface AccordionChildrenProps {
   /**
    * The expandedSections setter which sets every value except from the index to false.
    */
@@ -24,7 +24,7 @@ export type AccordionChildrenProps = {
   setSectionHeaderRef: (ref: MutableRefObject<HTMLButtonElement>, id: ID) => void
 }
 
-export type AccordionSectionProps = {
+export interface AccordionSectionProps extends Omit<HTMLDivProps, 'children'>, AccordionChildrenProps {
   children: (props: AccordionSectionChildrenProps) => ReactNode
   /**
    * Setting this to false will disable the collapse of an expanded section
@@ -34,10 +34,9 @@ export type AccordionSectionProps = {
    * Setting this to true will automatically open the section on mount.
    */
   isExpanded?: boolean
-} & AccordionChildrenProps &
-  Omit<HTMLDivProps, 'children'>
+}
 
-export type AccordionSectionChildrenProps = {
+export interface AccordionSectionChildrenProps {
   /**
    * The ID of the content element.
    */
@@ -60,28 +59,28 @@ export type AccordionSectionChildrenProps = {
   setHeaderRef: (ref: MutableRefObject<HTMLButtonElement>) => void
 }
 
-export type AccordionSectionPanelProps = AccordionSectionChildrenProps & Omit<HTMLDivProps, 'aria-labelledby' | 'id' | 'role'>
-export type AccordionSectionHeaderProps = AccordionSectionChildrenProps & Omit<HTMLButtonProps, 'aria-controls' | 'aria-expanded' | 'id' | 'type'>
+export interface AccordionSectionPanelProps extends Omit<HTMLDivProps, 'aria-labelledby' | 'id' | 'role'>, AccordionSectionChildrenProps {}
+export interface AccordionSectionHeaderProps extends Omit<HTMLButtonProps, 'aria-controls' | 'aria-expanded' | 'id' | 'type'>, AccordionSectionChildrenProps {}
 
-export type AlertProps = HTMLDivProps
+export interface AlertProps extends HTMLDivProps {}
 
-export type AlertDialogChildrenProps = DialogChildrenProps
-export type AlertDialogProps = DialogProps
-export type AlertDialogDescriptionProps = DialogDescriptionProps
-export type AlertDialogTitleProps = DialogTitleProps
+export interface AlertDialogChildrenProps extends DialogChildrenProps {}
+export interface AlertDialogProps extends DialogProps {}
+export interface AlertDialogDescriptionProps extends DialogDescriptionProps {}
+export interface AlertDialogTitleProps extends DialogTitleProps {}
 
-export type BreadcrumbProps = HTMLElementProps
-export type BreadcrumbListProps = HTMLOListProps
-export type BreadcrumbListItemProps = HTMLLIProps
+export interface BreadcrumbProps extends HTMLElementProps {}
+export interface BreadcrumbListProps extends HTMLOListProps {}
+export interface BreadcrumbListItemProps extends HTMLLIProps {}
 
-export type BreadcrumbListItemLinkProps = {
+export interface BreadcrumbListItemLinkProps extends HTMLAnchorProps {
   /**
    * The isCurrent boolean determines which link is the current one.
    */
   isCurrent: boolean
-} & HTMLAnchorProps
+}
 
-export type CarouselProps = {
+export interface CarouselProps extends Omit<HTMLElementProps, 'children'> {
   /**
    * The active slide index determines the slide that is currently visible, can also be used to set a starting slide.
    */
@@ -110,9 +109,9 @@ export type CarouselProps = {
    * Setting it to INFINITE will make it overflow, going to the first slide if trying to go next while at the last slide and going to the last slide if trying to go back while at the first slide.
    */
   rotationMode?: CarouselRotationMode
-} & Omit<HTMLElementProps, 'children'>
+}
 
-export type CarouselChildrenProps = {
+export interface CarouselChildrenProps {
   /**
    * The active slide index determines the slide that is currently visible, can also be used to set a starting slide.
    */
@@ -162,28 +161,27 @@ export type CarouselChildrenProps = {
   slidesID: ID
 }
 
-export type CarouselButtonLiveProps = CarouselChildrenProps & HTMLButtonProps
-export type CarouselButtonNextProps = CarouselChildrenProps & HTMLButtonProps
-export type CarouselButtonPreviousProps = CarouselChildrenProps & HTMLButtonProps
+export interface CarouselButtonLiveProps extends HTMLButtonProps, CarouselChildrenProps {}
+export interface CarouselButtonNextProps extends HTMLButtonProps, CarouselChildrenProps {}
+export interface CarouselButtonPreviousProps extends HTMLButtonProps, CarouselChildrenProps {}
 
-export type CarouselSlideProps = {
+export interface CarouselSlideProps extends HTMLDivProps, CarouselChildrenProps {
   /**
    * The index of this slide, necessary to handle the visibility and to build the internal map of slides.
    */
   index: number
-} & CarouselChildrenProps &
-  HTMLDivProps
+}
 
-export type CarouselSlidesProps = CarouselChildrenProps & Omit<HTMLDivProps, 'id'>
+export interface CarouselSlidesProps extends Omit<HTMLDivProps, 'id'>, CarouselChildrenProps {}
 
-export type CheckBoxProps = {
+export interface CheckBoxProps extends HTMLDivProps {
   /**
    * Determines whether the CheckBox is checked or not.
    */
   checked: boolean
-} & HTMLDivProps
+}
 
-export type ComboBoxProps = {
+export interface ComboBoxProps extends Omit<HTMLDivProps, 'children'> {
   /**
    * Required if your ComboBox implementation has some kind of autocomplete logic.
    */
@@ -207,9 +205,9 @@ export type ComboBoxProps = {
    */
   popperOptions?: PopperOptions<unknown>
   selectedListBoxItemIndexes?: number[]
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type ComboBoxChildrenProps = {
+export interface ComboBoxChildrenProps extends Pick<ComboBoxProps, 'autocomplete' | 'listBoxLabel'> {
   /**
    * The method which takes care of deleting the unmounted ListBoxItem components from the internal map.
    */
@@ -256,36 +254,31 @@ export type ComboBoxChildrenProps = {
    */
   setListBoxRef: (ref: MutableRefObject<HTMLUListElement>) => void
   setSelectedListBoxItemIndex: (index: number, selected: boolean) => void
-} & Pick<ComboBoxProps, 'autocomplete' | 'listBoxLabel'>
+}
 
-export type ComboBoxButtonProps = ComboBoxChildrenProps & HTMLButtonProps
-export type ComboBoxGroupProps = ComboBoxChildrenProps & HTMLDivProps
+export interface ComboBoxButtonProps extends HTMLButtonProps, ComboBoxChildrenProps {}
+export interface ComboBoxGroupProps extends HTMLDivProps, ComboBoxChildrenProps {}
 
-export type ComboBoxInputProps = ComboBoxChildrenProps & HTMLInputProps
+export interface ComboBoxInputProps extends HTMLInputProps, ComboBoxChildrenProps {}
 
-export type ComboBoxListBoxProps = ComboBoxChildrenProps & Omit<HTMLUListProps, 'id'>
+export interface ComboBoxListBoxProps extends Omit<HTMLUListProps, 'id'>, ComboBoxChildrenProps {}
 
-export type ComboBoxListBoxItemProps = {
+export interface ComboBoxListBoxItemProps extends HTMLLIProps, ComboBoxChildrenProps {
   /**
    * The index of the ListBoxItem element.
    */
   index: number
-} & ComboBoxChildrenProps &
-  HTMLLIProps
+}
 
-export type ContextMenuProps = {
+export interface ContextMenuProps extends Omit<HTMLDivProps, 'children'> {
   children: (props: ContextMenuChildrenProps) => ReactNode
   /**
    * The popper options.
    */
   popperOptions?: PopperOptions<any>
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type ContextMenuChildrenProps = {
-  /**
-   * The ID of the Trigger element.
-   */
-  triggerID: ID
+export interface ContextMenuChildrenProps {
   /**
    * The method which takes care of deleting the ref of the ListItemAnchor element when unmounted.
    */
@@ -319,26 +312,29 @@ export type ContextMenuChildrenProps = {
    */
   setTriggerRef: (ref: MutableRefObject<HTMLDivElement>) => void
   /**
+   * The ID of the Trigger element.
+   */
+  triggerID: ID
+  /**
    * The ref of the Trigger element.
    */
   triggerRef: MutableRefObject<HTMLDivElement>
 }
 
-export type ContextMenuBackdropProps = ContextMenuChildrenProps & Omit<HTMLDivProps, 'id'>
-export type ContextMenuListProps = ContextMenuChildrenProps & Omit<HTMLUListProps, 'id'>
-export type ContextMenuListItemProps = ContextMenuChildrenProps & HTMLLIProps
+export interface ContextMenuBackdropProps extends Omit<HTMLDivProps, 'id'>, ContextMenuChildrenProps {}
+export interface ContextMenuListProps extends Omit<HTMLUListProps, 'id'>, ContextMenuChildrenProps {}
+export interface ContextMenuListItemProps extends HTMLLIProps, ContextMenuChildrenProps {}
 
-export type ContextMenuListItemAnchorProps = {
+export interface ContextMenuListItemAnchorProps extends HTMLAnchorProps, ContextMenuChildrenProps {
   /**
    * The index of the ListItemAnchor element.
    */
   index: number
-} & ContextMenuChildrenProps &
-  HTMLAnchorProps
+}
 
-export type ContextMenuTriggerProps = ContextMenuChildrenProps & Omit<HTMLDivProps, 'id'>
+export interface ContextMenuTriggerProps extends Omit<HTMLDivProps, 'id'>, ContextMenuChildrenProps {}
 
-export type DialogProps = {
+export interface DialogProps extends Omit<HTMLDivProps, 'children'> {
   children: (props: DialogChildrenProps) => ReactNode
   /**
    * Required if your Dialog has a description.
@@ -352,9 +348,9 @@ export type DialogProps = {
    * The method which handles the closure of the dialog.
    */
   onClose: () => any
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type DialogChildrenProps = {
+export interface DialogChildrenProps {
   /**
    * The ID of the description element.
    */
@@ -365,17 +361,17 @@ export type DialogChildrenProps = {
   titleID: ID
 }
 
-export type DialogDescriptionProps = DialogChildrenProps & Omit<HTMLSpanProps, 'id'>
-export type DialogTitleProps = DialogChildrenProps & Omit<HTMLSpanProps, 'id'>
+export interface DialogDescriptionProps extends Omit<HTMLSpanProps, 'id'>, DialogChildrenProps {}
+export interface DialogTitleProps extends Omit<HTMLSpanProps, 'id'>, DialogChildrenProps {}
 
-export type DisclosureProps = HTMLDListProps
+export interface DisclosureProps extends HTMLDListProps {}
 
-export type DisclosureSectionProps = {
+export interface DisclosureSectionProps {
   children: (props: DisclosureSectionChildrenProps) => ReactFragment
   expanded?: boolean
 }
 
-export type DisclosureSectionChildrenProps = {
+export interface DisclosureSectionChildrenProps {
   /**
    * Indicates whether the DisclosureSection is expanded or collapsed.
    */
@@ -390,11 +386,11 @@ export type DisclosureSectionChildrenProps = {
   setExpanded: (expanded: boolean) => void
 }
 
-export type DisclosureSectionHeaderProps = HTMLElementProps
-export type DisclosureSectionHeaderButtonProps = DisclosureSectionChildrenProps & HTMLButtonProps
-export type DisclosureSectionPanelProps = DisclosureSectionChildrenProps & Omit<HTMLElementProps, 'id'>
+export interface DisclosureSectionHeaderProps extends HTMLElementProps {}
+export interface DisclosureSectionHeaderButtonProps extends HTMLButtonProps, DisclosureSectionChildrenProps {}
+export interface DisclosureSectionPanelProps extends Omit<HTMLElementProps, 'id'>, DisclosureSectionChildrenProps {}
 
-export type FocusTrapProps = {
+export interface FocusTrapProps extends Omit<HTMLDivProps, 'ref'> {
   /**
    * Setting this to true will automatically focus the first inside element inside the trap.
    */
@@ -403,9 +399,9 @@ export type FocusTrapProps = {
    * Setting this to true will automatically restore the focus to the element that lost it before being moved to the trap.
    */
   restoreFocus?: boolean
-} & Omit<HTMLDivProps, 'ref'>
+}
 
-export type ListBoxProps = {
+export interface ListBoxProps extends Omit<HTMLDivProps, 'children'> {
   children: (props: ListBoxChildrenProps) => ReactNode
   /**
    * Determines if the ListBox is collapsable or not, useful for creating Select components.
@@ -421,9 +417,9 @@ export type ListBoxProps = {
    */
   selectMode?: ListBoxSelectMode
   selectedListItemIndexes?: number[]
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type ListBoxChildrenProps = {
+export interface ListBoxChildrenProps extends Pick<ListBoxProps, 'collapsable' | 'selectMode'> {
   /**
    * The method which takes care of deleting the unmounted ListItem ref from the internal map.
    */
@@ -457,49 +453,48 @@ export type ListBoxChildrenProps = {
    */
   setExpanded: (expanded: boolean, id: ID, context: string) => void
   /**
-   * The method which sets the ref of a ListItem element.
+   * The method which sets the index of the focused ListItem element.
    */
-  setListItemRef: (index: number, ref: MutableRefObject<HTMLLIElement>) => void
+  setFocusedListItemIndex: (index: number) => void
   /**
    * The method which sets the ref of the List element.
    */
   setListRef: (ref: MutableRefObject<HTMLUListElement>) => void
   /**
-   * The method which sets the index of the focused ListItem element.
+   * The method which sets the ref of a ListItem element.
    */
-  setFocusedListItemIndex: (index: number) => void
+  setListItemRef: (index: number, ref: MutableRefObject<HTMLLIElement>) => void
   /**
    * The method which sets the index of the selected ListItem element.
    */
   setSelectedListItemIndex: (index: number, selected: boolean) => void
-} & Pick<ListBoxProps, 'collapsable' | 'selectMode'>
+}
 
-export type ListBoxButtonProps = ListBoxChildrenProps & HTMLButtonProps
-export type ListBoxListProps = ListBoxChildrenProps & HTMLUListProps
+export interface ListBoxButtonProps extends HTMLButtonProps, ListBoxChildrenProps {}
+export interface ListBoxListProps extends HTMLUListProps, ListBoxChildrenProps {}
 
-export type ListBoxListItemProps = {
+export interface ListBoxListItemProps extends HTMLLIProps, ListBoxChildrenProps {
   /**
    * The index of the ListItem element.
    */
   index: number
-} & ListBoxChildrenProps &
-  HTMLLIProps
+}
 
-export type HTMLAnchorProps = React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
-export type HTMLButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
-export type HTMLDivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-export type HTMLDListProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDListElement>, HTMLDListElement>
-export type HTMLElementProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
-export type HTMLImageProps = React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
-export type HTMLInputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
-export type HTMLLabelProps = React.DetailedHTMLProps<React.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>
-export type HTMLLIProps = React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>
-export type HTMLFormProps = React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>
-export type HTMLOListProps = React.DetailedHTMLProps<React.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement>
-export type HTMLSpanProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
-export type HTMLUListProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>
+export interface HTMLAnchorProps extends React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> {}
+export interface HTMLButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {}
+export interface HTMLDivProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
+export interface HTMLDListProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDListElement>, HTMLDListElement> {}
+export interface HTMLElementProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {}
+export interface HTMLImageProps extends React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {}
+export interface HTMLInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {}
+export interface HTMLLabelProps extends React.DetailedHTMLProps<React.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement> {}
+export interface HTMLLIProps extends React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement> {}
+export interface HTMLFormProps extends React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> {}
+export interface HTMLOListProps extends React.DetailedHTMLProps<React.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement> {}
+export interface HTMLSpanProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {}
+export interface HTMLUListProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement> {}
 
-export type MenuProps = {
+export interface MenuProps extends Omit<HTMLUListProps, 'children'> {
   /**
    * Determines the behavior of the Menu, setting this to true will open the MenuItems on hover while setting it to false will require a click.
    */
@@ -514,9 +509,9 @@ export type MenuProps = {
    */
   label: string
   popperReferenceElement?: MenuPopperReferenceElement
-} & Omit<HTMLUListProps, 'children'>
+}
 
-export type MenuChildrenProps = {
+export interface MenuChildrenProps extends Pick<MenuProps, 'autoOpen' | 'popperReferenceElement'> {
   /**
    * The method which takes care of deleting the ref of the ItemAnchor element when unmounted.
    */
@@ -530,13 +525,13 @@ export type MenuChildrenProps = {
    */
   deleteItemMenuItemAnchorRef: (parentIndex: number, index: number) => void
   /**
-   * The method which finds the ref of the ItemMenu through its ID.
-   */
-  findItemMenuRef: (id: ID) => MutableRefObject<HTMLUListElement>
-  /**
    * The index of the expanded Item element.
    */
   expandedItemIndex: number
+  /**
+   * The method which finds the ref of the ItemMenu through its ID.
+   */
+  findItemMenuRef: (id: ID) => MutableRefObject<HTMLUListElement>
   /**
    * The method which focuses the ItemAnchor element.
    */
@@ -577,9 +572,9 @@ export type MenuChildrenProps = {
    * The method which sets the ref of the ItemMenuItemAnchor element.
    */
   setItemMenuItemAnchorRef: (parentIndex: number, index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
-} & Pick<MenuProps, 'autoOpen' | 'popperReferenceElement'>
+}
 
-export type MenuItemProps = {
+export interface MenuItemProps extends Omit<HTMLLIProps, 'children'>, MenuChildrenProps {
   children: (props: MenuItemChildrenProps) => ReactNode
   /**
    * The index of the Item element.
@@ -589,10 +584,21 @@ export type MenuItemProps = {
    * The popper options.
    */
   popperOptions?: PopperOptions<any>
-} & MenuChildrenProps &
-  Omit<HTMLLIProps, 'children'>
+}
 
-export type MenuItemChildrenProps = {
+export interface MenuItemChildrenProps
+  extends Pick<
+    MenuChildrenProps,
+    | 'autoOpen'
+    | 'deleteItemAnchorRef'
+    | 'deleteItemMenuRef'
+    | 'expandedItemIndex'
+    | 'focusItemAnchor'
+    | 'focusedItemIndex'
+    | 'setExpandedItemIndex'
+    | 'setItemAnchorRef'
+    | 'setItemMenuRef'
+  > {
   /**
    * The method which takes care of deleting the ref of the ItemMenuItemAnchor element when unmounted.
    */
@@ -617,41 +623,29 @@ export type MenuItemChildrenProps = {
    * The method which sets the ref of the ItemMenuItemAnchor element.
    */
   setItemMenuItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
-} & Pick<
-  MenuChildrenProps,
-  | 'autoOpen'
-  | 'deleteItemAnchorRef'
-  | 'deleteItemMenuRef'
-  | 'expandedItemIndex'
-  | 'focusItemAnchor'
-  | 'focusedItemIndex'
-  | 'setExpandedItemIndex'
-  | 'setItemAnchorRef'
-  | 'setItemMenuRef'
->
+}
 
-export type MenuItemAnchorProps = {} & MenuItemChildrenProps & HTMLAnchorProps
-export type MenuItemMenuProps = {} & MenuItemChildrenProps & HTMLUListProps
+export interface MenuItemAnchorProps extends MenuItemChildrenProps, HTMLAnchorProps {}
+export interface MenuItemMenuProps extends MenuItemChildrenProps, HTMLUListProps {}
 
-export type MenuItemMenuItemAnchorProps = {
+export interface MenuItemMenuItemAnchorProps extends HTMLAnchorProps, MenuItemChildrenProps {
   /**
    * The index of the ItemMenuItemAnchor element.
    */
   index: number
-} & MenuItemChildrenProps &
-  HTMLAnchorProps
+}
 
-export type MenuItemMenuItemProps = MenuItemChildrenProps & HTMLLIProps
+export interface MenuItemMenuItemProps extends HTMLLIProps, MenuItemChildrenProps {}
 
-export type MenuButtonProps = {
+export interface MenuButtonProps extends Omit<HTMLDivProps, 'children'> {
   children: (props: MenuButtonChildrenProps) => ReactNode
   /**
    * The popper options.
    */
   popperOptions?: PopperOptions<any>
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type MenuButtonChildrenProps = {
+export interface MenuButtonChildrenProps {
   /**
    * The ID of the Button element.
    */
@@ -690,19 +684,18 @@ export type MenuButtonChildrenProps = {
   setListItemAnchorRef: (index: number, ref: MutableRefObject<HTMLAnchorElement>) => void
 }
 
-export type MenuButtonButtonProps = MenuButtonChildrenProps & Omit<HTMLButtonProps, 'id'>
-export type MenuButtonListProps = MenuButtonChildrenProps & Omit<HTMLUListProps, 'id'>
-export type MenuButtonListItemProps = MenuButtonChildrenProps & HTMLLIProps
+export interface MenuButtonButtonProps extends Omit<HTMLButtonProps, 'id'>, MenuButtonChildrenProps {}
+export interface MenuButtonListProps extends Omit<HTMLUListProps, 'id'>, MenuButtonChildrenProps {}
+export interface MenuButtonListItemProps extends HTMLLIProps, MenuButtonChildrenProps {}
 
-export type MenuButtonListItemAnchorProps = {
+export interface MenuButtonListItemAnchorProps extends HTMLAnchorProps, MenuButtonChildrenProps {
   /**
    * The index of the ListItemAnchor element.
    */
   index: number
-} & MenuButtonChildrenProps &
-  HTMLAnchorProps
+}
 
-export type MeterProps = {
+export interface MeterProps extends Omit<HTMLDivProps, 'children'> {
   children: (props: MeterChildrenProps) => ReactNode
   /**
    * The maximum value that the Meter can have, the value will be automatically lower or equal to this.
@@ -716,9 +709,9 @@ export type MeterProps = {
    * The current value of the Meter.
    */
   value: number
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type MeterChildrenProps = {
+export interface MeterChildrenProps {
   /**
    * The percentual of the current value limited by maximum and minimum.
    */
@@ -729,13 +722,13 @@ export type MeterChildrenProps = {
   value: number
 }
 
-export type RadioGroupProps = {
+export interface RadioGroupProps extends Omit<HTMLDivProps, 'children'> {
   checkedItemIndex?: number
   children: (props: RadioGroupChildrenProps) => ReactNode
   onCheckItem?: (index: number) => any
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type RadioGroupChildrenProps = {
+export interface RadioGroupChildrenProps {
   /**
    * The index of the checked Item element.
    */
@@ -758,15 +751,14 @@ export type RadioGroupChildrenProps = {
   setCheckedItemIndex: (index: number) => void
 }
 
-export type RadioGroupItemProps = {
+export interface RadioGroupItemProps extends HTMLDivProps, RadioGroupChildrenProps {
   /**
    * The index of the Item element.
    */
   index: number
-} & RadioGroupChildrenProps &
-  HTMLDivProps
+}
 
-export type SliderProps = {
+export interface SliderProps extends Omit<HTMLDivProps, 'children'> {
   children: (props: SliderChildrenProps) => ReactNode
   /**
    * The label of the Slider.
@@ -788,14 +780,14 @@ export type SliderProps = {
    * The current value of the Slider.
    */
   value?: SliderValue
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type SliderChildrenProps = {
+export interface SliderChildrenProps extends Pick<SliderProps, 'maximum' | 'minimum' | 'orientation'> {
   handleKeyboardInteractions: (index: SliderThumbIndex, event: KeyboardEvent<HTMLDivElement>) => void
   onThumbMouseDown: (index: SliderThumbIndex) => void
-  onThumbTouchStart: () => void
-  onThumbTouchMove: (index: SliderThumbIndex, event: TouchEvent<HTMLDivElement>) => void
   onThumbTouchEnd: (index: SliderThumbIndex) => void
+  onThumbTouchMove: (index: SliderThumbIndex, event: TouchEvent<HTMLDivElement>) => void
+  onThumbTouchStart: () => void
   /**
    * The percentual value of the current value based on the minimum and maximum values.
    */
@@ -804,23 +796,22 @@ export type SliderChildrenProps = {
    * The current value limited by maximum and minimum.
    */
   value: SliderValue
-} & Pick<SliderProps, 'maximum' | 'minimum' | 'orientation'>
+}
 
-export type SliderThumbProps = {
+export interface SliderThumbProps extends HTMLDivProps, SliderChildrenProps {
   /**
    * Determines whether the element is focusable or not.
    */
   focusable?: boolean
-} & SliderChildrenProps &
-  HTMLDivProps
+}
 
-export type TabberProps = {
+export interface TabberProps extends Omit<HTMLDivProps, 'children'> {
   activation?: TabberActivation
   children: (props: TabberChildrenProps) => ReactNode
   listItemsLength: number
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type TabberChildrenProps = {
+export interface TabberChildrenProps {
   handleKeyboardEvents: (event: KeyboardEvent<HTMLDivElement>) => void
   isTabSelected: (index: number) => boolean
   listItemIDs: ID[]
@@ -830,29 +821,26 @@ export type TabberChildrenProps = {
   setSelectedListItemIndex: (index: number) => void
 }
 
-export type TabberListProps = {
+export interface TabberListProps extends HTMLDivProps, TabberChildrenProps {
   label: string
-} & TabberChildrenProps &
-  HTMLDivProps
+}
 
-export type TabberListItemProps = {
+export interface TabberListItemProps extends HTMLButtonProps, TabberChildrenProps {
   index: number
-} & TabberChildrenProps &
-  HTMLButtonProps
+}
 
-export type TabberPanelProps = {
+export interface TabberPanelProps extends HTMLDivProps, TabberChildrenProps {
   index: number
-} & TabberChildrenProps &
-  HTMLDivProps
+}
 
-export type ToggleButtonProps = {
+export interface ToggleButtonProps extends HTMLButtonProps {
   /**
    * Determines whether the Button is toggled or not.
    */
   toggled: boolean
-} & HTMLButtonProps
+}
 
-export type TooltipProps = {
+export interface TooltipProps extends Omit<HTMLDivProps, 'children'> {
   children: (props: TooltipChildrenProps) => ReactNode
   /**
    * The hide events are debounced with a delay to allow the user to move the mouse around without instantly closing the Tooltip.
@@ -862,9 +850,9 @@ export type TooltipProps = {
    * The popper options.
    */
   popperOptions?: PopperOptions<any>
-} & Omit<HTMLDivProps, 'children'>
+}
 
-export type TooltipChildrenProps = {
+export interface TooltipChildrenProps extends Pick<TooltipProps, 'hideDelay'> {
   /**
    * The ID of the Element element.
    */
@@ -893,7 +881,7 @@ export type TooltipChildrenProps = {
    * Indicates whether the Tooltip is visible or hidden.
    */
   visible: boolean
-} & Pick<TooltipProps, 'hideDelay'>
+}
 
-export type TooltipElementProps = {} & TooltipChildrenProps & Omit<HTMLDivProps, 'id'>
-export type TooltipTriggerProps = {} & TooltipChildrenProps & HTMLDivProps
+export interface TooltipElementProps extends Omit<HTMLDivProps, 'id'>, TooltipChildrenProps {}
+export interface TooltipTriggerProps extends HTMLDivProps, TooltipChildrenProps {}

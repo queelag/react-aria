@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID } from '@queelag/react-core'
-import React, { Fragment, MouseEvent, useEffect } from 'react'
+import React, { Fragment, MouseEvent } from 'react'
 import { ComponentName } from '../definitions/enums'
 import {
   DisclosureProps,
@@ -13,6 +13,7 @@ import {
 import DisclosureSectionStore from '../stores/disclosure.section.store'
 
 const SECTION_CHILDREN_PROPS_KEYS: (keyof DisclosureSectionChildrenProps)[] = ['expanded', 'panelID', 'setExpanded']
+const SECTION_STORE_KEYS: (keyof DisclosureSectionProps & keyof DisclosureSectionStore)[] = ['expanded']
 
 /**
  * A disclosure is a button that controls visibility of a section of content. When the controlled content is hidden, it is often styled as a typical push button with a right-pointing arrow or triangle to hint that activating the button will display additional content. When the content is visible, the arrow or triangle typically points down.
@@ -24,12 +25,7 @@ export function Root(props: DisclosureProps) {
 }
 
 export function Section(props: DisclosureSectionProps) {
-  const store = useComponentStore(DisclosureSectionStore, props)
-
-  useEffect(() => {
-    props.expanded && store.setExpanded(true)
-  }, [])
-
+  const store = useComponentStore(DisclosureSectionStore, props, SECTION_STORE_KEYS)
   return <Fragment>{props.children({ expanded: store.expanded, panelID: store.panelID, setExpanded: store.setExpanded })}</Fragment>
 }
 

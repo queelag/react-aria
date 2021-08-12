@@ -1,5 +1,5 @@
 import { ID, Logger } from '@queelag/core'
-import { ComponentStore, ReactUtils } from '@queelag/react-core'
+import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, MenuPopperReferenceElement } from '../definitions/enums'
 import { MenuProps } from '../definitions/props'
@@ -14,13 +14,13 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
   itemsRef: Map<number, MutableRefObject<HTMLLIElement>>
   popperReferenceElement: MenuPopperReferenceElement
 
-  constructor(props: MenuProps) {
+  constructor(props: MenuProps & ComponentStoreProps<HTMLUListElement>) {
     super(ComponentName.MENU, props)
 
     this.expandedItemIndex = -1
     this.focusedItemIndex = 0
     this.itemAnchorsRef = new Map()
-    this.itemMenuHideDelay = 200
+    this.itemMenuHideDelay = props.itemMenuHideDelay || 200
     this.itemMenusRef = new Map()
     this.itemMenuItemAnchorsRef = new Map()
     this.itemsRef = new Map()

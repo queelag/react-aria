@@ -20,10 +20,10 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ContextMenuChildrenProps)[] = [
   'expanded',
   'listID',
   'popper',
-  'setTriggerRef',
   'setExpanded',
-  'setListItemAnchorRef',
   'setListRef',
+  'setListItemAnchorRef',
+  'setTriggerRef',
   'triggerID',
   'triggerRef'
 ]

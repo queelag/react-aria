@@ -1,10 +1,10 @@
 import { ObjectUtils } from '@queelag/core'
-import { COMPONENT_STORE_KEYS, useComponentStore, useSafeRef } from '@queelag/react-core'
+import { useComponentStore, useSafeRef } from '@queelag/react-core'
 import React, { KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { TabberChildrenProps, TabberListItemProps, TabberListProps, TabberPanelProps, TabberProps } from '../definitions/props'
 import TabberStore from '../stores/tabber.store'
 
-const ROOT_PROPS_KEYS: (keyof TabberProps)[] = ['listItemsLength']
+const ROOT_PROPS_KEYS: (keyof TabberProps)[] = ['activation', 'listItemsLength']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
   'handleKeyboardEvents',
   'isTabSelected',
@@ -14,8 +14,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
   'setListItemRef',
   'setSelectedListItemIndex'
 ]
-
-const STORE_KEYS: (keyof TabberProps & keyof TabberStore)[] = [...COMPONENT_STORE_KEYS, 'activation', 'listItemsLength']
+const STORE_KEYS: (keyof TabberProps & keyof TabberStore)[] = ['activation', 'listItemsLength']
 
 export function Root(props: TabberProps) {
   const store = useComponentStore(TabberStore, props, STORE_KEYS)

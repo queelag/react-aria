@@ -16,7 +16,6 @@ import {
 import MenuStore from '../stores/menu.store'
 
 const MENU_PROPS_KEYS: (keyof MenuProps)[] = ['autoOpen', 'itemMenuHideDelay', 'label', 'popperReferenceElement']
-
 const MENU_CHILDREN_PROPS_KEYS: (keyof MenuChildrenProps)[] = [
   'autoOpen',
   'deleteItemAnchorRef',
@@ -28,13 +27,13 @@ const MENU_CHILDREN_PROPS_KEYS: (keyof MenuChildrenProps)[] = [
   'focusedItemIndex',
   'isItemExpanded',
   'popper',
+  'rootRef',
   'setExpandedItemIndex',
   'setFocusedItemIndex',
   'setItemAnchorRef',
   'setItemMenuRef',
   'setItemMenuItemAnchorRef'
 ]
-
 const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
   'autoOpen',
   'deleteItemAnchorRef',
@@ -52,12 +51,13 @@ const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
   'setItemMenuRef',
   'setItemMenuItemAnchorRef'
 ]
+const STORE_KEYS: (keyof MenuProps & keyof MenuStore)[] = ['itemMenuHideDelay']
 
 /**
  * A menu is a widget that offers a list of choices to the user, such as a set of actions or functions. Menu widgets behave like native operating system menus, such as the menus that pull down from the menubars commonly found at the top of many desktop application windows.
  */
 export function Root(props: MenuProps) {
-  const store = useComponentStore(MenuStore, props)
+  const store = useComponentStore(MenuStore, props, STORE_KEYS, 'ul')
 
   const onBlur = (event: FocusEvent<HTMLUListElement>) => {
     Debounce.handle(store.id, () => store.setExpandedItemIndex(-1), store.itemMenuHideDelay)

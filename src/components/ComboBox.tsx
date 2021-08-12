@@ -1,5 +1,5 @@
 import { Logger, ObjectUtils } from '@queelag/core'
-import { COMPONENT_STORE_KEYS, useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
 import React, { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
@@ -40,8 +40,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ComboBoxChildrenProps)[] = [
   'setListBoxRef',
   'setSelectedListBoxItemIndex'
 ]
-
-const STORE_KEYS: (keyof ComboBoxProps & keyof ComboBoxStore)[] = [...COMPONENT_STORE_KEYS, 'onCollapse', 'onSelectListBoxItem', 'selectedListBoxItemIndexes']
+const STORE_KEYS: (keyof ComboBoxProps & keyof ComboBoxStore)[] = ['onCollapse', 'onSelectListBoxItem', 'selectedListBoxItemIndexes']
 
 /**
  * A combobox is an input widget with an associated popup that enables users to select a value for the combobox from a collection of possible values. In some implementations, the popup presents allowed values, while in other implementations, the popup presents suggested values, and users may either select one of the suggestions or type a value.

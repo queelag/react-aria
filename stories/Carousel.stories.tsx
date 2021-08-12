@@ -1,3 +1,4 @@
+import { ObjectUtils } from '@queelag/core'
 import { ReactUtils } from '@queelag/react-core'
 import { IconChevronLeft, IconChevronRight, IconPause, IconPlay } from '@queelag/react-feather-icons'
 import { Meta, Story } from '@storybook/react'
@@ -12,7 +13,7 @@ const StyledTemplate: Story<CarouselProps> = (args: CarouselProps) => {
   const slides = new Array(5).fill(0).map((v, k: number) => ({ alt: Chance().first(), id: Chance().guid(), src: require(`../assets/cats/${k}.jpg`) }))
 
   return (
-    <Component.Root {...args} className='relative w-64 h-64'>
+    <Component.Root {...ObjectUtils.omit(args, ['onChangeActiveSlideIndex'])} className='relative w-64 h-64' label={args.label}>
       {(props: CarouselChildrenProps) => (
         <Fragment>
           <Component.Slides {...props} className='relative inset-0 min-h-full overflow-hidden rounded-md'>

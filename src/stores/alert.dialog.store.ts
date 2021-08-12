@@ -2,12 +2,13 @@ import { ID, IDUtils, Logger } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
+import { AlertDialogProps } from '../definitions/props'
 
 class AlertDialogStore extends ComponentStore<HTMLDivElement> {
   descriptionElementID: ID
   titleElementID: ID
 
-  constructor(props: ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: AlertDialogProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.ALERT_DIALOG, props)
 
     this.descriptionElementID = IDUtils.prefixed(ComponentName.ALERT_DIALOG_DESCRIPTION)

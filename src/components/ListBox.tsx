@@ -1,5 +1,5 @@
 import { ObjectUtils } from '@queelag/core'
-import { COMPONENT_STORE_KEYS, useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName, ListBoxSelectMode } from '../definitions/enums'
@@ -19,12 +19,11 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
   'setButtonRef',
   'setExpanded',
   'setFocusedListItemIndex',
-  'setListItemRef',
   'setListRef',
+  'setListItemRef',
   'setSelectedListItemIndex'
 ]
-
-const STORE_KEYS: (keyof ListBoxProps & keyof ListBoxStore)[] = [...COMPONENT_STORE_KEYS, 'onSelectListItem', 'selectMode', 'selectedListItemIndexes']
+const STORE_KEYS: (keyof ListBoxProps & keyof ListBoxStore)[] = ['onSelectListItem', 'selectMode', 'selectedListItemIndexes']
 
 /**
  * A listbox widget presents a list of options and allows a user to select one or more of them. A listbox that allows a single option to be chosen is a single-select listbox; one that allows multiple options to be selected is a multi-select listbox.

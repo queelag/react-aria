@@ -2,12 +2,13 @@ import { ID, Logger } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
+import { AccordionProps } from '../definitions/props'
 
 class AccordionStore extends ComponentStore<HTMLDivElement> {
   expandedSections: Map<ID, boolean>
   sectionHeaderRefs: Map<ID, MutableRefObject<HTMLButtonElement>>
 
-  constructor(props: ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: AccordionProps & ComponentStoreProps<HTMLDivElement>) {
     super(ComponentName.ACCORDION, props)
 
     this.expandedSections = new Map()

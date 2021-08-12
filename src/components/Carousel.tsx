@@ -1,5 +1,5 @@
 import { ObjectUtils } from '@queelag/core'
-import { COMPONENT_STORE_KEYS, useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
 import React, { FocusEvent, MouseEvent, useEffect } from 'react'
 import { CarouselLive, ComponentName } from '../definitions/enums'
 import {
@@ -27,9 +27,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof CarouselChildrenProps)[] = [
   'slides',
   'slidesID'
 ]
-
 const STORE_KEYS: (keyof CarouselProps & keyof CarouselStore)[] = [
-  ...COMPONENT_STORE_KEYS,
   'activeSlideIndex',
   'automaticRotationDuration',
   'live',

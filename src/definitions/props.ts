@@ -722,6 +722,36 @@ export interface MeterChildrenProps {
   value: number
 }
 
+export interface PaginationProps extends Omit<HTMLElementProps, 'children'> {
+  activeListItemIndex?: number
+  children: (props: PaginationChildrenProps) => ReactNode
+  label: string
+  listItemsIndexOffset?: number
+  numberOfListItems: number
+  numberOfListItemsPerPage: number
+  onChangeActiveListItemIndex?: (active: number) => any
+}
+
+export interface PaginationChildrenProps {
+  canGoToNextListItem: boolean
+  canGoToPreviousListItem: boolean
+  isListItemActive: (index: number) => boolean
+  iterablePages: number[]
+  nextListItemIndex: number
+  previousListItemIndex: number
+  setActiveListItemIndex: (index: number) => void
+}
+
+export interface PaginationListProps extends HTMLUListProps {}
+export interface PaginationListItemProps extends HTMLLIProps {}
+
+export interface PaginationListItemLinkProps extends PaginationChildrenProps, HTMLAnchorProps {
+  index: number
+}
+
+export interface PaginationNextListItemLinkProps extends PaginationChildrenProps, HTMLAnchorProps {}
+export interface PaginationPreviousListItemLinkProps extends PaginationChildrenProps, HTMLAnchorProps {}
+
 export interface RadioGroupProps extends Omit<HTMLDivProps, 'children'> {
   checkedItemIndex?: number
   children: (props: RadioGroupChildrenProps) => ReactNode

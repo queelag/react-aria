@@ -15,7 +15,7 @@ const Template: Story<BreadcrumbProps> = (args: BreadcrumbProps) => {
           <Fragment key={k}>
             {k > 0 && <IconChevronRight />}
             <Component.ListItem>
-              <Component.ListItemLink className={k >= links.length - 1 ? 'text-blue-600' : ''} href='#' isCurrent={k >= links.length - 1}>
+              <Component.ListItemLink className={k >= links.length - 1 ? 'text-blue-600' : ''} href='#' isCurrent={k >= links.length - 1} target='_self'>
                 {v}
               </Component.ListItemLink>
             </Component.ListItem>

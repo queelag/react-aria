@@ -13,6 +13,7 @@ export { AriaListBox } from './components/ListBox'
 export { AriaMenu } from './components/Menu'
 export { AriaMenuButton } from './components/MenuButton'
 export { AriaMeter } from './components/Meter'
+export { AriaPagination } from './components/Pagination'
 export { AriaRadioGroup } from './components/RadioGroup'
 export { AriaSlider } from './components/Slider'
 export { AriaTabber } from './components/Tabber'
@@ -100,6 +101,13 @@ export {
   MenuProps as AriaMenuProps,
   MeterChildrenProps as AriaMeterChildrenProps,
   MeterProps as AriaMeterProps,
+  PaginationChildrenProps,
+  PaginationListItemLinkProps,
+  PaginationListItemProps,
+  PaginationListProps,
+  PaginationNextListItemLinkProps,
+  PaginationPreviousListItemLinkProps,
+  PaginationProps,
   RadioGroupChildrenProps as AriaRadioGroupChildrenProps,
   RadioGroupItemProps as AriaRadioGroupItemProps,
   RadioGroupProps as AriaRadioGroupProps,

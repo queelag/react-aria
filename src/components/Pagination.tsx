@@ -87,7 +87,7 @@ export function PreviousListItemLink(props: PaginationPreviousListItemLinkProps)
     props.onClick && props.onClick(event)
   }
 
-  return <a {...ObjectUtils.omit(props, ROOT_CHILDREN_KEYS)} aria-label='Go to the previous page' id={id} onClick={onClick} />
+  return <a {...ObjectUtils.omit(props, ROOT_CHILDREN_KEYS)} aria-label='Go to the previous page.' id={id} onClick={onClick} />
 }
 
 export function NextListItemLink(props: PaginationNextListItemLinkProps) {
@@ -98,7 +98,7 @@ export function NextListItemLink(props: PaginationNextListItemLinkProps) {
     props.onClick && props.onClick(event)
   }
 
-  return <a {...ObjectUtils.omit(props, ROOT_CHILDREN_KEYS)} aria-label='Go to the previous page' id={id} onClick={onClick} />
+  return <a {...ObjectUtils.omit(props, ROOT_CHILDREN_KEYS)} aria-label='Go to the next page.' id={id} onClick={onClick} />
 }
 
 export const AriaPagination = {

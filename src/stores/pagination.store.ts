@@ -64,15 +64,7 @@ export class PaginationStore extends ComponentStore<HTMLElement> {
     return this.activeListItemIndex > this.listItemsIndexOffset
   }
 
-  get canNotGoToPreviousListItem(): boolean {
-    return !this.canGoToPreviousListItem
-  }
-
   get canGoToNextListItem(): boolean {
     return this.activeListItemIndex - this.listItemsIndexOffset < this.numberOfPages - 1
-  }
-
-  get canNotGoToNextListItem(): boolean {
-    return !this.canGoToNextListItem
   }
 }

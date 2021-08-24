@@ -18,7 +18,7 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
     super(ComponentName.MENU, props)
 
     this.expandedItemIndex = -1
-    this.focusedItemIndex = 0
+    this.focusedItemIndex = -1
     this.itemAnchorsRef = new Map()
     this.itemMenuHideDelay = props.itemMenuHideDelay || 200
     this.itemMenusRef = new Map()
@@ -217,6 +217,11 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
     this.focusedItemIndex = index
     Logger.debug(this.id, 'setFocusedItemIndex', `The focused item index has been set to ${index}.`)
 
+    if (index < 0) {
+      this.itemAnchorsRef.get(0)?.current.blur()
+      Logger.debug(this.id, 'setFocusedItemIndex', `The first item anchor element has been blurred.`)
+    }
+
     this.update()
   }
 
@@ -227,6 +232,9 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
     if (!ref.current.id) return Logger.error(this.id, 'focusItemAnchor', `Failed to find the item anchor ref with index ${index}.`)
 
     ref.current.focus()
+    Logger.debug(this.id, 'focusItemAnchor', `The item anchor element with index ${index} has been focused.`)
+
+    this.setFocusedItemIndex(index)
   }
 
   findItemAnchorRef(index: number): MutableRefObject<HTMLAnchorElement> {

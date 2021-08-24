@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID } from '@queelag/react-core'
-import React, { MouseEvent } from 'react'
+import React, { ForwardedRef, forwardRef, MouseEvent } from 'react'
 import { ComponentName } from '../definitions/enums'
 import {
   PaginationChildrenProps,
@@ -30,13 +30,19 @@ const ROOT_CHILDREN_KEYS: (keyof PaginationChildrenProps)[] = [
   'previousListItemIndex',
   'setActiveListItemIndex'
 ]
-const STORE_KEYS: (keyof PaginationProps & keyof PaginationStore)[] = []
+const STORE_KEYS: (keyof PaginationProps & keyof PaginationStore)[] = [
+  'activeListItemIndex',
+  'listItemsIndexOffset',
+  'numberOfListItems',
+  'numberOfListItemsPerPage',
+  'onChangeActiveListItemIndex'
+]
 
-export function Root(props: PaginationProps) {
+export const Root = forwardRef((props: PaginationProps, ref: ForwardedRef<HTMLElement>) => {
   const store = useComponentStore(PaginationStore, props, STORE_KEYS, 'nav')
 
   return (
-    <nav {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} aria-label={props.label} id={store.id}>
+    <nav {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} aria-label={props.label} id={store.id} ref={ref}>
       {props.children({
         canGoToNextListItem: store.canGoToNextListItem,
         canGoToPreviousListItem: store.canGoToPreviousListItem,
@@ -48,19 +54,19 @@ export function Root(props: PaginationProps) {
       })}
     </nav>
   )
-}
+})
 
-export function List(props: PaginationListProps) {
+export const List = forwardRef((props: PaginationListProps, ref: ForwardedRef<HTMLUListElement>) => {
   const id = useID(ComponentName.PAGINATION_LIST, props.id)
-  return <ul {...props} id={id} />
-}
+  return <ul {...props} id={id} ref={ref} />
+})
 
-export function ListItem(props: PaginationListItemProps) {
+export const ListItem = forwardRef((props: PaginationListItemProps, ref: ForwardedRef<HTMLLIElement>) => {
   const id = useID(ComponentName.PAGINATION_LIST_ITEM, props.id)
-  return <li {...props} id={id} />
-}
+  return <li {...props} id={id} ref={ref} />
+})
 
-export function ListItemLink(props: PaginationListItemLinkProps) {
+export const ListItemLink = forwardRef((props: PaginationListItemLinkProps, ref: ForwardedRef<HTMLAnchorElement>) => {
   const id = useID(ComponentName.PAGINATION_LIST_ITEM_LINK, props.id)
 
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -75,11 +81,12 @@ export function ListItemLink(props: PaginationListItemLinkProps) {
       aria-label={`Go to page ${props.index}.`}
       id={id}
       onClick={onClick}
+      ref={ref}
     />
   )
-}
+})
 
-export function PreviousListItemLink(props: PaginationPreviousListItemLinkProps) {
+export const PreviousListItemLink = forwardRef((props: PaginationPreviousListItemLinkProps, ref: ForwardedRef<HTMLAnchorElement>) => {
   const id = useID(ComponentName.PAGINATION_PREVIOUS_LIST_ITEM_LINK, props.id)
 
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -87,10 +94,10 @@ export function PreviousListItemLink(props: PaginationPreviousListItemLinkProps)
     props.onClick && props.onClick(event)
   }
 
-  return <a {...ObjectUtils.omit(props, ROOT_CHILDREN_KEYS)} aria-label='Go to the previous page.' id={id} onClick={onClick} />
-}
+  return <a {...ObjectUtils.omit(props, ROOT_CHILDREN_KEYS)} aria-label='Go to the previous page.' id={id} onClick={onClick} ref={ref} />
+})
 
-export function NextListItemLink(props: PaginationNextListItemLinkProps) {
+export const NextListItemLink = forwardRef((props: PaginationNextListItemLinkProps, ref: ForwardedRef<HTMLAnchorElement>) => {
   const id = useID(ComponentName.PAGINATION_NEXT_LIST_ITEM_LINK, props.id)
 
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -98,8 +105,8 @@ export function NextListItemLink(props: PaginationNextListItemLinkProps) {
     props.onClick && props.onClick(event)
   }
 
-  return <a {...ObjectUtils.omit(props, ROOT_CHILDREN_KEYS)} aria-label='Go to the next page.' id={id} onClick={onClick} />
-}
+  return <a {...ObjectUtils.omit(props, ROOT_CHILDREN_KEYS)} aria-label='Go to the next page.' id={id} onClick={onClick} ref={ref} />
+})
 
 export const AriaPagination = {
   Root,

@@ -596,6 +596,7 @@ export interface MenuItemChildrenProps
     | 'focusItemAnchor'
     | 'focusedItemIndex'
     | 'setExpandedItemIndex'
+    | 'setFocusedItemIndex'
     | 'setItemAnchorRef'
     | 'setItemMenuRef'
   > {

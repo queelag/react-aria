@@ -60,7 +60,15 @@ export function Root(props: MenuProps) {
   const store = useComponentStore(MenuStore, props, STORE_KEYS, 'ul')
 
   const onBlur = (event: FocusEvent<HTMLUListElement>) => {
-    Debounce.handle(store.id, () => store.setExpandedItemIndex(-1), store.itemMenuHideDelay)
+    Debounce.handle(
+      store.id,
+      () => {
+        store.setExpandedItemIndex(-1)
+        store.setFocusedItemIndex(-1)
+      },
+      store.itemMenuHideDelay
+    )
+
     props.onBlur && props.onBlur(event)
   }
 
@@ -80,7 +88,14 @@ export function Root(props: MenuProps) {
   }
 
   const onMouseLeave = (event: MouseEvent<HTMLUListElement>) => {
-    Debounce.handle(store.id, () => store.setExpandedItemIndex(-1), store.itemMenuHideDelay)
+    Debounce.handle(
+      store.id,
+      () => {
+        store.setExpandedItemIndex(-1)
+        store.setFocusedItemIndex(-1)
+      },
+      store.itemMenuHideDelay
+    )
     props.onMouseLeave && props.onMouseLeave(event)
   }
 
@@ -153,6 +168,7 @@ export function Item(props: MenuItemProps) {
         parentIndex: props.index,
         popper: popper,
         setExpandedItemIndex: props.setExpandedItemIndex,
+        setFocusedItemIndex: props.setFocusedItemIndex,
         setItemAnchorRef: props.setItemAnchorRef,
         setItemMenuRef: props.setItemMenuRef,
         setItemMenuItemAnchorRef: setItemMenuItemAnchorRef
@@ -168,6 +184,14 @@ export function ItemAnchor(props: MenuItemAnchorProps) {
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     props.autoOpen === false && props.setExpandedItemIndex(props.expanded ? -1 : props.parentIndex, 0)
     props.onClick && props.onClick(event)
+  }
+
+  const onFocus = (event: FocusEvent<HTMLAnchorElement>) => {
+    if (props.parentIndex === 0) {
+      props.setFocusedItemIndex(0)
+    }
+
+    props.onFocus && props.onFocus(event)
   }
 
   const onMouseEnter = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -190,6 +214,7 @@ export function ItemAnchor(props: MenuItemAnchorProps) {
       aria-expanded={props.expanded}
       id={id}
       onClick={onClick}
+      onFocus={onFocus}
       onMouseEnter={onMouseEnter}
       ref={ref}
       role='menuitem'

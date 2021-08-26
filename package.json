@@ -7,8 +7,8 @@
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@microsoft/api-extractor": "^7.18.4",
-    "@queelag/core": "^1.0.10",
-    "@queelag/react-core": "^1.0.23",
+    "@queelag/core": "^1.0.11",
+    "@queelag/react-core": "^1.0.25",
     "@queelag/react-feather-icons": "^1.0.6",
     "@rollup/plugin-typescript": "^8.2.3",
     "@storybook/addon-actions": "^6.4.0-alpha.18",

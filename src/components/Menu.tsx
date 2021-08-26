@@ -47,6 +47,7 @@ const MENU_ITEM_CHILDREN_PROPS_KEYS: (keyof MenuItemChildrenProps)[] = [
   'parentIndex',
   'popper',
   'setExpandedItemIndex',
+  'setFocusedItemIndex',
   'setItemAnchorRef',
   'setItemMenuRef',
   'setItemMenuItemAnchorRef'

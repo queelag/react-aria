@@ -53,7 +53,7 @@ export class PaginationStore extends ComponentStore<HTMLElement> {
   }
 
   get numberOfPages(): number {
-    return Math.round(this.numberOfListItems / this.numberOfListItemsPerPage)
+    return Math.ceil(this.numberOfListItems / this.numberOfListItemsPerPage)
   }
 
   get previousListItemIndex(): number {

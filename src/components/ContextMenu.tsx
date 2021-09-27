@@ -1,6 +1,7 @@
 import { Logger, ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
 import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import {
@@ -33,7 +34,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ContextMenuChildrenProps)[] = [
  */
 export function Root(props: ContextMenuProps) {
   const store = useComponentStore(ContextMenuStore, props)
-  const popper = usePopper(store.triggerRef.current, store.listRef.current, { ...props.popperOptions, placement: 'bottom-start' })
+  const popper = usePopper(store.triggerRef.current, store.listRef.current, { ...props.popperOptions, placement: 'bottom-start', strategy: 'absolute' })
 
   const onBlur = (event: FocusEvent<HTMLDivElement>) => {
     // store.setExpanded(false)
@@ -79,14 +80,15 @@ export function Backdrop(props: ContextMenuBackdropProps) {
     props.onContextMenu && props.onContextMenu(event)
   }
 
-  return (
+  return createPortal(
     <div
       {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
       id={id}
       onClick={onClick}
       onContextMenu={onContextMenu}
-      style={{ bottom: 0, left: 0, right: 0, position: 'absolute', top: 0, ...props.style }}
-    />
+      style={{ bottom: 0, left: 0, right: 0, position: 'fixed', top: 0, ...props.style }}
+    />,
+    document.body
   )
 }
 
@@ -118,7 +120,7 @@ export function Trigger(props: ContextMenuTriggerProps) {
       aria-haspopup
     >
       {props.children}
-      <div ref={childRef} style={{ position: 'absolute' }} tabIndex={0} />
+      {createPortal(<div ref={childRef} style={{ position: 'fixed' }} tabIndex={0} />, document.body)}
     </div>
   )
 }
@@ -128,7 +130,7 @@ export function List(props: ContextMenuListProps) {
 
   useEffect(() => props.setListRef(ref), [])
 
-  return (
+  return createPortal(
     <ul
       {...props.popper.attributes.popper}
       {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
@@ -138,7 +140,8 @@ export function List(props: ContextMenuListProps) {
       role='menu'
       style={{ ...props.style, ...props.popper.styles.popper }}
       tabIndex={-1}
-    />
+    />,
+    document.body
   )
 }
 

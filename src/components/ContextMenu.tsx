@@ -105,6 +105,8 @@ export function Trigger(props: ContextMenuTriggerProps) {
 
     props.popper.forceUpdate && props.popper.forceUpdate()
     props.setExpanded(true)
+
+    props.onContextMenu && props.onContextMenu(event)
   }
 
   useEffect(() => props.setTriggerRef(childRef), [])

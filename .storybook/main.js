@@ -22,7 +22,7 @@ module.exports = {
       include: path.resolve(__dirname, '../stories')
     })
     config.resolve.alias['mobx'] = path.resolve(__dirname, '../node_modules/mobx')
-    config.resolve.alias['mobx-react'] = path.resolve(__dirname, '../node_modules/mobx-react')
+    config.resolve.alias['mobx-react-lite'] = path.resolve(__dirname, '../node_modules/mobx-react-lite')
 
     return config
   }

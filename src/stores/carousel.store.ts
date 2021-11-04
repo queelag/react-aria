@@ -9,7 +9,7 @@ class CarouselStore extends ComponentStore<HTMLElement> {
 
   activeSlideIndex: number
   automaticRotationDuration: number
-  automaticRotationInterval: number
+  automaticRotationInterval: NodeJS.Timer | number
   liveTemporary?: CarouselLive
   mouseEntered: boolean
   rotationMode: CarouselRotationMode
@@ -120,15 +120,15 @@ class CarouselStore extends ComponentStore<HTMLElement> {
   }
 
   disableAutomaticRotation = (): void => {
-    window.clearInterval(this.automaticRotationInterval)
+    clearInterval(this.automaticRotationInterval as any)
     Logger.debug(this.id, 'disableAutomaticRotation', `The automatic rotation has been disabled.`)
   }
 
   enableAutomaticRotation = (): void => {
-    window.clearInterval(this.automaticRotationInterval)
+    clearInterval(this.automaticRotationInterval as any)
     Logger.debug(this.id, 'enableAutomaticRotation', `The automatic rotation has been disabled.`)
 
-    this.automaticRotationInterval = window.setInterval(this.gotoNextSlide, this.automaticRotationDuration)
+    this.automaticRotationInterval = setInterval(this.gotoNextSlide, this.automaticRotationDuration)
     Logger.debug(this.id, 'enableAutomaticRotation', `The automatic rotation has been enabled.`)
   }
 

@@ -64,5 +64,5 @@
     "build-storybook": "build-storybook -o docs"
   },
   "sideEffects": false,
-  "version": "1.0.19"
+  "version": "1.0.20"
 }

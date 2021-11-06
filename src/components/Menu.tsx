@@ -1,6 +1,6 @@
 import { Debounce, noop, ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, MutableRefObject, useEffect } from 'react'
+import React, { FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, MutableRefObject, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName, MenuPopperReferenceElement } from '../definitions/enums'
 import {
@@ -13,9 +13,9 @@ import {
   MenuItemProps,
   MenuProps
 } from '../definitions/props'
-import MenuStore from '../stores/menu.store'
+import { MenuStore } from '../stores/menu.store'
 
-const MENU_PROPS_KEYS: (keyof MenuProps)[] = ['autoOpen', 'itemMenuHideDelay', 'label', 'popperReferenceElement']
+const MENU_PROPS_KEYS: (keyof MenuProps)[] = ['autoOpen', 'getStore', 'itemMenuHideDelay', 'label', 'popperReferenceElement']
 const MENU_CHILDREN_PROPS_KEYS: (keyof MenuChildrenProps)[] = [
   'autoOpen',
   'deleteItemAnchorRef',
@@ -247,10 +247,10 @@ export function ItemMenu(props: MenuItemMenuProps) {
   )
 }
 
-export function ItemMenuItem(props: MenuItemMenuItemProps) {
+export const ItemMenuItem = forwardRef((props: MenuItemMenuItemProps, ref: ForwardedRef<HTMLLIElement>) => {
   const id = useID(ComponentName.MENU_ITEM_MENU_ITEM, props.id)
-  return <li {...ObjectUtils.omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS)} id={id} role='none' />
-}
+  return <li {...ObjectUtils.omit(props, MENU_ITEM_CHILDREN_PROPS_KEYS)} id={id} ref={ref} role='none' />
+})
 
 export function ItemMenuItemAnchor(props: MenuItemMenuItemAnchorProps) {
   const id = useID(ComponentName.MENU_ITEM_MENU_ITEM_ANCHOR, props.id)

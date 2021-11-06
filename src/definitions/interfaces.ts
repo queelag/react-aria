@@ -1,4 +1,4 @@
-import PopperJS from '@popperjs/core'
+import type PopperJS from '@popperjs/core'
 
 export interface PopperData {
   styles: { [key: string]: React.CSSProperties }

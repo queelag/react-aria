@@ -4,7 +4,7 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, ListBoxSelectMode } from '../definitions/enums'
 import { ListBoxProps } from '../definitions/props'
 
-class ListBoxStore extends ComponentStore<HTMLDivElement> {
+export class ListBoxStore extends ComponentStore {
   buttonRef: MutableRefObject<HTMLButtonElement>
   expanded: boolean
   focusedListItemIndex: number
@@ -13,7 +13,7 @@ class ListBoxStore extends ComponentStore<HTMLDivElement> {
   selectMode: ListBoxSelectMode
   selectedListItemIndexes: number[]
 
-  constructor(props: ListBoxProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: ListBoxProps & ComponentStoreProps) {
     super(ComponentName.LIST_BOX, props)
 
     this.buttonRef = ReactUtils.createDummyRef('button')
@@ -223,5 +223,3 @@ class ListBoxStore extends ComponentStore<HTMLDivElement> {
     return this.selectMode === ListBoxSelectMode.SINGLE
   }
 }
-
-export default ListBoxStore

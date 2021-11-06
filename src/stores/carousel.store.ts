@@ -4,7 +4,7 @@ import { MutableRefObject } from 'react'
 import { CarouselLive, CarouselRotationMode, ComponentName } from '../definitions/enums'
 import { CarouselProps } from '../definitions/props'
 
-class CarouselStore extends ComponentStore<HTMLElement> {
+export class CarouselStore extends ComponentStore<HTMLElement> {
   _live: CarouselLive = CarouselLive.OFF
 
   activeSlideIndex: number
@@ -179,5 +179,3 @@ class CarouselStore extends ComponentStore<HTMLElement> {
     this.update()
   }
 }
-
-export default CarouselStore

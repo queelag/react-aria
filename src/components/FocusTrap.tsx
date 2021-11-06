@@ -2,9 +2,9 @@ import { noop, ObjectUtils } from '@queelag/core'
 import { useComponentStore } from '@queelag/react-core'
 import React, { KeyboardEvent, useEffect } from 'react'
 import { FocusTrapProps } from '../definitions/props'
-import FocusTrapStore from '../stores/focus.trap.store'
+import { FocusTrapStore } from '../stores/focus.trap.store'
 
-const ROOT_PROPS_KEYS: (keyof FocusTrapProps)[] = ['autoFocus', 'restoreFocus']
+const ROOT_PROPS_KEYS: (keyof FocusTrapProps)[] = ['autoFocus', 'getStore', 'restoreFocus']
 
 /**
  * A focus trap is an element which overrides the default tab behaviour, allowing only the elements inside it to be focused.

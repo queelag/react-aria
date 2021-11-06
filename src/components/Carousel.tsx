@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, MouseEvent, useEffect } from 'react'
+import React, { FocusEvent, ForwardedRef, forwardRef, MouseEvent, useEffect } from 'react'
 import { CarouselLive, ComponentName } from '../definitions/enums'
 import {
   CarouselButtonLiveProps,
@@ -11,9 +11,17 @@ import {
   CarouselSlideProps,
   CarouselSlidesProps
 } from '../definitions/props'
-import CarouselStore from '../stores/carousel.store'
+import { CarouselStore } from '../stores/carousel.store'
 
-const ROOT_PROPS_KEYS: (keyof CarouselProps)[] = ['activeSlideIndex', 'automaticRotationDuration', 'label', 'live', 'onChangeActiveSlideIndex', 'rotationMode']
+const ROOT_PROPS_KEYS: (keyof CarouselProps)[] = [
+  'activeSlideIndex',
+  'automaticRotationDuration',
+  'getStore',
+  'label',
+  'live',
+  'onChangeActiveSlideIndex',
+  'rotationMode'
+]
 const ROOT_CHILDREN_PROPS_KEYS: (keyof CarouselChildrenProps)[] = [
   'activeSlideIndex',
   'deleteSlideElementRef',
@@ -38,7 +46,7 @@ const STORE_KEYS: (keyof CarouselProps & keyof CarouselStore)[] = [
 /**
  * A carousel presents a set of items, referred to as slides, by sequentially displaying a subset of one or more slides. Typically, one slide is displayed at a time, and users can activate a next or previous slide control that hides the current slide and "rotates" the next or previous slide into view. In some implementations, rotation automatically starts when the page loads, and it may also automatically stop once all the slides have been displayed. While a slide may contain any type of content, image carousels where each slide contains nothing more than a single image are common.
  */
-export function Root(props: CarouselProps) {
+export const Root = forwardRef((props: CarouselProps, ref: ForwardedRef<HTMLElement>) => {
   const store = useComponentStore(CarouselStore, props, STORE_KEYS, 'section')
   const slidesID = useID(ComponentName.CAROUSEL_SLIDES)
 
@@ -74,6 +82,7 @@ export function Root(props: CarouselProps) {
       onFocus={onFocus}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      ref={ref}
     >
       {props.children({
         activeSlideIndex: store.activeSlideIndex,
@@ -90,11 +99,11 @@ export function Root(props: CarouselProps) {
       })}
     </section>
   )
-}
+})
 
-export function Slides(props: CarouselSlidesProps) {
-  return <div {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-live={props.liveTemporary || props.live} id={props.slidesID} />
-}
+export const Slides = forwardRef((props: CarouselSlidesProps, ref: ForwardedRef<HTMLDivElement>) => {
+  return <div {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-live={props.liveTemporary || props.live} id={props.slidesID} ref={ref} />
+})
 
 export function Slide(props: CarouselSlideProps) {
   const id = useID(ComponentName.CAROUSEL_SLIDE, props.id)
@@ -117,7 +126,7 @@ export function Slide(props: CarouselSlideProps) {
   )
 }
 
-export function ButtonLive(props: CarouselButtonLiveProps) {
+export const ButtonLive = forwardRef((props: CarouselButtonLiveProps, ref: ForwardedRef<HTMLButtonElement>) => {
   const id = useID(ComponentName.CAROUSEL_BUTTON_LIVE, props.id)
 
   const findLabelByLive = () => {
@@ -143,10 +152,10 @@ export function ButtonLive(props: CarouselButtonLiveProps) {
     props.onClick && props.onClick(event)
   }
 
-  return <button {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label={findLabelByLive()} id={id} onClick={onClick} type='button' />
-}
+  return <button {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label={findLabelByLive()} id={id} onClick={onClick} ref={ref} type='button' />
+})
 
-export function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
+export const ButtonPreviousSlide = forwardRef((props: CarouselButtonPreviousProps, ref: ForwardedRef<HTMLButtonElement>) => {
   const id = useID(ComponentName.CAROUSEL_BUTTON_PREVIOUS_SLIDE, props.id)
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -161,12 +170,13 @@ export function ButtonPreviousSlide(props: CarouselButtonPreviousProps) {
       aria-label='Previous Slide'
       id={id}
       onClick={onClick}
+      ref={ref}
       type='button'
     />
   )
-}
+})
 
-export function ButtonNextSlide(props: CarouselButtonNextProps) {
+export const ButtonNextSlide = forwardRef((props: CarouselButtonNextProps, ref: ForwardedRef<HTMLButtonElement>) => {
   const id = useID(ComponentName.CAROUSEL_BUTTON_NEXT_SLIDE, props.id)
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -181,10 +191,11 @@ export function ButtonNextSlide(props: CarouselButtonNextProps) {
       aria-label='Next Slide'
       id={id}
       onClick={onClick}
+      ref={ref}
       type='button'
     />
   )
-}
+})
 
 export const AriaCarousel = {
   Root,

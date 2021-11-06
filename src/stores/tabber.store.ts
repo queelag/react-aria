@@ -4,7 +4,7 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, TabberActivation } from '../definitions/enums'
 import { TabberProps } from '../definitions/props'
 
-class TabberStore extends ComponentStore<HTMLDivElement> {
+export class TabberStore extends ComponentStore {
   _listItemsLength: number = 0
 
   activation: TabberActivation
@@ -13,7 +13,7 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
   panelIDs: ID[]
   selectedListItemIndex: number
 
-  constructor(props: TabberProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: TabberProps & ComponentStoreProps) {
     super(ComponentName.TABBER, props)
 
     this.activation = props.activation || TabberActivation.AUTOMATIC
@@ -153,5 +153,3 @@ class TabberStore extends ComponentStore<HTMLDivElement> {
     this.update()
   }
 }
-
-export default TabberStore

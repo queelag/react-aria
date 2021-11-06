@@ -4,7 +4,7 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { ContextMenuProps } from '../definitions/props'
 
-class ContextMenuStore extends ComponentStore<HTMLDivElement> {
+export class ContextMenuStore extends ComponentStore {
   triggerID: ID
   triggerRef: MutableRefObject<HTMLDivElement>
   expanded: boolean
@@ -12,7 +12,7 @@ class ContextMenuStore extends ComponentStore<HTMLDivElement> {
   listRef: MutableRefObject<HTMLUListElement>
   listItemAnchorsRef: Map<number, MutableRefObject<HTMLAnchorElement>>
 
-  constructor(props: ContextMenuProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: ContextMenuProps & ComponentStoreProps) {
     super(ComponentName.CONTEXT_MENU, props)
 
     this.triggerID = IDUtils.prefixed(ComponentName.CONTEXT_MENU_TRIGGER)
@@ -173,5 +173,3 @@ class ContextMenuStore extends ComponentStore<HTMLDivElement> {
     return this.expanded === true
   }
 }
-
-export default ContextMenuStore

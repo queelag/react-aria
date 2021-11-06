@@ -5,7 +5,7 @@ import { ComponentName, Key, SliderMode } from '../definitions/enums'
 import { SliderProps } from '../definitions/props'
 import { SliderPercentual, SliderThumbIndex, SliderValue } from '../definitions/types'
 
-class SliderStore extends ComponentStore<HTMLDivElement> {
+export class SliderStore extends ComponentStore {
   _step: number = 0
 
   maximum: number
@@ -16,7 +16,7 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
   thumbMovable: boolean
   value: SliderValue
 
-  constructor(props: SliderProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: SliderProps & ComponentStoreProps) {
     super(ComponentName.SLIDER, props)
 
     this.maximum = props.maximum
@@ -251,5 +251,3 @@ class SliderStore extends ComponentStore<HTMLDivElement> {
     this.stepDecimals = (step.toString().match(/\..+/) || [''])[0].slice(1).length
   }
 }
-
-export default SliderStore

@@ -4,11 +4,11 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { RadioGroupProps } from '../definitions/props'
 
-class RadioGroupStore extends ComponentStore<HTMLDivElement> {
+export class RadioGroupStore extends ComponentStore {
   itemsRef: Map<number, MutableRefObject<HTMLDivElement>>
   checkedItemIndex: number
 
-  constructor(props: RadioGroupProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: RadioGroupProps & ComponentStoreProps) {
     super(ComponentName.RADIO_GROUP, props)
 
     this.itemsRef = new Map()
@@ -84,5 +84,3 @@ class RadioGroupStore extends ComponentStore<HTMLDivElement> {
     return [...this.itemsRef.values()].findIndex((v: MutableRefObject<HTMLDivElement>) => v.current === document.activeElement)
   }
 }
-
-export default RadioGroupStore

@@ -4,11 +4,11 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { AccordionProps } from '../definitions/props'
 
-class AccordionStore extends ComponentStore<HTMLDivElement> {
+export class AccordionStore extends ComponentStore {
   expandedSections: Map<ID, boolean>
   sectionHeaderRefs: Map<ID, MutableRefObject<HTMLButtonElement>>
 
-  constructor(props: AccordionProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: AccordionProps & ComponentStoreProps) {
     super(ComponentName.ACCORDION, props)
 
     this.expandedSections = new Map()
@@ -98,5 +98,3 @@ class AccordionStore extends ComponentStore<HTMLDivElement> {
     }
   }
 }
-
-export default AccordionStore

@@ -4,7 +4,7 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { ComboBoxProps } from '../definitions/props'
 
-class ComboBoxStore extends ComponentStore<HTMLDivElement> {
+export class ComboBoxStore extends ComponentStore {
   expanded: boolean
   focusedListBoxItemIndex: number
   groupRef: MutableRefObject<HTMLDivElement>
@@ -14,7 +14,7 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
   listBoxRef: MutableRefObject<HTMLUListElement>
   selectedListBoxItemIndexes: number[]
 
-  constructor(props: ComboBoxProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: ComboBoxProps & ComponentStoreProps) {
     super(ComponentName.COMBO_BOX, props)
 
     this.expanded = false
@@ -175,5 +175,3 @@ class ComboBoxStore extends ComponentStore<HTMLDivElement> {
     return this.expanded === true
   }
 }
-
-export default ComboBoxStore

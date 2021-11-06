@@ -3,13 +3,13 @@ import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { FocusTrapProps } from '../definitions/props'
-import DOMUtils from '../utils/dom.utils'
+import { DOMUtils } from '../utils/dom.utils'
 
-class FocusTrapStore extends ComponentStore<HTMLDivElement> {
+export class FocusTrapStore extends ComponentStore {
   focusables: Element[]
   originalFocused: Element
 
-  constructor(props: FocusTrapProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: FocusTrapProps & ComponentStoreProps) {
     super(ComponentName.FOCUS_TRAP, props)
 
     this.focusables = []
@@ -105,5 +105,3 @@ class FocusTrapStore extends ComponentStore<HTMLDivElement> {
     }
   }
 }
-
-export default FocusTrapStore

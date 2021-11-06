@@ -4,14 +4,14 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { TooltipProps } from '../definitions/props'
 
-class TooltipStore extends ComponentStore<HTMLDivElement> {
+export class TooltipStore extends ComponentStore {
   elementID: ID
   elementRef: MutableRefObject<HTMLDivElement>
   hideDelay: number
   triggerRef: MutableRefObject<HTMLDivElement>
   visible: boolean
 
-  constructor(props: TooltipProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: TooltipProps & ComponentStoreProps) {
     super(ComponentName.TOOLTIP, props)
 
     this.elementID = IDUtils.prefixed(ComponentName.TOOLTIP_ELEMENT)
@@ -60,5 +60,3 @@ class TooltipStore extends ComponentStore<HTMLDivElement> {
     this.update()
   }
 }
-
-export default TooltipStore

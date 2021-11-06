@@ -4,7 +4,7 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, MenuPopperReferenceElement } from '../definitions/enums'
 import { MenuProps } from '../definitions/props'
 
-class MenuStore extends ComponentStore<HTMLUListElement> {
+export class MenuStore extends ComponentStore<HTMLUListElement> {
   expandedItemIndex: number
   focusedItemIndex: number
   itemAnchorsRef: Map<number, MutableRefObject<HTMLAnchorElement>>
@@ -271,5 +271,3 @@ class MenuStore extends ComponentStore<HTMLUListElement> {
     return this.popperReferenceElement === MenuPopperReferenceElement.ROOT
   }
 }
-
-export default MenuStore

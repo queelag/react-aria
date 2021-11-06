@@ -4,11 +4,11 @@ import { KeyboardEvent } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { AlertDialogProps } from '../definitions/props'
 
-class AlertDialogStore extends ComponentStore<HTMLDivElement> {
+export class AlertDialogStore extends ComponentStore {
   descriptionElementID: ID
   titleElementID: ID
 
-  constructor(props: AlertDialogProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: AlertDialogProps & ComponentStoreProps) {
     super(ComponentName.ALERT_DIALOG, props)
 
     this.descriptionElementID = IDUtils.prefixed(ComponentName.ALERT_DIALOG_DESCRIPTION)
@@ -29,5 +29,3 @@ class AlertDialogStore extends ComponentStore<HTMLDivElement> {
     }
   }
 }
-
-export default AlertDialogStore

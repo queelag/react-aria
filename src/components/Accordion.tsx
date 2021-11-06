@@ -1,6 +1,6 @@
 import { Logger, ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { KeyboardEvent, MouseEvent, MutableRefObject, useEffect } from 'react'
+import React, { ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, MutableRefObject, useEffect } from 'react'
 import { ComponentName } from '../definitions/enums'
 import {
   AccordionChildrenProps,
@@ -10,15 +10,16 @@ import {
   AccordionSectionPanelProps,
   AccordionSectionProps
 } from '../definitions/props'
-import AccordionStore from '../stores/accordion.store'
+import { AccordionStore } from '../stores/accordion.store'
 
+const ROOT_PROPS_KEYS: (keyof AccordionProps)[] = ['getStore']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof AccordionChildrenProps)[] = ['expandSection', 'expandedSections', 'setSectionHeaderRef']
 const SECTION_CHILDREN_PROPS_KEYS: (keyof AccordionSectionChildrenProps)[] = ['contentID', 'expand', 'expanded', 'headerID', 'setHeaderRef']
 
 /**
  * An accordion is a vertically stacked set of interactive headings that each contain a title, content snippet, or thumbnail representing a section of content. The headings function as controls that enable users to reveal or hide their associated sections of content. Accordions are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.
  */
-export function Root(props: AccordionProps) {
+export const Root = forwardRef((props: AccordionProps, ref: ForwardedRef<HTMLDivElement>) => {
   const store = useComponentStore(AccordionStore, props)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -27,11 +28,11 @@ export function Root(props: AccordionProps) {
   }
 
   return (
-    <div {...props} id={store.id} onKeyDown={onKeyDown}>
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} ref={ref}>
       {props.children({ expandSection: store.expandSection, expandedSections: store.expandedSections, setSectionHeaderRef: store.setSectionHeaderRef })}
     </div>
   )
-}
+})
 
 export function Section(props: AccordionSectionProps) {
   const id = useID(ComponentName.ACCORDION_SECTION, props.id)
@@ -88,9 +89,9 @@ export function SectionHeader(props: AccordionSectionHeaderProps) {
   )
 }
 
-export function SectionPanel(props: AccordionSectionPanelProps) {
-  return <div {...ObjectUtils.omit(props, SECTION_CHILDREN_PROPS_KEYS)} aria-labelledby={props.headerID} id={props.contentID} role='region' />
-}
+export const SectionPanel = forwardRef((props: AccordionSectionPanelProps, ref: ForwardedRef<HTMLDivElement>) => {
+  return <div {...ObjectUtils.omit(props, SECTION_CHILDREN_PROPS_KEYS)} aria-labelledby={props.headerID} id={props.contentID} ref={ref} role='region' />
+})
 
 export const AriaAccordion = {
   Root,

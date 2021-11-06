@@ -3,7 +3,7 @@ import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { ComponentName } from '../definitions/enums'
 import { DisclosureSectionProps } from '../definitions/props'
 
-class DisclosureSectionStore extends ComponentStore<HTMLElement> {
+export class DisclosureSectionStore extends ComponentStore<HTMLElement> {
   _expanded: boolean = false
   panelID: ID
 
@@ -29,5 +29,3 @@ class DisclosureSectionStore extends ComponentStore<HTMLElement> {
     this.update()
   }
 }
-
-export default DisclosureSectionStore

@@ -1,12 +1,12 @@
 import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
+import React, { FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName, ListBoxSelectMode } from '../definitions/enums'
 import { ListBoxButtonProps, ListBoxChildrenProps, ListBoxListItemProps, ListBoxListProps, ListBoxProps } from '../definitions/props'
-import ListBoxStore from '../stores/list.box.store'
+import { ListBoxStore } from '../stores/list.box.store'
 
-const ROOT_PROPS_KEYS: (keyof ListBoxProps)[] = ['collapsable', 'onSelectListItem', 'popperOptions', 'selectMode', 'selectedListItemIndexes']
+const ROOT_PROPS_KEYS: (keyof ListBoxProps)[] = ['collapsable', 'getStore', 'onSelectListItem', 'popperOptions', 'selectMode', 'selectedListItemIndexes']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof ListBoxChildrenProps)[] = [
   'collapsable',
   'deleteListItemRef',
@@ -28,7 +28,7 @@ const STORE_KEYS: (keyof ListBoxProps & keyof ListBoxStore)[] = ['onSelectListIt
 /**
  * A listbox widget presents a list of options and allows a user to select one or more of them. A listbox that allows a single option to be chosen is a single-select listbox; one that allows multiple options to be selected is a multi-select listbox.
  */
-export function Root(props: ListBoxProps) {
+export const Root = forwardRef((props: ListBoxProps, ref: ForwardedRef<HTMLDivElement>) => {
   const store = useComponentStore(ListBoxStore, props, STORE_KEYS)
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
 
@@ -38,7 +38,7 @@ export function Root(props: ListBoxProps) {
   }
 
   return (
-    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} style={{ position: 'relative', ...props.style }}>
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} ref={ref} style={{ position: 'relative', ...props.style }}>
       {props.children({
         collapsable: props.collapsable,
         deleteListItemRef: store.deleteListItemRef,
@@ -57,7 +57,7 @@ export function Root(props: ListBoxProps) {
       })}
     </div>
   )
-}
+})
 
 export function Button(props: ListBoxButtonProps) {
   const id = useID(ComponentName.LIST_BOX_BUTTON, props.id)

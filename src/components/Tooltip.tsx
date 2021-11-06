@@ -1,12 +1,12 @@
 import { Debounce, noop, ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
+import React, { FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import { TooltipChildrenProps, TooltipElementProps, TooltipProps, TooltipTriggerProps } from '../definitions/props'
-import TooltipStore from '../stores/tooltip.store'
+import { TooltipStore } from '../stores/tooltip.store'
 
-const TOOLTIP_PROPS_KEYS: (keyof TooltipProps)[] = ['hideDelay', 'popperOptions']
+const TOOLTIP_PROPS_KEYS: (keyof TooltipProps)[] = ['getStore', 'hideDelay', 'popperOptions']
 const TOOLTIP_CHILDREN_PROPS_KEYS: (keyof TooltipChildrenProps)[] = [
   'elementID',
   'hideDelay',
@@ -22,7 +22,7 @@ const STORE_KEYS: (keyof TooltipProps & keyof TooltipStore)[] = ['hideDelay']
 /**
  * A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it. It typically appears after a small delay and disappears when Escape is pressed or on mouse out.
  */
-export function Root(props: TooltipProps) {
+export const Root = forwardRef((props: TooltipProps, ref: ForwardedRef<HTMLDivElement>) => {
   const store = useComponentStore(TooltipStore, props, STORE_KEYS)
   const popper = usePopper(store.triggerRef.current, store.elementRef.current, props.popperOptions)
 
@@ -32,7 +32,7 @@ export function Root(props: TooltipProps) {
   }
 
   return (
-    <div {...ObjectUtils.omit(props, TOOLTIP_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown}>
+    <div {...ObjectUtils.omit(props, TOOLTIP_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} ref={ref}>
       {props.children({
         elementID: store.elementID,
         hideDelay: store.hideDelay,
@@ -45,7 +45,7 @@ export function Root(props: TooltipProps) {
       })}
     </div>
   )
-}
+})
 
 export function Element(props: TooltipElementProps) {
   const ref = useSafeRef('div')

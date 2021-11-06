@@ -1,11 +1,38 @@
 import { ID } from '@queelag/core'
-import { Orientation } from '@queelag/react-core'
+import type {
+  HTMLAnchorProps,
+  HTMLButtonProps,
+  HTMLDivProps,
+  HTMLDListProps,
+  HTMLElementProps,
+  HTMLInputProps,
+  HTMLLIProps,
+  HTMLOListProps,
+  HTMLSpanProps,
+  HTMLUListProps,
+  Orientation,
+  WithGetStore
+} from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, TouchEvent } from 'react'
-import { CarouselLive, CarouselRotationMode, ListBoxSelectMode, MenuPopperReferenceElement, SliderMode, TabberActivation } from './enums'
+import type { AccordionStore } from '../stores/accordion.store'
+import type { CarouselStore } from '../stores/carousel.store'
+import type { ComboBoxStore } from '../stores/combo.box.store'
+import type { ContextMenuStore } from '../stores/context.menu.store'
+import type { DisclosureSectionStore } from '../stores/disclosure.section.store'
+import type { FocusTrapStore } from '../stores/focus.trap.store'
+import type { ListBoxStore } from '../stores/list.box.store'
+import type { MenuButtonStore } from '../stores/menu.button.store'
+import type { MenuStore } from '../stores/menu.store'
+import type { PaginationStore } from '../stores/pagination.store'
+import type { RadioGroupStore } from '../stores/radio.group.store'
+import type { SliderStore } from '../stores/slider.store'
+import type { TabberStore } from '../stores/tabber.store'
+import type { TooltipStore } from '../stores/tooltip.store'
+import type { CarouselLive, CarouselRotationMode, ListBoxSelectMode, MenuPopperReferenceElement, SliderMode, TabberActivation } from './enums'
 import { PopperData, PopperOptions } from './interfaces'
 import { SliderPercentual, SliderThumbIndex, SliderValue } from './types'
 
-export interface AccordionProps extends Omit<HTMLDivProps, 'children'> {
+export interface AccordionProps extends Omit<HTMLDivProps, 'children'>, WithGetStore<HTMLDivElement, AccordionStore> {
   children: (props: AccordionChildrenProps) => ReactNode
 }
 
@@ -80,7 +107,7 @@ export interface BreadcrumbListItemLinkProps extends HTMLAnchorProps {
   isCurrent: boolean
 }
 
-export interface CarouselProps extends Omit<HTMLElementProps, 'children'> {
+export interface CarouselProps extends Omit<HTMLElementProps, 'children'>, WithGetStore<HTMLElement, CarouselStore> {
   /**
    * The active slide index determines the slide that is currently visible, can also be used to set a starting slide.
    */
@@ -181,7 +208,7 @@ export interface CheckBoxProps extends HTMLDivProps {
   checked: boolean
 }
 
-export interface ComboBoxProps extends Omit<HTMLDivProps, 'children'> {
+export interface ComboBoxProps extends Omit<HTMLDivProps, 'children'>, WithGetStore<HTMLDivElement, ComboBoxStore> {
   /**
    * Required if your ComboBox implementation has some kind of autocomplete logic.
    */
@@ -270,7 +297,7 @@ export interface ComboBoxListBoxItemProps extends HTMLLIProps, ComboBoxChildrenP
   index: number
 }
 
-export interface ContextMenuProps extends Omit<HTMLDivProps, 'children'> {
+export interface ContextMenuProps extends Omit<HTMLDivProps, 'children'>, WithGetStore<HTMLDivElement, ContextMenuStore> {
   children: (props: ContextMenuChildrenProps) => ReactNode
   /**
    * The popper options.
@@ -366,7 +393,7 @@ export interface DialogTitleProps extends Omit<HTMLSpanProps, 'id'>, DialogChild
 
 export interface DisclosureProps extends HTMLDListProps {}
 
-export interface DisclosureSectionProps {
+export interface DisclosureSectionProps extends WithGetStore<Element, DisclosureSectionStore> {
   children: (props: DisclosureSectionChildrenProps) => ReactFragment
   expanded?: boolean
 }
@@ -390,7 +417,7 @@ export interface DisclosureSectionHeaderProps extends HTMLElementProps {}
 export interface DisclosureSectionHeaderButtonProps extends HTMLButtonProps, DisclosureSectionChildrenProps {}
 export interface DisclosureSectionPanelProps extends Omit<HTMLElementProps, 'id'>, DisclosureSectionChildrenProps {}
 
-export interface FocusTrapProps extends Omit<HTMLDivProps, 'ref'> {
+export interface FocusTrapProps extends Omit<HTMLDivProps, 'ref'>, WithGetStore<HTMLDivElement, FocusTrapStore> {
   /**
    * Setting this to true will automatically focus the first inside element inside the trap.
    */
@@ -401,7 +428,7 @@ export interface FocusTrapProps extends Omit<HTMLDivProps, 'ref'> {
   restoreFocus?: boolean
 }
 
-export interface ListBoxProps extends Omit<HTMLDivProps, 'children'> {
+export interface ListBoxProps extends Omit<HTMLDivProps, 'children'>, WithGetStore<HTMLDivElement, ListBoxStore> {
   children: (props: ListBoxChildrenProps) => ReactNode
   /**
    * Determines if the ListBox is collapsable or not, useful for creating Select components.
@@ -480,21 +507,7 @@ export interface ListBoxListItemProps extends HTMLLIProps, ListBoxChildrenProps 
   index: number
 }
 
-export interface HTMLAnchorProps extends React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> {}
-export interface HTMLButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {}
-export interface HTMLDivProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
-export interface HTMLDListProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDListElement>, HTMLDListElement> {}
-export interface HTMLElementProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {}
-export interface HTMLImageProps extends React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {}
-export interface HTMLInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {}
-export interface HTMLLabelProps extends React.DetailedHTMLProps<React.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement> {}
-export interface HTMLLIProps extends React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement> {}
-export interface HTMLFormProps extends React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> {}
-export interface HTMLOListProps extends React.DetailedHTMLProps<React.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement> {}
-export interface HTMLSpanProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {}
-export interface HTMLUListProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement> {}
-
-export interface MenuProps extends Omit<HTMLUListProps, 'children'> {
+export interface MenuProps extends Omit<HTMLUListProps, 'children'>, WithGetStore<HTMLUListElement, MenuStore> {
   /**
    * Determines the behavior of the Menu, setting this to true will open the MenuItems on hover while setting it to false will require a click.
    */
@@ -638,7 +651,7 @@ export interface MenuItemMenuItemAnchorProps extends HTMLAnchorProps, MenuItemCh
 
 export interface MenuItemMenuItemProps extends HTMLLIProps, MenuItemChildrenProps {}
 
-export interface MenuButtonProps extends Omit<HTMLDivProps, 'children'> {
+export interface MenuButtonProps extends Omit<HTMLDivProps, 'children'>, WithGetStore<HTMLDivElement, MenuButtonStore> {
   children: (props: MenuButtonChildrenProps) => ReactNode
   /**
    * The popper options.
@@ -723,7 +736,7 @@ export interface MeterChildrenProps {
   value: number
 }
 
-export interface PaginationProps extends Omit<HTMLElementProps, 'children'> {
+export interface PaginationProps extends Omit<HTMLElementProps, 'children'>, WithGetStore<HTMLElement, PaginationStore> {
   activeListItemIndex?: number
   children: (props: PaginationChildrenProps) => ReactNode
   label: string
@@ -753,7 +766,7 @@ export interface PaginationListItemLinkProps extends PaginationChildrenProps, HT
 export interface PaginationNextListItemLinkProps extends PaginationChildrenProps, HTMLAnchorProps {}
 export interface PaginationPreviousListItemLinkProps extends PaginationChildrenProps, HTMLAnchorProps {}
 
-export interface RadioGroupProps extends Omit<HTMLDivProps, 'children'> {
+export interface RadioGroupProps extends Omit<HTMLDivProps, 'children'>, WithGetStore<HTMLDivElement, RadioGroupStore> {
   checkedItemIndex?: number
   children: (props: RadioGroupChildrenProps) => ReactNode
   onCheckItem?: (index: number) => any
@@ -789,7 +802,7 @@ export interface RadioGroupItemProps extends HTMLDivProps, RadioGroupChildrenPro
   index: number
 }
 
-export interface SliderProps extends Omit<HTMLDivProps, 'children'> {
+export interface SliderProps extends Omit<HTMLDivProps, 'children'>, WithGetStore<HTMLDivElement, SliderStore> {
   children: (props: SliderChildrenProps) => ReactNode
   /**
    * The label of the Slider.
@@ -836,7 +849,7 @@ export interface SliderThumbProps extends HTMLDivProps, SliderChildrenProps {
   focusable?: boolean
 }
 
-export interface TabberProps extends Omit<HTMLDivProps, 'children'> {
+export interface TabberProps extends Omit<HTMLDivProps, 'children'>, WithGetStore<HTMLDivElement, TabberStore> {
   activation?: TabberActivation
   children: (props: TabberChildrenProps) => ReactNode
   listItemsLength: number
@@ -871,7 +884,7 @@ export interface ToggleButtonProps extends HTMLButtonProps {
   toggled: boolean
 }
 
-export interface TooltipProps extends Omit<HTMLDivProps, 'children'> {
+export interface TooltipProps extends Omit<HTMLDivProps, 'children'>, WithGetStore<HTMLDivElement, TooltipStore> {
   children: (props: TooltipChildrenProps) => ReactNode
   /**
    * The hide events are debounced with a delay to allow the user to move the mouse around without instantly closing the Tooltip.

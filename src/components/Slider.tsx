@@ -1,12 +1,12 @@
 import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID } from '@queelag/react-core'
-import React, { KeyboardEvent, MouseEvent, TouchEvent, useEffect } from 'react'
+import React, { ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, TouchEvent, useEffect } from 'react'
 import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
 import { SliderThumbIndex } from '../definitions/types'
-import SliderStore from '../stores/slider.store'
+import { SliderStore } from '../stores/slider.store'
 
-const ROOT_PROPS_KEYS: (keyof SliderProps)[] = ['label', 'maximum', 'minimum', 'mode', 'onChangeValue', 'orientation', 'step', 'value']
+const ROOT_PROPS_KEYS: (keyof SliderProps)[] = ['getStore', 'label', 'maximum', 'minimum', 'mode', 'onChangeValue', 'orientation', 'step', 'value']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof SliderChildrenProps)[] = [
   'handleKeyboardInteractions',
   'maximum',
@@ -81,53 +81,55 @@ export function Root(props: SliderProps) {
   )
 }
 
-const Thumb = (index: SliderThumbIndex) => (props: SliderThumbProps) => {
-  const id = useID(ComponentName.SLIDER_THUMB, props.id)
+const Thumb = (index: SliderThumbIndex) =>
+  forwardRef((props: SliderThumbProps, ref: ForwardedRef<HTMLDivElement>) => {
+    const id = useID(ComponentName.SLIDER_THUMB, props.id)
 
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    props.handleKeyboardInteractions(index, event)
-    props.onKeyDown && props.onKeyDown(event)
-  }
+    const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+      props.handleKeyboardInteractions(index, event)
+      props.onKeyDown && props.onKeyDown(event)
+    }
 
-  const onMouseDown = (event: MouseEvent<HTMLDivElement>) => {
-    props.onThumbMouseDown(index)
-    props.onMouseDown && props.onMouseDown(event)
-  }
+    const onMouseDown = (event: MouseEvent<HTMLDivElement>) => {
+      props.onThumbMouseDown(index)
+      props.onMouseDown && props.onMouseDown(event)
+    }
 
-  const onTouchStart = (event: TouchEvent<HTMLDivElement>) => {
-    props.onThumbTouchStart()
-    props.onTouchStart && props.onTouchStart(event)
-  }
+    const onTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+      props.onThumbTouchStart()
+      props.onTouchStart && props.onTouchStart(event)
+    }
 
-  const onTouchMove = (event: TouchEvent<HTMLDivElement>) => {
-    props.onThumbTouchMove(index, event)
-    props.onTouchMove && props.onTouchMove(event)
-  }
+    const onTouchMove = (event: TouchEvent<HTMLDivElement>) => {
+      props.onThumbTouchMove(index, event)
+      props.onTouchMove && props.onTouchMove(event)
+    }
 
-  const onTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
-    props.onThumbTouchEnd(index)
-    props.onTouchEnd && props.onTouchEnd(event)
-  }
+    const onTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+      props.onThumbTouchEnd(index)
+      props.onTouchEnd && props.onTouchEnd(event)
+    }
 
-  return (
-    <div
-      {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
-      aria-orientation={props.orientation?.toLowerCase() as any}
-      aria-valuemax={props.maximum}
-      aria-valuemin={props.minimum}
-      aria-valuenow={props.value[index]}
-      id={id}
-      onKeyDown={onKeyDown}
-      onMouseDown={onMouseDown}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      role='slider'
-      style={{ touchAction: 'none', userSelect: 'none', ...props.style }}
-      tabIndex={typeof props.focusable === 'boolean' ? (props.focusable ? 0 : -1) : 0}
-    />
-  )
-}
+    return (
+      <div
+        {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)}
+        aria-orientation={props.orientation?.toLowerCase() as any}
+        aria-valuemax={props.maximum}
+        aria-valuemin={props.minimum}
+        aria-valuenow={props.value[index]}
+        id={id}
+        onKeyDown={onKeyDown}
+        onMouseDown={onMouseDown}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        ref={ref}
+        role='slider'
+        style={{ touchAction: 'none', userSelect: 'none', ...props.style }}
+        tabIndex={typeof props.focusable === 'boolean' ? (props.focusable ? 0 : -1) : 0}
+      />
+    )
+  })
 
 export const FirstThumb = Thumb(0)
 export const SecondThumb = Thumb(1)

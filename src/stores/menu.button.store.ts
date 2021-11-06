@@ -4,7 +4,7 @@ import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { MenuButtonProps } from '../definitions/props'
 
-class MenuButtonStore extends ComponentStore<HTMLDivElement> {
+export class MenuButtonStore extends ComponentStore {
   buttonID: ID
   buttonRef: MutableRefObject<HTMLButtonElement>
   expanded: boolean
@@ -12,7 +12,7 @@ class MenuButtonStore extends ComponentStore<HTMLDivElement> {
   listRef: MutableRefObject<HTMLUListElement>
   listItemAnchorsRef: Map<number, MutableRefObject<HTMLAnchorElement>>
 
-  constructor(props: MenuButtonProps & ComponentStoreProps<HTMLDivElement>) {
+  constructor(props: MenuButtonProps & ComponentStoreProps) {
     super(ComponentName.MENU_BUTTON, props)
 
     this.buttonID = IDUtils.prefixed(ComponentName.MENU_BUTTON_BUTTON)
@@ -173,5 +173,3 @@ class MenuButtonStore extends ComponentStore<HTMLDivElement> {
     return this.expanded === true
   }
 }
-
-export default MenuButtonStore

@@ -1,6 +1,6 @@
 import { Logger, ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
+import React, { ChangeEvent, FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
 import {
@@ -12,10 +12,11 @@ import {
   ComboBoxListBoxProps,
   ComboBoxProps
 } from '../definitions/props'
-import ComboBoxStore from '../stores/combo.box.store'
+import { ComboBoxStore } from '../stores/combo.box.store'
 
 const ROOT_PROPS_KEYS: (keyof ComboBoxProps)[] = [
   'autocomplete',
+  'getStore',
   'listBoxLabel',
   'onCollapse',
   'onEscape',
@@ -45,7 +46,7 @@ const STORE_KEYS: (keyof ComboBoxProps & keyof ComboBoxStore)[] = ['onCollapse',
 /**
  * A combobox is an input widget with an associated popup that enables users to select a value for the combobox from a collection of possible values. In some implementations, the popup presents allowed values, while in other implementations, the popup presents suggested values, and users may either select one of the suggestions or type a value.
  */
-export function Root(props: ComboBoxProps) {
+export const Root = forwardRef((props: ComboBoxProps, ref: ForwardedRef<HTMLDivElement>) => {
   const store = useComponentStore(ComboBoxStore, props, STORE_KEYS)
   const popper = usePopper(store.groupRef.current, store.listBoxRef.current, props.popperOptions)
 
@@ -60,7 +61,7 @@ export function Root(props: ComboBoxProps) {
   }, [store.listBoxRef.current])
 
   return (
-    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} style={{ position: 'relative', ...props.style }}>
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} ref={ref} style={{ position: 'relative', ...props.style }}>
       {props.children({
         autocomplete: props.autocomplete,
         deleteListBoxItemRef: store.deleteListBoxItemRef,
@@ -80,7 +81,7 @@ export function Root(props: ComboBoxProps) {
       })}
     </div>
   )
-}
+})
 
 export function Group(props: ComboBoxGroupProps) {
   const id = useID(ComponentName.COMBO_BOX_GROUP, props.id)
@@ -130,7 +131,7 @@ export function Input(props: ComboBoxInputProps) {
   )
 }
 
-export function Button(props: ComboBoxButtonProps) {
+export const Button = forwardRef((props: ComboBoxButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
   const id = useID(ComponentName.COMBO_BOX_BUTTON, props.id)
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -153,11 +154,12 @@ export function Button(props: ComboBoxButtonProps) {
       id={id}
       onClick={onClick}
       onMouseDown={onMouseDown}
+      ref={ref}
       tabIndex={-1}
       type='button'
     />
   )
-}
+})
 
 export function ListBox(props: ComboBoxListBoxProps) {
   const ref = useSafeRef('ul')

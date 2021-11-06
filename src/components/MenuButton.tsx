@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
+import React, { FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import {
   MenuButtonButtonProps,
@@ -10,9 +10,9 @@ import {
   MenuButtonListProps,
   MenuButtonProps
 } from '../definitions/props'
-import MenuButtonStore from '../stores/menu.button.store'
+import { MenuButtonStore } from '../stores/menu.button.store'
 
-const ROOT_PROPS_KEYS: (keyof MenuButtonProps)[] = ['popperOptions']
+const ROOT_PROPS_KEYS: (keyof MenuButtonProps)[] = ['getStore', 'popperOptions']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
   'buttonID',
   'deleteListItemAnchorRef',
@@ -28,7 +28,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
 /**
  * A menu button is a button that opens a menu. It is often styled as a typical push button with a downward pointing arrow or triangle to hint that activating the button will display a menu.
  */
-export function Root(props: MenuButtonProps) {
+export const Root = forwardRef((props: MenuButtonProps, ref: ForwardedRef<HTMLDivElement>) => {
   const store = useComponentStore(MenuButtonStore, props)
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
 
@@ -43,7 +43,14 @@ export function Root(props: MenuButtonProps) {
   }
 
   return (
-    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onBlur={onBlur} onKeyDown={onKeyDown} style={{ position: 'relative', ...props.style }}>
+    <div
+      {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)}
+      id={store.id}
+      onBlur={onBlur}
+      onKeyDown={onKeyDown}
+      ref={ref}
+      style={{ position: 'relative', ...props.style }}
+    >
       {props.children({
         buttonID: store.buttonID,
         deleteListItemAnchorRef: store.deleteListItemAnchorRef,
@@ -57,7 +64,7 @@ export function Root(props: MenuButtonProps) {
       })}
     </div>
   )
-}
+})
 
 export function Button(props: MenuButtonButtonProps) {
   const ref = useSafeRef('button')
@@ -101,9 +108,9 @@ export function List(props: MenuButtonListProps) {
   )
 }
 
-export function ListItem(props: MenuButtonListItemProps) {
-  return <li {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} role='none' />
-}
+export const ListItem = forwardRef((props: MenuButtonListItemProps, ref: ForwardedRef<HTMLLIElement>) => {
+  return <li {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} ref={ref} role='none' />
+})
 
 export function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
   const ref = useSafeRef('a')

@@ -1,6 +1,6 @@
 import { Logger, ObjectUtils } from '@queelag/core'
 import { useID } from '@queelag/react-core'
-import React, { KeyboardEvent } from 'react'
+import React, { ForwardedRef, forwardRef, KeyboardEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { ComponentName, Key } from '../definitions/enums'
 import { AlertDialogChildrenProps, AlertDialogDescriptionProps, AlertDialogProps, AlertDialogTitleProps } from '../definitions/props'
@@ -11,7 +11,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof AlertDialogChildrenProps)[] = ['descripti
 /**
  * An alert dialog is a modal dialog that interrupts the user's workflow to communicate an important message and acquire a response.
  */
-export function Root(props: AlertDialogProps) {
+export const Root = forwardRef((props: AlertDialogProps, ref: ForwardedRef<HTMLDivElement>) => {
   const id = useID(ComponentName.ALERT_DIALOG, props.id)
   const descriptionID = useID(ComponentName.ALERT_DIALOG_DESCRIPTION)
   const titleID = useID(ComponentName.ALERT_DIALOG_TITLE)
@@ -42,6 +42,7 @@ export function Root(props: AlertDialogProps) {
       aria-labelledby={props.hasTitle ? titleID : undefined}
       id={id}
       onKeyDown={onKeyDown}
+      ref={ref}
       role='alertdialog'
       style={{ bottom: 0, left: 0, position: 'absolute', right: 0, top: 0, ...props.style }}
       aria-modal
@@ -50,15 +51,15 @@ export function Root(props: AlertDialogProps) {
     </div>,
     document.body
   )
-}
+})
 
-export function Title(props: AlertDialogTitleProps) {
-  return <span {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} id={props.titleID}></span>
-}
+export const Title = forwardRef((props: AlertDialogTitleProps, ref: ForwardedRef<HTMLSpanElement>) => {
+  return <span {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} id={props.titleID} ref={ref}></span>
+})
 
-export function Description(props: AlertDialogDescriptionProps) {
-  return <span {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} id={props.descriptionID}></span>
-}
+export const Description = forwardRef((props: AlertDialogDescriptionProps, ref: ForwardedRef<HTMLSpanElement>) => {
+  return <span {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} id={props.descriptionID} ref={ref}></span>
+})
 
 export const AriaAlertDialog = {
   Root,

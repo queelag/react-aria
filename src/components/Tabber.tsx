@@ -1,10 +1,10 @@
 import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useSafeRef } from '@queelag/react-core'
-import React, { KeyboardEvent, MouseEvent, useEffect } from 'react'
+import React, { ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { TabberChildrenProps, TabberListItemProps, TabberListProps, TabberPanelProps, TabberProps } from '../definitions/props'
-import TabberStore from '../stores/tabber.store'
+import { TabberStore } from '../stores/tabber.store'
 
-const ROOT_PROPS_KEYS: (keyof TabberProps)[] = ['activation', 'listItemsLength']
+const ROOT_PROPS_KEYS: (keyof TabberProps)[] = ['activation', 'getStore', 'listItemsLength']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
   'handleKeyboardEvents',
   'isTabSelected',
@@ -16,11 +16,11 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof TabberChildrenProps)[] = [
 ]
 const STORE_KEYS: (keyof TabberProps & keyof TabberStore)[] = ['activation', 'listItemsLength']
 
-export function Root(props: TabberProps) {
+export const Root = forwardRef((props: TabberProps, ref: ForwardedRef<HTMLDivElement>) => {
   const store = useComponentStore(TabberStore, props, STORE_KEYS)
 
   return (
-    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)}>
+    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} ref={ref}>
       {props.children({
         handleKeyboardEvents: store.handleKeyboardEvents,
         isTabSelected: store.isTabSelected,
@@ -32,16 +32,16 @@ export function Root(props: TabberProps) {
       })}
     </div>
   )
-}
+})
 
-export function List(props: TabberListProps) {
+export const List = forwardRef((props: TabberListProps, ref: ForwardedRef<HTMLDivElement>) => {
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     props.handleKeyboardEvents(event)
     props.onKeyDown && props.onKeyDown(event)
   }
 
-  return <div {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label={props.label} onKeyDown={onKeyDown} role='tablist' />
-}
+  return <div {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} aria-label={props.label} onKeyDown={onKeyDown} ref={ref} role='tablist' />
+})
 
 export function ListItem(props: TabberListItemProps) {
   const ref = useSafeRef('button')
@@ -67,18 +67,19 @@ export function ListItem(props: TabberListItemProps) {
   )
 }
 
-export function Panel(props: TabberPanelProps) {
+export const Panel = forwardRef((props: TabberPanelProps, ref: ForwardedRef<HTMLDivElement>) => {
   return (
     <div
       {...ObjectUtils.omit(props, [...ROOT_CHILDREN_PROPS_KEYS, 'index'])}
       aria-hidden={!props.isTabSelected(props.index)}
       aria-labelledby={props.panelIDs[props.index]}
       id={props.listItemIDs[props.index]}
+      ref={ref}
       role='tabpanel'
       tabIndex={props.isTabSelected(props.index) ? 0 : undefined}
     />
   )
-}
+})
 
 export const AriaTabber = {
   Root,

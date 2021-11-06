@@ -15,6 +15,7 @@ import { PaginationStore } from '../stores/pagination.store'
 
 const ROOT_PROPS_KEYS: (keyof PaginationProps)[] = [
   'activeListItemIndex',
+  'getStore',
   'label',
   'listItemsIndexOffset',
   'numberOfListItems',

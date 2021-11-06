@@ -1,6 +1,6 @@
 import { Logger, ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, KeyboardEvent, MouseEvent, useEffect } from 'react'
+import React, { FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { usePopper } from 'react-popper'
 import { ComponentName } from '../definitions/enums'
@@ -13,9 +13,9 @@ import {
   ContextMenuProps,
   ContextMenuTriggerProps
 } from '../definitions/props'
-import ContextMenuStore from '../stores/context.menu.store'
+import { ContextMenuStore } from '../stores/context.menu.store'
 
-const ROOT_PROPS_KEYS: (keyof ContextMenuProps)[] = ['popperOptions']
+const ROOT_PROPS_KEYS: (keyof ContextMenuProps)[] = ['getStore', 'popperOptions']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof ContextMenuChildrenProps)[] = [
   'deleteListItemAnchorRef',
   'expanded',
@@ -32,7 +32,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof ContextMenuChildrenProps)[] = [
 /**
  * A menu trigger is a trigger that opens a menu. It is often styled as a typical push trigger with a downward pointing arrow or triangle to hint that activating the trigger will display a menu.
  */
-export function Root(props: ContextMenuProps) {
+export const Root = forwardRef((props: ContextMenuProps, ref: ForwardedRef<HTMLDivElement>) => {
   const store = useComponentStore(ContextMenuStore, props)
   const popper = usePopper(store.triggerRef.current, store.listRef.current, { ...props.popperOptions, placement: 'bottom-start', strategy: 'absolute' })
 
@@ -47,7 +47,14 @@ export function Root(props: ContextMenuProps) {
   }
 
   return (
-    <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onBlur={onBlur} onKeyDown={onKeyDown} style={{ position: 'relative', ...props.style }}>
+    <div
+      {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)}
+      id={store.id}
+      onBlur={onBlur}
+      onKeyDown={onKeyDown}
+      ref={ref}
+      style={{ position: 'relative', ...props.style }}
+    >
       {props.children({
         deleteListItemAnchorRef: store.deleteListItemAnchorRef,
         expanded: store.expanded,
@@ -62,9 +69,9 @@ export function Root(props: ContextMenuProps) {
       })}
     </div>
   )
-}
+})
 
-export function Backdrop(props: ContextMenuBackdropProps) {
+export const Backdrop = forwardRef((props: ContextMenuBackdropProps, ref: ForwardedRef<HTMLDivElement>) => {
   const id = useID(ComponentName.CONTEXT_MENU_BACKDROP)
 
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -86,11 +93,12 @@ export function Backdrop(props: ContextMenuBackdropProps) {
       id={id}
       onClick={onClick}
       onContextMenu={onContextMenu}
+      ref={ref}
       style={{ bottom: 0, left: 0, right: 0, position: 'fixed', top: 0, ...props.style }}
     />,
     document.body
   )
-}
+})
 
 export function Trigger(props: ContextMenuTriggerProps) {
   const ref = useSafeRef('div')
@@ -147,9 +155,9 @@ export function List(props: ContextMenuListProps) {
   )
 }
 
-export function ListItem(props: ContextMenuListItemProps) {
-  return <li {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} role='none' />
-}
+export const ListItem = forwardRef((props: ContextMenuListItemProps, ref: ForwardedRef<HTMLLIElement>) => {
+  return <li {...ObjectUtils.omit(props, ROOT_CHILDREN_PROPS_KEYS)} ref={ref} role='none' />
+})
 
 export function ListItemAnchor(props: ContextMenuListItemAnchorProps) {
   const ref = useSafeRef('a')

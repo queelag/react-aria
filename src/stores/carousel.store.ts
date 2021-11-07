@@ -88,7 +88,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
 
   gotoPreviousSlide = (): void => {
     if (this.slideElementRefs.size <= 1) {
-      return StoreLogger.warn(this.id, 'gotoPreviousSlide', `There aren't enough slides to traverse.`)
+      return StoreLogger.verbose(this.id, 'gotoPreviousSlide', `There aren't enough slides to traverse.`)
     }
 
     switch (this.rotationMode) {
@@ -105,7 +105,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
 
   gotoNextSlide = (): void => {
     if (this.slideElementRefs.size <= 1) {
-      return StoreLogger.warn(this.id, 'gotoNextSlide', `There aren't enough slides to traverse.`)
+      return StoreLogger.verbose(this.id, 'gotoNextSlide', `There aren't enough slides to traverse.`)
     }
 
     switch (this.rotationMode) {
@@ -122,15 +122,15 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
 
   disableAutomaticRotation = (): void => {
     clearInterval(this.automaticRotationInterval as any)
-    StoreLogger.debug(this.id, 'disableAutomaticRotation', `The automatic rotation has been disabled.`)
+    StoreLogger.verbose(this.id, 'disableAutomaticRotation', `The automatic rotation has been disabled.`)
   }
 
   enableAutomaticRotation = (): void => {
     clearInterval(this.automaticRotationInterval as any)
-    StoreLogger.debug(this.id, 'enableAutomaticRotation', `The automatic rotation has been disabled.`)
+    StoreLogger.verbose(this.id, 'enableAutomaticRotation', `The automatic rotation has been disabled.`)
 
     this.automaticRotationInterval = setInterval(this.gotoNextSlide, this.automaticRotationDuration)
-    StoreLogger.debug(this.id, 'enableAutomaticRotation', `The automatic rotation has been enabled.`)
+    StoreLogger.verbose(this.id, 'enableAutomaticRotation', `The automatic rotation has been enabled.`)
   }
 
   toggleAutomaticRotation = (): void => {

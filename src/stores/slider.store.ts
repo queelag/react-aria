@@ -1,9 +1,10 @@
-import { Logger, noop, NumberUtils, ObjectUtils } from '@queelag/core'
+import { noop, NumberUtils, ObjectUtils } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, Orientation } from '@queelag/react-core'
 import React from 'react'
 import { ComponentName, Key, SliderMode } from '../definitions/enums'
 import { SliderProps } from '../definitions/props'
 import { SliderPercentual, SliderThumbIndex, SliderValue } from '../definitions/types'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class SliderStore extends ComponentStore {
   _step: number = 0
@@ -44,7 +45,7 @@ export class SliderStore extends ComponentStore {
       case Key.END:
         event.preventDefault()
         event.stopPropagation()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
+        StoreLogger.verbose(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }
@@ -75,17 +76,17 @@ export class SliderStore extends ComponentStore {
 
   onThumbMouseDown = (index: SliderThumbIndex): void => {
     this.thumbMovable = true
-    Logger.debug(this.id, 'handleMouseInteractions', `The thumb has been unlocked.`)
+    StoreLogger.debug(this.id, 'handleMouseInteractions', `The thumb has been unlocked.`)
 
     this.onThumbMouseMoveListener = (event: MouseEvent) => this.onThumbMouseMove(index, event)
     this.onThumbMouseUpListener = () => this.onThumbMouseUp(index)
 
-    Logger.debug(this.id, 'handleMouseInteractions', `The mousemove and mouseup listeners has been set.`)
+    StoreLogger.verbose(this.id, 'handleMouseInteractions', `The mousemove and mouseup listeners has been set.`)
 
     document.addEventListener('mousemove', this.onThumbMouseMoveListener)
     document.addEventListener('mouseup', this.onThumbMouseUpListener)
 
-    Logger.debug(this.id, 'handleMouseInteractions', `The mousemove and mouseup listeners have been registered.`)
+    StoreLogger.verbose(this.id, 'handleMouseInteractions', `The mousemove and mouseup listeners have been registered.`)
   }
 
   onThumbMouseMove(index: SliderThumbIndex, event: MouseEvent): void {
@@ -101,7 +102,7 @@ export class SliderStore extends ComponentStore {
 
   onThumbTouchStart = (): void => {
     this.thumbMovable = true
-    Logger.debug(this.id, 'handleTouchInteractions', `The thumb has been unlocked.`)
+    StoreLogger.debug(this.id, 'handleTouchInteractions', `The thumb has been unlocked.`)
   }
 
   onThumbTouchMove = (index: SliderThumbIndex, event: React.TouchEvent): void => {
@@ -117,7 +118,7 @@ export class SliderStore extends ComponentStore {
 
   onThumbMouseOrTouchMove(index: SliderThumbIndex, x: number, y: number): void {
     if (this.thumbMovable === false) {
-      Logger.debug(this.id, 'onMouseOrTouchMove', `The thumb is not movable.`)
+      StoreLogger.verbose(this.id, 'onMouseOrTouchMove', `The thumb is not movable.`)
       return
     }
 
@@ -125,18 +126,18 @@ export class SliderStore extends ComponentStore {
   }
 
   onThumbMouseUpOrTouchEnd(index: SliderThumbIndex): void {
-    Logger.debug(this.id, 'onMouseUpOrTouchEnd', `The percentual with index ${index} has been set to ${this.percentual[index]}%.`)
-    Logger.debug(this.id, 'onMouseUpOrTouchEnd', `The value with index ${index} has been set to ${this.value[index]}.`)
+    StoreLogger.debug(this.id, 'onMouseUpOrTouchEnd', `The percentual with index ${index} has been set to ${this.percentual[index]}%.`)
+    StoreLogger.debug(this.id, 'onMouseUpOrTouchEnd', `The value with index ${index} has been set to ${this.value[index]}.`)
 
     this.thumbMovable = false
-    Logger.debug(this.id, 'onMouseUpOrTouchEnd', `The thumb has been locked.`)
+    StoreLogger.debug(this.id, 'onMouseUpOrTouchEnd', `The thumb has been locked.`)
 
     document.removeEventListener('mousemove', this.onThumbMouseMoveListener)
     document.removeEventListener('mouseup', this.onThumbMouseUpListener)
     document.removeEventListener('touchmove', this.onThumbTouchMoveListener)
     document.removeEventListener('touchend', this.onThumbTouchEndListener)
 
-    Logger.debug(this.id, 'onMouseUpOrTouchEnd', `THe mousemove, mouseup, touchmove and touchend listeners have been removed.`)
+    StoreLogger.verbose(this.id, 'onMouseUpOrTouchEnd', `THe mousemove, mouseup, touchmove and touchend listeners have been removed.`)
   }
 
   setPercentualByValue(index: SliderThumbIndex, value: number): void {
@@ -150,7 +151,7 @@ export class SliderStore extends ComponentStore {
 
   setPercentual(index: SliderThumbIndex, percentual: number): void {
     this.percentual[index] = percentual
-    // Logger.debug(this.id, 'setPercentual', `The percentual with index ${index} has been set to ${this.percentual[index]}%.`)
+    // StoreLogger.debug(this.id, 'setPercentual', `The percentual with index ${index} has been set to ${this.percentual[index]}%.`)
 
     this.update()
   }
@@ -179,7 +180,7 @@ export class SliderStore extends ComponentStore {
 
   setValue(index: SliderThumbIndex, value: number): void {
     this.value[index] = value
-    // Logger.debug(this.id, 'setValueByCoordinates', `The value with index ${index} has been set to ${this.value[index]}.`)
+    // StoreLogger.debug(this.id, 'setValueByCoordinates', `The value with index ${index} has been set to ${this.value[index]}.`)
 
     switch (this.mode) {
       case SliderMode.DUAL_THUMB:
@@ -212,7 +213,7 @@ export class SliderStore extends ComponentStore {
         0,
         100
       )
-      Logger.debug(this.id, 'setPercentual', `The percentual has been rounded to ${percentual}%.`)
+      StoreLogger.verbose(this.id, 'setPercentual', `The percentual has been rounded to ${percentual}%.`)
     }
 
     return percentual

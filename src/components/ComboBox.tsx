@@ -1,4 +1,4 @@
-import { Logger, ObjectUtils } from '@queelag/core'
+import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
 import React, { ChangeEvent, FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
@@ -12,6 +12,7 @@ import {
   ComboBoxListBoxProps,
   ComboBoxProps
 } from '../definitions/props'
+import { ComponentLogger } from '../loggers/component.logger'
 import { ComboBoxStore } from '../stores/combo.box.store'
 
 const ROOT_PROPS_KEYS: (keyof ComboBoxProps)[] = [
@@ -57,7 +58,7 @@ export const Root = forwardRef((props: ComboBoxProps, ref: ForwardedRef<HTMLDivE
 
   useEffect(() => {
     store.listBoxRef.current.scrollTo({ behavior: 'smooth', top: store.focusedListBoxItemRef.current.offsetTop })
-    Logger.debug(store.id, 'useEffect', 'The focused listbox item has been scrolled into view.')
+    ComponentLogger.verbose(store.id, 'useEffect', 'The focused listbox item has been scrolled into view.')
   }, [store.listBoxRef.current])
 
   return (
@@ -136,7 +137,7 @@ export const Button = forwardRef((props: ComboBoxButtonProps, ref: ForwardedRef<
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
-    Logger.debug(id, 'onClick', `The event propagation has been stopped.`)
+    ComponentLogger.verbose(id, 'onClick', `The event propagation has been stopped.`)
 
     props.setExpanded(!props.expanded, id, 'onClick')
     props.onClick && props.onClick(event)

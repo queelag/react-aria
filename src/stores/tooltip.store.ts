@@ -1,8 +1,9 @@
-import { ID, IDUtils, Logger } from '@queelag/core'
+import { ID, IDUtils } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { TooltipProps } from '../definitions/props'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class TooltipStore extends ComponentStore {
   elementID: ID
@@ -26,7 +27,7 @@ export class TooltipStore extends ComponentStore {
       case Key.ESCAPE:
         event.preventDefault()
         event.stopPropagation()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
+        StoreLogger.verbose(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         this.setVisible(false)
 
@@ -36,26 +37,26 @@ export class TooltipStore extends ComponentStore {
 
   setElementRef = (ref: MutableRefObject<HTMLDivElement>): void => {
     this.elementRef = ref
-    Logger.debug(this.id, 'setElementRef', `The element ref has been set.`)
+    StoreLogger.verbose(this.id, 'setElementRef', `The element ref has been set.`)
 
     this.update()
   }
 
   setTriggerRef = (ref: MutableRefObject<HTMLDivElement>): void => {
     this.triggerRef = ref
-    Logger.debug(this.id, 'setTriggerRef', `The trigger ref has been set.`)
+    StoreLogger.verbose(this.id, 'setTriggerRef', `The trigger ref has been set.`)
 
     this.update()
   }
 
   setVisible = (visible: boolean): void => {
     if (visible === false && this.triggerRef.current === document.activeElement) {
-      Logger.debug(this.id, 'setVisible', `Failed to set visible to false, the trigger element is still focused.`)
+      StoreLogger.verbose(this.id, 'setVisible', `Failed to set visible to false, the trigger element is still focused.`)
       return
     }
 
     this.visible = visible
-    Logger.debug(this.id, 'setVisible', `The tooltip has been ${visible ? 'shown' : 'hidden'}.`)
+    StoreLogger.debug(this.id, 'setVisible', `The tooltip has been ${visible ? 'shown' : 'hidden'}.`)
 
     this.update()
   }

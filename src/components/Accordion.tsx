@@ -1,4 +1,4 @@
-import { Logger, ObjectUtils } from '@queelag/core'
+import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
 import React, { ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, MutableRefObject, useEffect } from 'react'
 import { ComponentName } from '../definitions/enums'
@@ -10,6 +10,7 @@ import {
   AccordionSectionPanelProps,
   AccordionSectionProps
 } from '../definitions/props'
+import { ComponentLogger } from '../loggers/component.logger'
 import { AccordionStore } from '../stores/accordion.store'
 
 const ROOT_PROPS_KEYS: (keyof AccordionProps)[] = ['getStore']
@@ -51,7 +52,7 @@ export function Section(props: AccordionSectionProps) {
   useEffect(() => {
     if (props.isExpanded === true) {
       expand(true)
-      Logger.debug(id, 'useEffect', 'The isExpanded prop is truthy, expanding the section')
+      ComponentLogger.verbose(id, 'useEffect', 'The isExpanded prop is truthy, expanding the section')
     }
   }, [props.isExpanded])
 
@@ -67,7 +68,7 @@ export function SectionHeader(props: AccordionSectionHeaderProps) {
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     props.expand(!props.expanded)
-    Logger.debug(props.headerID, 'onClick', `The section has been ${!props.expanded ? 'expanded' : 'collapsed'}`)
+    ComponentLogger.debug(props.headerID, 'onClick', `The section has been ${!props.expanded ? 'expanded' : 'collapsed'}`)
 
     props.onClick && props.onClick(event)
   }

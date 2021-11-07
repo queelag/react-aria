@@ -856,6 +856,7 @@ export interface TabberProps extends Omit<HTMLDivProps, 'children'>, WithGetStor
 }
 
 export interface TabberChildrenProps {
+  deleteListItemRef: (index: number) => void
   handleKeyboardEvents: (event: KeyboardEvent<HTMLDivElement>) => void
   isTabSelected: (index: number) => boolean
   listItemIDs: ID[]

@@ -1,6 +1,7 @@
-import { Logger, noop, NumberUtils } from '@queelag/core'
+import { noop, NumberUtils } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { PaginationProps } from '../definitions/props'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class PaginationStore extends ComponentStore<HTMLElement> {
   activeListItemIndex: number
@@ -22,11 +23,11 @@ export class PaginationStore extends ComponentStore<HTMLElement> {
 
   setActiveListItemIndex = (index: number): void => {
     this.activeListItemIndex = NumberUtils.limit(index, this.firstListItemIndex, this.lastListItemIndex)
-    Logger.debug(this.id, 'setActiveListItemIndex', `The active list item index has been set to ${this.activeListItemIndex}.`)
+    StoreLogger.debug(this.id, 'setActiveListItemIndex', `The active list item index has been set to ${this.activeListItemIndex}.`)
 
     if (this.onChangeActiveListItemIndex !== noop) {
       this.onChangeActiveListItemIndex(this.activeListItemIndex)
-      Logger.debug(this.id, 'setActiveListItemIndex', `The onChangeActiveListItemIndex function has been called.`, this.onChangeActiveListItemIndex)
+      StoreLogger.debug(this.id, 'setActiveListItemIndex', `The onChangeActiveListItemIndex function has been called.`, this.onChangeActiveListItemIndex)
     }
 
     this.update()

@@ -1,8 +1,9 @@
-import { ID, IDUtils, Logger, noop, tc } from '@queelag/core'
+import { ID, IDUtils, noop, tc } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { ComboBoxProps } from '../definitions/props'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class ComboBoxStore extends ComponentStore {
   expanded: boolean
@@ -40,7 +41,7 @@ export class ComboBoxStore extends ComponentStore {
       case Key.ESCAPE:
         event.preventDefault()
         event.stopPropagation()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
+        StoreLogger.verbose(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }
@@ -68,11 +69,11 @@ export class ComboBoxStore extends ComponentStore {
         let listBoxItemRef: MutableRefObject<HTMLLIElement> | undefined
 
         if (this.isCollapsed) {
-          return Logger.warn(this.id, 'handleKeyboardInteractions', event.key, `The listbox is collapsed, can't proceed.`)
+          return StoreLogger.warn(this.id, 'handleKeyboardInteractions', event.key, `The listbox is collapsed, can't proceed.`)
         }
 
         listBoxItemRef = this.listBoxItemsRef.get(this.focusedListBoxItemIndex)
-        if (!listBoxItemRef) return Logger.error(this.id, 'handleKeyboardInteractions', event.key, `Failed to find the ref of the focused listbox item.`)
+        if (!listBoxItemRef) return StoreLogger.error(this.id, 'handleKeyboardInteractions', event.key, `Failed to find the ref of the focused listbox item.`)
 
         listBoxItemRef.current.click()
         this.setExpanded(false, this.id, 'handleKeyboardInteractions')
@@ -88,7 +89,7 @@ export class ComboBoxStore extends ComponentStore {
 
   setExpanded = (expanded: boolean, id: ID, caller: string): void => {
     this.expanded = expanded
-    Logger.debug(id, caller, `The combobox has been ${expanded ? 'expanded' : 'collapsed'}.`)
+    StoreLogger.debug(id, caller, `The combobox has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
     if (this.isCollapsed) {
       // this.setFocusedListBoxItemIndex(-1)
@@ -105,38 +106,38 @@ export class ComboBoxStore extends ComponentStore {
 
   setFocusedListBoxItemIndex = (index: number): void => {
     this.focusedListBoxItemIndex = index
-    Logger.debug(this.id, 'setFocusedListBoxItemID', `The focused listbox item index has been set to ${index}.`)
+    StoreLogger.debug(this.id, 'setFocusedListBoxItemID', `The focused listbox item index has been set to ${index}.`)
 
     this.update()
   }
 
   setSelectedListBoxItemIndex = (index: number, selected: boolean): void => {
     this.selectedListBoxItemIndexes = selected ? [index] : []
-    Logger.debug(this.id, 'setSelectedListBoxItemIndex', `The selected list box item index has been set to ${index}.`)
+    StoreLogger.debug(this.id, 'setSelectedListBoxItemIndex', `The selected list box item index has been set to ${index}.`)
 
     this.onSelectListBoxItem === noop ? this.update() : this.onSelectListBoxItem(this.selectedListBoxItemIndexes)
   }
 
   setGroupRef = (ref: MutableRefObject<HTMLDivElement>): void => {
     this.groupRef = ref
-    Logger.debug(this.id, 'setGroupRef', `The group ref has been set.`)
+    StoreLogger.verbose(this.id, 'setGroupRef', `The group ref has been set.`)
 
     this.update()
   }
 
   setInputRef = (ref: MutableRefObject<HTMLInputElement>): void => {
     this.inputRef = ref
-    Logger.debug(this.id, 'setInputRef', `The input ref has been set.`)
+    StoreLogger.verbose(this.id, 'setInputRef', `The input ref has been set.`)
   }
 
   setListBoxItemRef = (index: number, ref: MutableRefObject<HTMLLIElement>): void => {
     this.listBoxItemsRef.set(index, ref)
-    Logger.debug(this.id, 'setListBoxItemRef', `The ref of the listbox item with index ${index} has been set.`)
+    StoreLogger.verbose(this.id, 'setListBoxItemRef', `The ref of the listbox item with index ${index} has been set.`)
   }
 
   setListBoxRef = (ref: MutableRefObject<HTMLUListElement>): void => {
     this.listBoxRef.current = ref.current || this.listBoxRef.current
-    Logger.debug(this.id, 'setListBoxRef', `The listbox ref has been set.`)
+    StoreLogger.verbose(this.id, 'setListBoxRef', `The listbox ref has been set.`)
 
     this.update()
   }
@@ -145,10 +146,10 @@ export class ComboBoxStore extends ComponentStore {
     let exists: boolean
 
     exists = this.listBoxItemsRef.has(index)
-    if (!exists) return Logger.error(this.id, 'deleteListBoxItemRef', `Failed to find the ref of the listbox item with index ${index}.`)
+    if (!exists) return StoreLogger.error(this.id, 'deleteListBoxItemRef', `Failed to find the ref of the listbox item with index ${index}.`)
 
     this.listBoxItemsRef.delete(index)
-    Logger.debug(this.id, 'deleteListBoxItemRef', `The ref of the listbox item with index ${index} has been deleted.`)
+    StoreLogger.verbose(this.id, 'deleteListBoxItemRef', `The ref of the listbox item with index ${index} has been deleted.`)
   }
 
   isListBoxItemFocused = (index: number): boolean => {

@@ -1,8 +1,9 @@
-import { ID, Logger } from '@queelag/core'
+import { ID } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, MenuPopperReferenceElement } from '../definitions/enums'
 import { MenuProps } from '../definitions/props'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class MenuStore extends ComponentStore<HTMLUListElement> {
   expandedItemIndex: number
@@ -42,7 +43,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
       case Key.SPACE:
         event.preventDefault()
         event.stopPropagation()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
+        StoreLogger.verbose(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }
@@ -55,7 +56,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
           let first: MutableRefObject<HTMLAnchorElement>
 
           first = this.findItemMenuItemAnchorRef(this.expandedItemIndex, 0)
-          if (!first.current.id) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first item menu item anchor ref.`)
+          if (!first.current.id) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first item menu item anchor ref.`)
 
           first.current.focus()
 
@@ -66,7 +67,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
           this.expandedItemIndex,
           this.expandedItemFocusedMenuItemIndex < this.expandedItemMenuItems - 1 ? this.expandedItemFocusedMenuItemIndex + 1 : 0
         )
-        if (!next.current.id) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the next item menu item anchor ref.`)
+        if (!next.current.id) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the next item menu item anchor ref.`)
 
         next.current.focus()
 
@@ -76,7 +77,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
           this.expandedItemIndex,
           this.expandedItemFocusedMenuItemIndex > 0 ? this.expandedItemFocusedMenuItemIndex - 1 : this.expandedItemMenuItems - 1
         )
-        if (!previous.current.id) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the previous item menu item anchor ref.`)
+        if (!previous.current.id) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the previous item menu item anchor ref.`)
 
         previous.current.focus()
 
@@ -87,10 +88,10 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
 
         previous = this.findItemAnchorRef(this.focusedItemIndex)
         if (!previous.current.id)
-          return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the ref of the item anchor with index ${this.focusedItemIndex}.`)
+          return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the ref of the item anchor with index ${this.focusedItemIndex}.`)
 
         previous.current.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The item anchor ref with index ${this.focusedItemIndex} has been focused.`)
+        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The item anchor ref with index ${this.focusedItemIndex} has been focused.`)
 
         break
       case Key.ARROW_RIGHT:
@@ -99,16 +100,16 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
 
         next = this.findItemAnchorRef(this.focusedItemIndex)
         if (!next.current.id)
-          return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the ref of the item anchor with index ${this.focusedItemIndex}.`)
+          return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the ref of the item anchor with index ${this.focusedItemIndex}.`)
 
         next.current.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The item anchor ref with index ${this.focusedItemIndex} has been focused.`)
+        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The item anchor ref with index ${this.focusedItemIndex} has been focused.`)
 
         break
       case Key.HOME:
         if (this.expandedItemIndex < 0) {
           first = this.findItemAnchorRef(0)
-          if (!first.current.id) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first item anchor ref.`)
+          if (!first.current.id) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first item anchor ref.`)
 
           first.current.focus()
 
@@ -117,7 +118,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
 
         if (this.expandedItemIndex >= 0) {
           first = this.findItemMenuItemAnchorRef(this.expandedItemIndex, 0)
-          if (!first.current.id) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first item menu item anchor ref.`)
+          if (!first.current.id) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first item menu item anchor ref.`)
 
           first.current.focus()
 
@@ -130,7 +131,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
 
         if (this.expandedItemIndex < 0) {
           last = this.findItemAnchorRef(this.itemAnchorsRef.size - 1)
-          if (!last.current.id) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the last item anchor ref.`)
+          if (!last.current.id) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the last item anchor ref.`)
 
           last.current.focus()
 
@@ -139,7 +140,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
 
         if (this.expandedItemIndex >= 0) {
           last = this.findItemMenuItemAnchorRef(this.expandedItemIndex, this.expandedItemMenuItems - 1)
-          if (!last.current.id) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the last item menu item anchor ref.`)
+          if (!last.current.id) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the last item menu item anchor ref.`)
 
           last.current.focus()
 
@@ -152,7 +153,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
 
         first = this.findItemAnchorRef(this.focusedItemIndex)
         if (!first.current.id)
-          return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the ref of the item anchor with index ${this.focusedItemIndex}.`)
+          return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the ref of the item anchor with index ${this.focusedItemIndex}.`)
 
         first.current.focus()
 
@@ -162,10 +163,10 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
         let active: MutableRefObject<HTMLAnchorElement>
 
         active = this.findItemMenuItemAnchorRef(this.expandedItemIndex, this.expandedItemFocusedMenuItemIndex)
-        if (!active.current.id) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the active item menu item anchor ref.`)
+        if (!active.current.id) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the active item menu item anchor ref.`)
 
         active.current.click()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The ${active.current.id} has been clicked.`)
+        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The ${active.current.id} has been clicked.`)
 
         break
     }
@@ -173,53 +174,57 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
 
   setItemAnchorRef = (index: number, ref: MutableRefObject<HTMLAnchorElement>): void => {
     this.itemAnchorsRef.set(index, ref)
-    Logger.debug(this.id, 'setItemAnchorRef', `The ref of the item anchor with index ${index} has been set.`)
+    StoreLogger.verbose(this.id, 'setItemAnchorRef', `The ref of the item anchor with index ${index} has been set.`)
   }
 
   deleteItemAnchorRef = (index: number): void => {
     this.itemAnchorsRef.delete(index)
-    Logger.debug(this.id, 'deleteItemAnchorRef', `The ref of the item anchor with index ${index} has been deleted.`)
+    StoreLogger.verbose(this.id, 'deleteItemAnchorRef', `The ref of the item anchor with index ${index} has been deleted.`)
   }
 
   setItemMenuRef = (id: ID, ref: MutableRefObject<HTMLUListElement>): void => {
     this.itemMenusRef.set(id, ref)
-    Logger.debug(this.id, 'setItemMenuRef', `The ref of the item menu child of ${id} has been set.`)
+    StoreLogger.verbose(this.id, 'setItemMenuRef', `The ref of the item menu child of ${id} has been set.`)
 
     this.update()
   }
 
   deleteItemMenuRef = (id: ID): void => {
     this.itemMenusRef.delete(id)
-    Logger.debug(this.id, 'deleteItemMenuRef', `The ref of the item menu child of ${id} has been deleted.`)
+    StoreLogger.verbose(this.id, 'deleteItemMenuRef', `The ref of the item menu child of ${id} has been deleted.`)
   }
 
   setItemMenuItemAnchorRef = (parentIndex: number, index: number, ref: MutableRefObject<HTMLAnchorElement>): void => {
     !this.itemMenuItemAnchorsRef.has(parentIndex) && this.itemMenuItemAnchorsRef.set(parentIndex, new Map())
-    Logger.debug(this.id, 'setItemMenuItemAnchorRef', `The map of the item menu item with index ${parentIndex} has been created.`)
+    StoreLogger.verbose(this.id, 'setItemMenuItemAnchorRef', `The map of the item menu item with index ${parentIndex} has been created.`)
 
     this.itemMenuItemAnchorsRef.get(parentIndex)?.set(index, ref)
-    Logger.debug(this.id, 'setItemMenuItemAnchorRef', `The ref of the item menu item anchor with parentIndex ${index} and index ${index} has been set.`)
+    StoreLogger.verbose(this.id, 'setItemMenuItemAnchorRef', `The ref of the item menu item anchor with parentIndex ${index} and index ${index} has been set.`)
   }
 
   deleteItemMenuItemAnchorRef = (parentIndex: number, index: number): void => {
     this.itemMenuItemAnchorsRef.get(parentIndex)?.delete(index)
-    Logger.debug(this.id, 'deleteItemMenuItemAnchorRef', `The ref of the item menu item anchor with parentIndex ${index} and index ${index} has been deleted.`)
+    StoreLogger.verbose(
+      this.id,
+      'deleteItemMenuItemAnchorRef',
+      `The ref of the item menu item anchor with parentIndex ${index} and index ${index} has been deleted.`
+    )
   }
 
   setExpandedItemIndex = (index: number, delay: number = 1000): void => {
     this.expandedItemIndex = index
-    Logger.debug(this.id, 'setExpandedItemIndex', `The expanded item index has been set to ${index}.`)
+    StoreLogger.debug(this.id, 'setExpandedItemIndex', `The expanded item index has been set to ${index}.`)
 
     this.update()
   }
 
   setFocusedItemIndex = (index: number): void => {
     this.focusedItemIndex = index
-    Logger.debug(this.id, 'setFocusedItemIndex', `The focused item index has been set to ${index}.`)
+    StoreLogger.debug(this.id, 'setFocusedItemIndex', `The focused item index has been set to ${index}.`)
 
     if (index < 0) {
       this.itemAnchorsRef.get(0)?.current.blur()
-      Logger.debug(this.id, 'setFocusedItemIndex', `The first item anchor element has been blurred.`)
+      StoreLogger.debug(this.id, 'setFocusedItemIndex', `The first item anchor element has been blurred.`)
     }
 
     this.update()
@@ -229,10 +234,10 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
     let ref: MutableRefObject<HTMLAnchorElement>
 
     ref = this.findItemAnchorRef(index)
-    if (!ref.current.id) return Logger.error(this.id, 'focusItemAnchor', `Failed to find the item anchor ref with index ${index}.`)
+    if (!ref.current.id) return StoreLogger.error(this.id, 'focusItemAnchor', `Failed to find the item anchor ref with index ${index}.`)
 
     ref.current.focus()
-    Logger.debug(this.id, 'focusItemAnchor', `The item anchor element with index ${index} has been focused.`)
+    StoreLogger.debug(this.id, 'focusItemAnchor', `The item anchor element with index ${index} has been focused.`)
 
     this.setFocusedItemIndex(index)
   }

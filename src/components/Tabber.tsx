@@ -22,6 +22,7 @@ export const Root = forwardRef((props: TabberProps, ref: ForwardedRef<HTMLDivEle
   return (
     <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} ref={ref}>
       {props.children({
+        deleteListItemRef: store.deleteListItemRef,
         handleKeyboardEvents: store.handleKeyboardEvents,
         isTabSelected: store.isTabSelected,
         listItemIDs: store.listItemIDs,
@@ -51,7 +52,10 @@ export function ListItem(props: TabberListItemProps) {
     props.onClick && props.onClick(event)
   }
 
-  useEffect(() => props.setListItemRef(props.index, ref), [])
+  useEffect(() => {
+    props.setListItemRef(props.index, ref)
+    return () => props.deleteListItemRef(props.index)
+  }, [])
 
   return (
     <button

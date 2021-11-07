@@ -1,7 +1,8 @@
-import { ID, IDUtils, Logger } from '@queelag/core'
+import { ID, IDUtils } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { ComponentName } from '../definitions/enums'
 import { DisclosureSectionProps } from '../definitions/props'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class DisclosureSectionStore extends ComponentStore<HTMLElement> {
   _expanded: boolean = false
@@ -24,7 +25,7 @@ export class DisclosureSectionStore extends ComponentStore<HTMLElement> {
 
   set expanded(expanded: boolean) {
     this._expanded = expanded
-    Logger.debug(this.id, 'setExpanded', `The section has been ${expanded ? 'expanded' : 'collapsed'}.`)
+    StoreLogger.debug(this.id, 'setExpanded', `The section has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
     this.update()
   }

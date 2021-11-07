@@ -1,8 +1,9 @@
-import { ID, Logger, noop } from '@queelag/core'
+import { ID, noop } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key, ListBoxSelectMode } from '../definitions/enums'
 import { ListBoxProps } from '../definitions/props'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class ListBoxStore extends ComponentStore {
   buttonRef: MutableRefObject<HTMLButtonElement>
@@ -38,7 +39,7 @@ export class ListBoxStore extends ComponentStore {
       case Key.END:
         event.preventDefault()
         event.stopPropagation()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
+        StoreLogger.verbose(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }
@@ -74,11 +75,11 @@ export class ListBoxStore extends ComponentStore {
           let listItemRef: MutableRefObject<HTMLLIElement> | undefined
 
           if (this.isCollapsed) {
-            return Logger.warn(this.id, 'handleKeyboardInteractions', event.key, `The listbox is collapsed, can't proceed.`)
+            return StoreLogger.warn(this.id, 'handleKeyboardInteractions', event.key, `The listbox is collapsed, can't proceed.`)
           }
 
           listItemRef = this.listItemsRef.get(this.focusedListItemIndex)
-          if (!listItemRef) return Logger.error(this.id, 'handleKeyboardInteractions', event.key, `Failed to find the ref of the focused listbox item.`)
+          if (!listItemRef) return StoreLogger.error(this.id, 'handleKeyboardInteractions', event.key, `Failed to find the ref of the focused listbox item.`)
 
           listItemRef.current.click()
         }
@@ -127,40 +128,40 @@ export class ListBoxStore extends ComponentStore {
 
   setButtonRef = (ref: MutableRefObject<HTMLButtonElement>): void => {
     this.buttonRef = ref
-    Logger.debug(this.id, 'setButtonRef', `The button ref has been set.`)
+    StoreLogger.verbose(this.id, 'setButtonRef', `The button ref has been set.`)
 
     this.update()
   }
 
   setListRef = (ref: MutableRefObject<HTMLUListElement>): void => {
     this.listRef = ref
-    Logger.debug(this.id, 'setListRef', `The list ref has been set.`)
+    StoreLogger.verbose(this.id, 'setListRef', `The list ref has been set.`)
 
     this.update()
   }
 
   setListItemRef = (index: number, ref: MutableRefObject<HTMLLIElement>): void => {
     this.listItemsRef.set(index, ref)
-    Logger.debug(this.id, 'setListItemRef', `The ref of the list item with index ${index} has been set.`)
+    StoreLogger.verbose(this.id, 'setListItemRef', `The ref of the list item with index ${index} has been set.`)
   }
 
   deleteListItemRef = (index: number): void => {
     this.listItemsRef.delete(index)
-    Logger.debug(this.id, 'deleteListItemRef', `The ref of the list item with index ${index} has been deleted.`)
+    StoreLogger.verbose(this.id, 'deleteListItemRef', `The ref of the list item with index ${index} has been deleted.`)
   }
 
   setExpanded = (expanded: boolean, id: ID, context: string): void => {
     this.expanded = expanded
-    Logger.debug(id, context, `The list box has been ${expanded ? 'expanded' : 'collapsed'}.`)
+    StoreLogger.debug(id, context, `The list box has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
     if (this.isCollapsed) {
       this.buttonRef.current.focus()
-      Logger.debug(id, context, `The button has been focused.`)
+      StoreLogger.debug(id, context, `The button has been focused.`)
     }
 
     if (this.isExpanded) {
       this.listRef.current.focus()
-      Logger.debug(id, context, `The list has been focused.`)
+      StoreLogger.debug(id, context, `The list has been focused.`)
     }
 
     this.update()
@@ -168,7 +169,7 @@ export class ListBoxStore extends ComponentStore {
 
   setFocusedListItemIndex = (index: number): void => {
     this.focusedListItemIndex = index
-    Logger.debug(this.id, 'setFocusedListItemIndex', `The list item with index ${index} has been focused.`)
+    StoreLogger.debug(this.id, 'setFocusedListItemIndex', `The list item with index ${index} has been focused.`)
 
     this.update()
   }
@@ -183,10 +184,10 @@ export class ListBoxStore extends ComponentStore {
         break
     }
 
-    Logger.debug(this.id, 'setSelectedListItemID', this.selectMode, `The list item with index ${index} has been ${selected ? 'selected' : 'unselected'}.`)
+    StoreLogger.debug(this.id, 'setSelectedListItemID', this.selectMode, `The list item with index ${index} has been ${selected ? 'selected' : 'unselected'}.`)
 
     this.listRef.current.focus()
-    Logger.debug(this.id, 'setSelectedListItemID', `The list has been focused.`)
+    StoreLogger.debug(this.id, 'setSelectedListItemID', `The list has been focused.`)
 
     this.onSelectListItem === noop ? this.update() : this.onSelectListItem(this.selectedListItemIndexes)
   }

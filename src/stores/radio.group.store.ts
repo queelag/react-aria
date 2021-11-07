@@ -1,8 +1,9 @@
-import { Logger, noop } from '@queelag/core'
+import { noop } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { RadioGroupProps } from '../definitions/props'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class RadioGroupStore extends ComponentStore {
   itemsRef: Map<number, MutableRefObject<HTMLDivElement>>
@@ -27,7 +28,7 @@ export class RadioGroupStore extends ComponentStore {
       case Key.SPACE:
         event.preventDefault()
         event.stopPropagation()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
+        StoreLogger.verbose(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }
@@ -51,17 +52,17 @@ export class RadioGroupStore extends ComponentStore {
 
   setItemRef = (index: number, ref: MutableRefObject<HTMLDivElement>): void => {
     this.itemsRef.set(index, ref)
-    Logger.debug(this.id, 'setItemRef', `The ref of the item with index ${index} has been set.`)
+    StoreLogger.verbose(this.id, 'setItemRef', `The ref of the item with index ${index} has been set.`)
   }
 
   deleteItemRef = (index: number): void => {
     this.itemsRef.delete(index)
-    Logger.debug(this.id, 'deleteItemRef', `The ref of the item with index ${index} has been deleted.`)
+    StoreLogger.verbose(this.id, 'deleteItemRef', `The ref of the item with index ${index} has been deleted.`)
   }
 
   setCheckedItemIndex = (index: number): void => {
     this.checkedItemIndex = index
-    Logger.debug(this.id, 'setCheckedItemIndex', `The item with index ${index} has been checked.`)
+    StoreLogger.debug(this.id, 'setCheckedItemIndex', `The item with index ${index} has been checked.`)
 
     this.onCheckItem === noop ? this.update() : this.onCheckItem(index)
   }
@@ -70,10 +71,10 @@ export class RadioGroupStore extends ComponentStore {
     let ref: MutableRefObject<HTMLDivElement> | undefined
 
     ref = this.itemsRef.get(this.checkedItemIndex)
-    if (!ref) return Logger.error(this.id, 'focusItem', `Failed to find the item ref with index ${this.checkedItemIndex}.`)
+    if (!ref) return StoreLogger.error(this.id, 'focusItem', `Failed to find the item ref with index ${this.checkedItemIndex}.`)
 
     ref.current.focus()
-    Logger.debug(this.id, 'focusItem', `The item ref with index ${index} has been focused.`)
+    StoreLogger.debug(this.id, 'focusItem', `The item ref with index ${index} has been focused.`)
   }
 
   isItemChecked = (index: number): boolean => {

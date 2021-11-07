@@ -1,4 +1,4 @@
-import { Logger, ObjectUtils } from '@queelag/core'
+import { ObjectUtils } from '@queelag/core'
 import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
 import React, { FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { createPortal } from 'react-dom'
@@ -13,6 +13,7 @@ import {
   ContextMenuProps,
   ContextMenuTriggerProps
 } from '../definitions/props'
+import { ComponentLogger } from '../loggers/component.logger'
 import { ContextMenuStore } from '../stores/context.menu.store'
 
 const ROOT_PROPS_KEYS: (keyof ContextMenuProps)[] = ['getStore', 'popperOptions']
@@ -81,7 +82,7 @@ export const Backdrop = forwardRef((props: ContextMenuBackdropProps, ref: Forwar
 
   const onContextMenu = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault()
-    Logger.debug(id, 'onContextMenu', `The default event has been prevented.`)
+    ComponentLogger.verbose(id, 'onContextMenu', `The default event has been prevented.`)
 
     props.setExpanded(false)
     props.onContextMenu && props.onContextMenu(event)

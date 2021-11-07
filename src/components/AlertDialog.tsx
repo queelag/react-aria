@@ -1,9 +1,10 @@
-import { Logger, ObjectUtils } from '@queelag/core'
+import { ObjectUtils } from '@queelag/core'
 import { useID } from '@queelag/react-core'
 import React, { ForwardedRef, forwardRef, KeyboardEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { ComponentName, Key } from '../definitions/enums'
 import { AlertDialogChildrenProps, AlertDialogDescriptionProps, AlertDialogProps, AlertDialogTitleProps } from '../definitions/props'
+import { ComponentLogger } from '../loggers/component.logger'
 
 const ROOT_PROPS_KEYS: (keyof AlertDialogProps)[] = ['hasDescription', 'hasTitle', 'onClose']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof AlertDialogChildrenProps)[] = ['descriptionID', 'titleID']
@@ -21,10 +22,10 @@ export const Root = forwardRef((props: AlertDialogProps, ref: ForwardedRef<HTMLD
       case Key.ESCAPE:
         event.preventDefault()
         event.stopPropagation()
-        Logger.debug(id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
+        ComponentLogger.verbose(id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         props.onClose()
-        Logger.debug(id, 'handleKeyboardEvents', event.key, 'The alert dialog has been closed.')
+        ComponentLogger.debug(id, 'handleKeyboardEvents', event.key, 'The onClose function has been called.')
 
         break
     }

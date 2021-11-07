@@ -1,8 +1,9 @@
-import { Logger, ObjectUtils } from '@queelag/core'
+import { ObjectUtils } from '@queelag/core'
 import { useID, useSafeRef } from '@queelag/react-core'
 import React, { KeyboardEvent } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { CheckBoxProps } from '../definitions/props'
+import { ComponentLogger } from '../loggers/component.logger'
 
 const ROOT_PROPS_KEYS: (keyof CheckBoxProps)[] = ['checked']
 
@@ -18,10 +19,10 @@ export function Root(props: CheckBoxProps) {
       case Key.SPACE:
         event.preventDefault()
         event.stopPropagation()
-        Logger.debug(id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
+        ComponentLogger.verbose(id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         ref.current.click()
-        Logger.debug(id, 'handleKeyboardInteractions', `The click event has been triggered.`)
+        ComponentLogger.debug(id, 'handleKeyboardInteractions', `The click event has been triggered.`)
 
         break
     }

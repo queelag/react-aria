@@ -126,8 +126,9 @@ export {
   TooltipTriggerProps as AriaTooltipTriggerProps
 } from './definitions/props'
 export * from './definitions/types'
+export { ComponentLogger as ReactAriaComponentLogger } from './loggers/component.logger'
+export { StoreLogger as ReactAriaStoreLogger } from './loggers/store.logger'
 export { AccordionStore as AriaAccordionStore } from './stores/accordion.store'
-export { AlertDialogStore as AriaAlertDialogStore } from './stores/alert.dialog.store'
 export { CarouselStore as AriaCarouselStore } from './stores/carousel.store'
 export { ComboBoxStore as AriaComboBoxStore } from './stores/combo.box.store'
 export { ContextMenuStore as AriaContextMenuStore } from './stores/context.menu.store'

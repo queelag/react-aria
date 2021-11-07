@@ -1,8 +1,9 @@
-import { Logger, noop, rc } from '@queelag/core'
+import { noop, rc } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { MutableRefObject } from 'react'
 import { CarouselLive, CarouselRotationMode, ComponentName } from '../definitions/enums'
 import { CarouselProps } from '../definitions/props'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class CarouselStore extends ComponentStore<HTMLElement> {
   _live: CarouselLive = CarouselLive.OFF
@@ -34,10 +35,10 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
     switch (this.live) {
       case CarouselLive.ASSERTIVE:
       case CarouselLive.POLITE:
-        return Logger.debug(this.id, 'handleFocusEvent', `The live is already set to ${this.live}.`)
+        return StoreLogger.verbose(this.id, 'handleFocusEvent', `The live is already set to ${this.live}.`)
       case CarouselLive.OFF:
         this.liveTemporary = CarouselLive.POLITE
-        Logger.debug(this.id, 'handleFocusEvent', `The temporary live has been set to polite.`)
+        StoreLogger.debug(this.id, 'handleFocusEvent', `The temporary live has been set to polite.`)
 
         this.disableAutomaticRotation()
         this.update()
@@ -52,7 +53,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
     }
 
     this.liveTemporary = undefined
-    Logger.debug(this.id, 'handleBlurEvent', `The temporary live has been unset.`)
+    StoreLogger.debug(this.id, 'handleBlurEvent', `The temporary live has been unset.`)
 
     this.update()
   }
@@ -61,7 +62,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
 
   setActiveSlideIndex = (index: number): void => {
     this.activeSlideIndex = index
-    Logger.debug(this.id, 'setActiveSlideIndex', `The slide with index ${index} has been set as the active slide.`)
+    StoreLogger.verbose(this.id, 'setActiveSlideIndex', `The slide with index ${index} has been set as the active slide.`)
 
     this.onChangeActiveSlideIndex === noop ? this.update() : this.onChangeActiveSlideIndex(index)
   }
@@ -72,22 +73,22 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
 
   setSlideElementRef = (index: number, ref: MutableRefObject<HTMLDivElement>): void => {
     this.slideElementRefs.set(index, ref)
-    Logger.debug(this.id, 'setSlideElementRef', `The slide with index ${index} has been set to the slide element refs.`)
+    StoreLogger.verbose(this.id, 'setSlideElementRef', `The slide with index ${index} has been set to the slide element refs.`)
   }
 
   deleteSlideElementRef = (index: number): void => {
     let exists: boolean
 
     exists = this.slideElementRefs.has(index)
-    if (!exists) return Logger.error(this.id, 'deleteSlideElementRef', `Failed to find the ref of the slide with index ${index}.`)
+    if (!exists) return StoreLogger.error(this.id, 'deleteSlideElementRef', `Failed to find the ref of the slide with index ${index}.`)
 
     this.slideElementRefs.delete(index)
-    Logger.debug(this.id, 'deleteSlideElementRef', `The ref of the slide with index ${index} has been deleted.`)
+    StoreLogger.verbose(this.id, 'deleteSlideElementRef', `The ref of the slide with index ${index} has been deleted.`)
   }
 
   gotoPreviousSlide = (): void => {
     if (this.slideElementRefs.size <= 1) {
-      return Logger.debug(this.id, 'gotoPreviousSlide', `There aren't enough slides to traverse.`)
+      return StoreLogger.warn(this.id, 'gotoPreviousSlide', `There aren't enough slides to traverse.`)
     }
 
     switch (this.rotationMode) {
@@ -104,7 +105,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
 
   gotoNextSlide = (): void => {
     if (this.slideElementRefs.size <= 1) {
-      return Logger.debug(this.id, 'gotoNextSlide', `There aren't enough slides to traverse.`)
+      return StoreLogger.warn(this.id, 'gotoNextSlide', `There aren't enough slides to traverse.`)
     }
 
     switch (this.rotationMode) {
@@ -121,15 +122,15 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
 
   disableAutomaticRotation = (): void => {
     clearInterval(this.automaticRotationInterval as any)
-    Logger.debug(this.id, 'disableAutomaticRotation', `The automatic rotation has been disabled.`)
+    StoreLogger.debug(this.id, 'disableAutomaticRotation', `The automatic rotation has been disabled.`)
   }
 
   enableAutomaticRotation = (): void => {
     clearInterval(this.automaticRotationInterval as any)
-    Logger.debug(this.id, 'enableAutomaticRotation', `The automatic rotation has been disabled.`)
+    StoreLogger.debug(this.id, 'enableAutomaticRotation', `The automatic rotation has been disabled.`)
 
     this.automaticRotationInterval = setInterval(this.gotoNextSlide, this.automaticRotationDuration)
-    Logger.debug(this.id, 'enableAutomaticRotation', `The automatic rotation has been enabled.`)
+    StoreLogger.debug(this.id, 'enableAutomaticRotation', `The automatic rotation has been enabled.`)
   }
 
   toggleAutomaticRotation = (): void => {
@@ -148,7 +149,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
     ref = this.slideElementRefs.get(index)
     if (!ref)
       return rc(
-        () => Logger.error(this.id, 'findSlideElementRefByIndex', `Failed to find the ref of the slide with index ${index}.`),
+        () => StoreLogger.error(this.id, 'findSlideElementRefByIndex', `Failed to find the ref of the slide with index ${index}.`),
         ReactUtils.createDummyRef('div')
       )
 
@@ -173,7 +174,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
 
   set live(live: CarouselLive) {
     this._live = live
-    Logger.debug(this.id, 'setLive', `The live has been set to ${live}.`)
+    StoreLogger.verbose(this.id, 'setLive', `The live has been set to ${live}.`)
 
     this.toggleAutomaticRotation()
     this.update()

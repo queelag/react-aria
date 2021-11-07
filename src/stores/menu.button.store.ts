@@ -1,8 +1,9 @@
-import { ID, IDUtils, Logger } from '@queelag/core'
+import { ID, IDUtils } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
 import { MenuButtonProps } from '../definitions/props'
+import { StoreLogger } from '../loggers/store.logger'
 
 export class MenuButtonStore extends ComponentStore {
   buttonID: ID
@@ -34,7 +35,7 @@ export class MenuButtonStore extends ComponentStore {
       case Key.ESCAPE:
         event.preventDefault()
         event.stopPropagation()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
+        StoreLogger.verbose(this.id, 'handleKeyboardInteractions', `The default event has been prevented and the propagation has been stopped.`)
 
         break
     }
@@ -47,21 +48,21 @@ export class MenuButtonStore extends ComponentStore {
           let first: MutableRefObject<HTMLAnchorElement> | undefined
 
           first = this.listItemAnchorsRef.get(0)
-          if (!first) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first list item anchor ref.`)
+          if (!first) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first list item anchor ref.`)
 
           this.setExpanded(true)
 
           first.current.focus()
-          Logger.debug(this.id, 'handleKeyboardInteractions', `The first list item anchor ref has been focused.`)
+          StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The first list item anchor ref has been focused.`)
 
           break
         }
 
         next = this.listItemAnchorsRef.get(this.focusedListItemAnchorIndex < this.listItemAnchorsRef.size - 1 ? this.focusedListItemAnchorIndex + 1 : 0)
-        if (!next) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the next list item anchor ref.`)
+        if (!next) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the next list item anchor ref.`)
 
         next.current.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The list item anchor ref with index ${this.focusedListItemAnchorIndex} has been focused.`)
+        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The list item anchor ref with index ${this.focusedListItemAnchorIndex} has been focused.`)
 
         break
       case Key.ARROW_UP:
@@ -71,41 +72,41 @@ export class MenuButtonStore extends ComponentStore {
           let last: MutableRefObject<HTMLAnchorElement> | undefined
 
           last = this.listItemAnchorsRef.get(this.listItemAnchorsRef.size - 1)
-          if (!last) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the end list item anchor ref.`)
+          if (!last) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the end list item anchor ref.`)
 
           this.setExpanded(true)
 
           last.current.focus()
-          Logger.debug(this.id, 'handleKeyboardInteractions', `The last list item anchor ref has been focused.`)
+          StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The last list item anchor ref has been focused.`)
 
           break
         }
 
         previous = this.listItemAnchorsRef.get(this.focusedListItemAnchorIndex > 0 ? this.focusedListItemAnchorIndex - 1 : this.listItemAnchorsRef.size - 1)
-        if (!previous) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the previous list item anchor ref.`)
+        if (!previous) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the previous list item anchor ref.`)
 
         previous.current.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The list item anchor ref with index ${this.focusedListItemAnchorIndex} has been focused.`)
+        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The list item anchor ref with index ${this.focusedListItemAnchorIndex} has been focused.`)
 
         break
       case Key.HOME:
         let first: MutableRefObject<HTMLAnchorElement> | undefined
 
         first = this.listItemAnchorsRef.get(0)
-        if (!first) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first list item anchor ref.`)
+        if (!first) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first list item anchor ref.`)
 
         first.current.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The first list item anchor ref has been focused.`)
+        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The first list item anchor ref has been focused.`)
 
         break
       case Key.END:
         let last: MutableRefObject<HTMLAnchorElement> | undefined
 
         last = this.listItemAnchorsRef.get(this.listItemAnchorsRef.size - 1)
-        if (!last) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the end list item anchor ref.`)
+        if (!last) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the end list item anchor ref.`)
 
         last.current.focus()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The last list item anchor ref has been focused.`)
+        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The last list item anchor ref has been focused.`)
 
         break
       case Key.ENTER:
@@ -113,10 +114,10 @@ export class MenuButtonStore extends ComponentStore {
         let active: MutableRefObject<HTMLAnchorElement> | undefined
 
         active = this.listItemAnchorsRef.get(this.focusedListItemAnchorIndex)
-        if (!active) return Logger.error(this.id, 'handleKeyboardInteractions', `Failed to find the active list item anchor ref.`)
+        if (!active) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the active list item anchor ref.`)
 
         active.current.click()
-        Logger.debug(this.id, 'handleKeyboardInteractions', `The active list item anchor ref has been clicked.`)
+        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The active list item anchor ref has been clicked.`)
 
         break
       case Key.ESCAPE:
@@ -127,35 +128,35 @@ export class MenuButtonStore extends ComponentStore {
 
   setButtonRef = (ref: MutableRefObject<HTMLButtonElement>): void => {
     this.buttonRef = ref
-    Logger.debug(this.id, 'setButtonRef', `The button ref has been set.`)
+    StoreLogger.verbose(this.id, 'setButtonRef', `The button ref has been set.`)
 
     this.update()
   }
 
   setListRef = (ref: MutableRefObject<HTMLUListElement>): void => {
     this.listRef = ref
-    Logger.debug(this.id, 'setListRef', `The list ref has been set.`)
+    StoreLogger.verbose(this.id, 'setListRef', `The list ref has been set.`)
 
     this.update()
   }
 
   setListItemAnchorRef = (index: number, ref: MutableRefObject<HTMLAnchorElement>): void => {
     this.listItemAnchorsRef.set(index, ref)
-    Logger.debug(this.id, 'setListItemAnchorRef', `The list item anchor ref with index ${index} has been set.`)
+    StoreLogger.verbose(this.id, 'setListItemAnchorRef', `The list item anchor ref with index ${index} has been set.`)
   }
 
   deleteListItemAnchorRef = (index: number): void => {
     this.listItemAnchorsRef.delete(index)
-    Logger.debug(this.id, 'deleteListItemAnchorRef', `The list item anchor ref with index ${index} has been deleted.`)
+    StoreLogger.verbose(this.id, 'deleteListItemAnchorRef', `The list item anchor ref with index ${index} has been deleted.`)
   }
 
   setExpanded = (expanded: boolean): void => {
     this.expanded = expanded
-    Logger.debug(this.id, 'setExpanded', `The menu button has been ${expanded ? 'expanded' : 'collapsed'}.`)
+    StoreLogger.debug(this.id, 'setExpanded', `The menu button has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
     if (this.isCollapsed) {
       this.buttonRef.current.focus()
-      Logger.debug(this.id, 'handleKeyboardInteractions', `The button has been focused.`)
+      StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The button has been focused.`)
     }
 
     this.update()

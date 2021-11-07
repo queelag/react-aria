@@ -1,5 +1,5 @@
-import { useID } from '@queelag/react-core'
-import React, { ForwardedRef, forwardRef } from 'react'
+import { forwardRef, useID } from '@queelag/react-core'
+import React, { ForwardedRef } from 'react'
 import { ComponentName } from '../definitions/enums'
 import { AlertProps } from '../definitions/props'
 

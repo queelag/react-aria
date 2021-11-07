@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
+import { forwardRef, useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import React, { ForwardedRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { ComponentName } from '../definitions/enums'
 import { RadioGroupChildrenProps, RadioGroupItemProps, RadioGroupProps } from '../definitions/props'
 import { RadioGroupStore } from '../stores/radio.group.store'

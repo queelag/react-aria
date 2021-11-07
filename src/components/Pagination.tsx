@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useComponentStore, useID } from '@queelag/react-core'
-import React, { ForwardedRef, forwardRef, MouseEvent } from 'react'
+import { forwardRef, useComponentStore, useID } from '@queelag/react-core'
+import React, { ForwardedRef, MouseEvent } from 'react'
 import { ComponentName } from '../definitions/enums'
 import {
   PaginationChildrenProps,

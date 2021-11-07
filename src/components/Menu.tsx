@@ -1,6 +1,6 @@
 import { Debounce, noop, ObjectUtils } from '@queelag/core'
-import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, MutableRefObject, useEffect } from 'react'
+import { forwardRef, useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, ForwardedRef, KeyboardEvent, MouseEvent, MutableRefObject, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import { ComponentName, MenuPopperReferenceElement } from '../definitions/enums'
 import {

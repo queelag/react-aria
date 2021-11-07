@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useComponentStore, useID, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, ForwardedRef, forwardRef, MouseEvent, useEffect } from 'react'
+import { forwardRef, useComponentStore, useID, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, ForwardedRef, MouseEvent, useEffect } from 'react'
 import { CarouselLive, ComponentName } from '../definitions/enums'
 import {
   CarouselButtonLiveProps,

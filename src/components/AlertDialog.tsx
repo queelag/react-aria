@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useID } from '@queelag/react-core'
-import React, { ForwardedRef, forwardRef, KeyboardEvent } from 'react'
+import { forwardRef, useID } from '@queelag/react-core'
+import React, { ForwardedRef, KeyboardEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { ComponentName, Key } from '../definitions/enums'
 import { AlertDialogChildrenProps, AlertDialogDescriptionProps, AlertDialogProps, AlertDialogTitleProps } from '../definitions/props'

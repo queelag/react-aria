@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useComponentStore, useSafeRef } from '@queelag/react-core'
-import React, { ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
+import { forwardRef, useComponentStore, useSafeRef } from '@queelag/react-core'
+import React, { ForwardedRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { TabberChildrenProps, TabberListItemProps, TabberListProps, TabberPanelProps, TabberProps } from '../definitions/props'
 import { TabberStore } from '../stores/tabber.store'
 

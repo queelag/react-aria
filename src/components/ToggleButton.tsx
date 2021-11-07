@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useID } from '@queelag/react-core'
-import React, { ForwardedRef, forwardRef } from 'react'
+import { forwardRef, useID } from '@queelag/react-core'
+import React, { ForwardedRef } from 'react'
 import { ComponentName } from '../definitions/enums'
 import { ToggleButtonProps } from '../definitions/props'
 

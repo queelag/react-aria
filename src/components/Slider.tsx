@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useComponentStore, useID } from '@queelag/react-core'
-import React, { ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, TouchEvent, useEffect } from 'react'
+import { forwardRef, useComponentStore, useID } from '@queelag/react-core'
+import React, { ForwardedRef, KeyboardEvent, MouseEvent, TouchEvent, useEffect } from 'react'
 import { ComponentName, SliderMode } from '../definitions/enums'
 import { SliderChildrenProps, SliderProps, SliderThumbProps } from '../definitions/props'
 import { SliderThumbIndex } from '../definitions/types'

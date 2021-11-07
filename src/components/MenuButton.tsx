@@ -1,6 +1,6 @@
 import { ObjectUtils } from '@queelag/core'
-import { useComponentStore, useSafeRef } from '@queelag/react-core'
-import React, { FocusEvent, ForwardedRef, forwardRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
+import { forwardRef, useComponentStore, useSafeRef } from '@queelag/react-core'
+import React, { FocusEvent, ForwardedRef, KeyboardEvent, MouseEvent, useEffect } from 'react'
 import { usePopper } from 'react-popper'
 import {
   MenuButtonButtonProps,

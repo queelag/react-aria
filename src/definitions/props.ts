@@ -364,6 +364,10 @@ export interface ContextMenuTriggerProps extends Omit<HTMLDivProps, 'id'>, Conte
 export interface DialogProps extends Omit<HTMLDivProps, 'children'> {
   children: (props: DialogChildrenProps) => ReactNode
   /**
+   * The container used by the portal.
+   */
+  container?: Element
+  /**
    * Required if your Dialog has a description.
    */
   hasDescription?: boolean
@@ -375,6 +379,10 @@ export interface DialogProps extends Omit<HTMLDivProps, 'children'> {
    * The method which handles the closure of the dialog.
    */
   onClose: () => any
+  /**
+   * Indicates whether the Dialog will be portaled or not.
+   */
+  usePortal?: boolean
 }
 
 export interface DialogChildrenProps {

@@ -6,7 +6,7 @@ import { ComponentName, Key } from '../definitions/enums'
 import { DialogChildrenProps, DialogDescriptionProps, DialogProps, DialogTitleProps } from '../definitions/props'
 import { ComponentLogger } from '../loggers/component.logger'
 
-const ROOT_PROPS_KEYS: (keyof DialogProps)[] = ['hasDescription', 'hasTitle', 'onClose']
+const ROOT_PROPS_KEYS: (keyof DialogProps)[] = ['container', 'hasDescription', 'hasTitle', 'onClose', 'usePortal']
 const ROOT_CHILDREN_PROPS_KEYS: (keyof DialogChildrenProps)[] = ['descriptionID', 'titleID']
 
 /**
@@ -36,7 +36,7 @@ export const Root = forwardRef((props: DialogProps, ref: ForwardedRef<HTMLDivEle
     props.onKeyDown && props.onKeyDown(event)
   }
 
-  return createPortal(
+  const render = () => (
     <div
       {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)}
       aria-describedby={props.hasDescription ? descriptionID : undefined}
@@ -48,9 +48,10 @@ export const Root = forwardRef((props: DialogProps, ref: ForwardedRef<HTMLDivEle
       aria-modal
     >
       {props.children({ descriptionID, titleID })}
-    </div>,
-    document.body
+    </div>
   )
+
+  return props.usePortal !== false ? createPortal(render(), props.container || document.body) : render()
 })
 
 export const Title = forwardRef((props: DialogTitleProps, ref: ForwardedRef<HTMLSpanElement>) => {

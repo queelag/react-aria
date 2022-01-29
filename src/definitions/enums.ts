@@ -99,6 +99,11 @@ export enum ListBoxSelectMode {
   SINGLE = 'SINGLE'
 }
 
+export enum LoggerName {
+  COMPONENT = 'REACT_ARIA_COMPONENT',
+  STORE = 'REACT_ARIA_STORE'
+}
+
 export enum Key {
   A = 'a',
   ARROW_DOWN = 'ArrowDown',

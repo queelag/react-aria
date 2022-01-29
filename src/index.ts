@@ -25,6 +25,7 @@ export {
   DisclosureStatus,
   Key,
   ListBoxSelectMode,
+  LoggerName as ReactAriaLoggerName,
   MenuPopperReferenceElement,
   SliderMode,
   SliderOrientation,

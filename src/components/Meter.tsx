@@ -4,7 +4,7 @@ import React, { ForwardedRef } from 'react'
 import { ComponentName } from '../definitions/enums'
 import { MeterProps } from '../definitions/props'
 
-const ROOT_PROPS_KEYS: (keyof MeterProps)[] = ['maximum', 'minimum', 'value']
+const ROOT_PROPS_KEYS: (keyof MeterProps)[] = ['maximum', 'minimum', 'round', 'value']
 
 /**
  * A meter is a graphical display of a numeric value that varies within a defined range. For example, a meter could be used to depict a device's current battery percentage or a car's fuel level.
@@ -24,7 +24,7 @@ export const Root = forwardRef((props: MeterProps, ref: ForwardedRef<HTMLDivElem
       role='meter'
     >
       {props.children({
-        percentual: (value / (props.maximum - props.minimum)) * 100,
+        percentual: NumberUtils.percentage(value, props.minimum, props.maximum, props.round),
         value: value
       })}
     </div>

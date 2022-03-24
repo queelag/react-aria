@@ -6,7 +6,7 @@ import { ComponentName } from '../definitions/enums'
 import { TooltipChildrenProps, TooltipElementProps, TooltipProps, TooltipTriggerProps } from '../definitions/props'
 import { TooltipStore } from '../stores/tooltip.store'
 
-const TOOLTIP_PROPS_KEYS: (keyof TooltipProps)[] = ['getStore', 'hideDelay', 'popperOptions']
+const TOOLTIP_PROPS_KEYS: (keyof TooltipProps)[] = ['getStore', 'hideDelay', 'popperOptions', 'showDelay']
 const TOOLTIP_CHILDREN_PROPS_KEYS: (keyof TooltipChildrenProps)[] = [
   'elementID',
   'hideDelay',

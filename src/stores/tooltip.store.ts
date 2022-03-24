@@ -1,4 +1,4 @@
-import { ID, IDUtils } from '@queelag/core'
+import { ID, IDUtils, Timeout } from '@queelag/core'
 import { ComponentStore, ComponentStoreProps, ReactUtils } from '@queelag/react-core'
 import { KeyboardEvent, MutableRefObject } from 'react'
 import { ComponentName, Key } from '../definitions/enums'
@@ -9,6 +9,7 @@ export class TooltipStore extends ComponentStore {
   elementID: ID
   elementRef: MutableRefObject<HTMLDivElement>
   hideDelay: number
+  showDelay: number
   triggerRef: MutableRefObject<HTMLDivElement>
   visible: boolean
 
@@ -18,6 +19,7 @@ export class TooltipStore extends ComponentStore {
     this.elementID = IDUtils.prefixed(ComponentName.TOOLTIP_ELEMENT)
     this.elementRef = ReactUtils.createDummyRef('div')
     this.hideDelay = props.hideDelay || 200
+    this.showDelay = props.showDelay || 0
     this.triggerRef = ReactUtils.createDummyRef('div')
     this.visible = false
   }
@@ -50,14 +52,34 @@ export class TooltipStore extends ComponentStore {
   }
 
   setVisible = (visible: boolean): void => {
-    if (visible === false && this.triggerRef.current === document.activeElement) {
-      StoreLogger.verbose(this.id, 'setVisible', `Failed to set visible to false, the trigger element is still focused.`)
-      return
+    switch (visible) {
+      case false:
+        if (this.triggerRef.current === document.activeElement) {
+          StoreLogger.verbose(this.id, 'setVisible', `Failed to set visible to false, the trigger element is still focused.`)
+          return
+        }
+
+        Timeout.clear(this.id)
+
+        this.visible = visible
+        StoreLogger.debug(this.id, 'setVisible', `The tooltip has been hidden.`)
+
+        this.update()
+
+        break
+      case true:
+        Timeout.set(
+          this.id,
+          () => {
+            this.visible = visible
+            StoreLogger.debug(this.id, 'setVisible', `The tooltip has been shown.`)
+
+            this.update()
+          },
+          this.showDelay
+        )
+
+        break
     }
-
-    this.visible = visible
-    StoreLogger.debug(this.id, 'setVisible', `The tooltip has been ${visible ? 'shown' : 'hidden'}.`)
-
-    this.update()
   }
 }

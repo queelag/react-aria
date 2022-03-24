@@ -728,6 +728,10 @@ export interface MeterProps extends Omit<HTMLDivProps, 'children'> {
    */
   minimum: number
   /**
+   * The boolean that determines if the percentual value will be rounded or not.
+   */
+  round?: boolean
+  /**
    * The current value of the Meter.
    */
   value: number
@@ -903,6 +907,10 @@ export interface TooltipProps extends Omit<HTMLDivProps, 'children'>, WithGetSto
    * The popper options.
    */
   popperOptions?: PopperOptions<any>
+  /**
+   * The tooltip can be shown after a delay to not disrupt the user experience.
+   */
+  showDelay?: number
 }
 
 export interface TooltipChildrenProps extends Pick<TooltipProps, 'hideDelay'> {

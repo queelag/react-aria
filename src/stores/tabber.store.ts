@@ -119,7 +119,7 @@ export class TabberStore extends ComponentStore {
     this.selectedListItemIndex = index
     StoreLogger.debug(this.id, 'setSelectedListItemIndex', `The selected tab index has been set to ${index}.`)
 
-    this.update()
+    this.dispatch()
   }
 
   isTabSelected = (index: number): boolean => {
@@ -156,6 +156,6 @@ export class TabberStore extends ComponentStore {
     this._listItemsLength = listItemsLength
     StoreLogger.verbose(this.id, 'setListItemsLength', `The list items length has been set to ${listItemsLength}.`)
 
-    this.update()
+    this.dispatch()
   }
 }

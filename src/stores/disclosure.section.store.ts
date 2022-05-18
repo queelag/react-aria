@@ -27,6 +27,6 @@ export class DisclosureSectionStore extends ComponentStore<HTMLElement> {
     this._expanded = expanded
     StoreLogger.debug(this.id, 'setExpanded', `The section has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
-    this.update()
+    this.dispatch()
   }
 }

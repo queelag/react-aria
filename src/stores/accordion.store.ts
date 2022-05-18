@@ -27,7 +27,7 @@ export class AccordionStore extends ComponentStore {
 
     StoreLogger.debug(this.id, 'expandSection', `Every section has been collapsed, the section ${id} has been ${expanded ? 'expanded' : 'collapsed'}`)
 
-    this.update()
+    this.dispatch()
   }
 
   setSectionHeaderRef = (ref: MutableRefObject<HTMLButtonElement>, id: ID): void => {

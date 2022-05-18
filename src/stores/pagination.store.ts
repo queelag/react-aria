@@ -30,7 +30,7 @@ export class PaginationStore extends ComponentStore<HTMLElement> {
       StoreLogger.debug(this.id, 'setActiveListItemIndex', `The onChangeActiveListItemIndex function has been called.`, this.onChangeActiveListItemIndex)
     }
 
-    this.update()
+    this.dispatch()
   }
 
   isListItemActive = (index: number): boolean => {

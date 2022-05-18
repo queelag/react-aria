@@ -64,7 +64,7 @@ export class RadioGroupStore extends ComponentStore {
     this.checkedItemIndex = index
     StoreLogger.debug(this.id, 'setCheckedItemIndex', `The item with index ${index} has been checked.`)
 
-    this.onCheckItem === noop ? this.update() : this.onCheckItem(index)
+    this.onCheckItem === noop ? this.dispatch() : this.onCheckItem(index)
   }
 
   focusItem(index: number): void {

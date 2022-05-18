@@ -41,14 +41,14 @@ export class TooltipStore extends ComponentStore {
     this.elementRef = ref
     StoreLogger.verbose(this.id, 'setElementRef', `The element ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setTriggerRef = (ref: MutableRefObject<HTMLDivElement>): void => {
     this.triggerRef = ref
     StoreLogger.verbose(this.id, 'setTriggerRef', `The trigger ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setVisible = (visible: boolean): void => {
@@ -64,7 +64,7 @@ export class TooltipStore extends ComponentStore {
         this.visible = visible
         StoreLogger.debug(this.id, 'setVisible', `The tooltip has been hidden.`)
 
-        this.update()
+        this.dispatch()
 
         break
       case true:
@@ -74,7 +74,7 @@ export class TooltipStore extends ComponentStore {
             this.visible = visible
             StoreLogger.debug(this.id, 'setVisible', `The tooltip has been shown.`)
 
-            this.update()
+            this.dispatch()
           },
           this.showDelay
         )

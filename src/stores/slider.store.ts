@@ -153,7 +153,7 @@ export class SliderStore extends ComponentStore {
     this.percentual[index] = percentual
     // StoreLogger.debug(this.id, 'setPercentual', `The percentual with index ${index} has been set to ${this.percentual[index]}%.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setValueByCoordinates(index: SliderThumbIndex, x: number, y: number, round: boolean = false): void {

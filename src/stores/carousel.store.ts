@@ -41,7 +41,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
         StoreLogger.debug(this.id, 'handleFocusEvent', `The temporary live has been set to polite.`)
 
         this.disableAutomaticRotation()
-        this.update()
+        this.dispatch()
 
         break
     }
@@ -55,7 +55,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
     this.liveTemporary = undefined
     StoreLogger.debug(this.id, 'handleBlurEvent', `The temporary live has been unset.`)
 
-    this.update()
+    this.dispatch()
   }
 
   onChangeActiveSlideIndex(index: number): void {}
@@ -64,7 +64,7 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
     this.activeSlideIndex = index
     StoreLogger.verbose(this.id, 'setActiveSlideIndex', `The slide with index ${index} has been set as the active slide.`)
 
-    this.onChangeActiveSlideIndex === noop ? this.update() : this.onChangeActiveSlideIndex(index)
+    this.onChangeActiveSlideIndex === noop ? this.dispatch() : this.onChangeActiveSlideIndex(index)
   }
 
   setLive = (live: CarouselLive): void => {
@@ -177,6 +177,6 @@ export class CarouselStore extends ComponentStore<HTMLElement> {
     StoreLogger.verbose(this.id, 'setLive', `The live has been set to ${live}.`)
 
     this.toggleAutomaticRotation()
-    this.update()
+    this.dispatch()
   }
 }

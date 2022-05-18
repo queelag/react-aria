@@ -186,7 +186,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
     this.itemMenusRef.set(id, ref)
     StoreLogger.verbose(this.id, 'setItemMenuRef', `The ref of the item menu child of ${id} has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   deleteItemMenuRef = (id: ID): void => {
@@ -215,7 +215,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
     this.expandedItemIndex = index
     StoreLogger.debug(this.id, 'setExpandedItemIndex', `The expanded item index has been set to ${index}.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setFocusedItemIndex = (index: number): void => {
@@ -227,7 +227,7 @@ export class MenuStore extends ComponentStore<HTMLUListElement> {
       StoreLogger.debug(this.id, 'setFocusedItemIndex', `The first item anchor element has been blurred.`)
     }
 
-    this.update()
+    this.dispatch()
   }
 
   focusItemAnchor = (index: number): void => {

@@ -130,14 +130,14 @@ export class ListBoxStore extends ComponentStore {
     this.buttonRef = ref
     StoreLogger.verbose(this.id, 'setButtonRef', `The button ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setListRef = (ref: MutableRefObject<HTMLUListElement>): void => {
     this.listRef = ref
     StoreLogger.verbose(this.id, 'setListRef', `The list ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setListItemRef = (index: number, ref: MutableRefObject<HTMLLIElement>): void => {
@@ -164,14 +164,14 @@ export class ListBoxStore extends ComponentStore {
       StoreLogger.debug(id, context, `The list has been focused.`)
     }
 
-    this.update()
+    this.dispatch()
   }
 
   setFocusedListItemIndex = (index: number): void => {
     this.focusedListItemIndex = index
     StoreLogger.debug(this.id, 'setFocusedListItemIndex', `The list item with index ${index} has been focused.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setSelectedListItemIndex = (index: number, selected: boolean): void => {
@@ -189,7 +189,7 @@ export class ListBoxStore extends ComponentStore {
     this.listRef.current.focus()
     StoreLogger.debug(this.id, 'setSelectedListItemID', `The list has been focused.`)
 
-    this.onSelectListItem === noop ? this.update() : this.onSelectListItem(this.selectedListItemIndexes)
+    this.onSelectListItem === noop ? this.dispatch() : this.onSelectListItem(this.selectedListItemIndexes)
   }
 
   setSelectedListItemIndexes = (indexes: [number, boolean][]): void => {

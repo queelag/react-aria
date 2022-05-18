@@ -130,14 +130,14 @@ export class MenuButtonStore extends ComponentStore {
     this.buttonRef = ref
     StoreLogger.verbose(this.id, 'setButtonRef', `The button ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setListRef = (ref: MutableRefObject<HTMLUListElement>): void => {
     this.listRef = ref
     StoreLogger.verbose(this.id, 'setListRef', `The list ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setListItemAnchorRef = (index: number, ref: MutableRefObject<HTMLAnchorElement>): void => {
@@ -159,7 +159,7 @@ export class MenuButtonStore extends ComponentStore {
       StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The button has been focused.`)
     }
 
-    this.update()
+    this.dispatch()
   }
 
   get focusedListItemAnchorIndex(): number {

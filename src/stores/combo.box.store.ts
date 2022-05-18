@@ -101,28 +101,28 @@ export class ComboBoxStore extends ComponentStore {
       this.setFocusedListBoxItemIndex(this.selectedListBoxItemIndexes[0] || 0)
     }
 
-    this.update()
+    this.dispatch()
   }
 
   setFocusedListBoxItemIndex = (index: number): void => {
     this.focusedListBoxItemIndex = index
     StoreLogger.debug(this.id, 'setFocusedListBoxItemID', `The focused listbox item index has been set to ${index}.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setSelectedListBoxItemIndex = (index: number, selected: boolean): void => {
     this.selectedListBoxItemIndexes = selected ? [index] : []
     StoreLogger.debug(this.id, 'setSelectedListBoxItemIndex', `The selected list box item index has been set to ${index}.`)
 
-    this.onSelectListBoxItem === noop ? this.update() : this.onSelectListBoxItem(this.selectedListBoxItemIndexes)
+    this.onSelectListBoxItem === noop ? this.dispatch() : this.onSelectListBoxItem(this.selectedListBoxItemIndexes)
   }
 
   setGroupRef = (ref: MutableRefObject<HTMLDivElement>): void => {
     this.groupRef = ref
     StoreLogger.verbose(this.id, 'setGroupRef', `The group ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setInputRef = (ref: MutableRefObject<HTMLInputElement>): void => {
@@ -139,7 +139,7 @@ export class ComboBoxStore extends ComponentStore {
     this.listBoxRef.current = ref.current || this.listBoxRef.current
     StoreLogger.verbose(this.id, 'setListBoxRef', `The listbox ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   deleteListBoxItemRef = (index: number): void => {

@@ -130,14 +130,14 @@ export class ContextMenuStore extends ComponentStore {
     this.triggerRef = ref
     StoreLogger.verbose(this.id, 'setTriggerRef', `The trigger ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setListRef = (ref: MutableRefObject<HTMLUListElement>): void => {
     this.listRef = ref
     StoreLogger.verbose(this.id, 'setListRef', `The list ref has been set.`)
 
-    this.update()
+    this.dispatch()
   }
 
   setListItemAnchorRef = (index: number, ref: MutableRefObject<HTMLAnchorElement>): void => {
@@ -159,7 +159,7 @@ export class ContextMenuStore extends ComponentStore {
       StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The trigger has been focused.`)
     }
 
-    this.update()
+    this.dispatch()
   }
 
   get focusedListItemAnchorIndex(): number {

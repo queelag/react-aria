@@ -111,7 +111,7 @@ export function Trigger(props: TooltipTriggerProps) {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       ref={ref}
-      tabIndex={0}
+      tabIndex={typeof props.tabIndex === 'number' ? props.tabIndex : 0}
     />
   )
 }

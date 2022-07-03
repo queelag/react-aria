@@ -1,9 +1,5 @@
 module.exports = {
-  purge: ['stories/*.tsx'],
-  darkMode: false,
-  theme: {
-    extend: {}
-  },
+  content: ['stories/*.tsx'],
   variants: {
     extend: {
       backgroundColor: ['active'],
@@ -11,6 +7,5 @@ module.exports = {
       ringWidth: ['active', 'hover'],
       scale: ['active']
     }
-  },
-  plugins: []
+  }
 }

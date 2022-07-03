@@ -17,6 +17,8 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
   'buttonID',
   'deleteListItemAnchorRef',
   'expanded',
+  'focusFirstListItemAnchor',
+  'focusedListItemAnchorIndex',
   'listID',
   'popper',
   'setButtonRef',
@@ -33,7 +35,10 @@ export const Root = forwardRef((props: MenuButtonProps, ref: ForwardedRef<HTMLDi
   const popper = usePopper(store.buttonRef.current, store.listRef.current, props.popperOptions)
 
   const onBlur = (event: FocusEvent<HTMLDivElement>) => {
-    // store.setExpanded(false)
+    if (store.isCollapsable) {
+      store.setExpanded(false)
+    }
+
     props.onBlur && props.onBlur(event)
   }
 
@@ -55,6 +60,8 @@ export const Root = forwardRef((props: MenuButtonProps, ref: ForwardedRef<HTMLDi
         buttonID: store.buttonID,
         deleteListItemAnchorRef: store.deleteListItemAnchorRef,
         expanded: store.expanded,
+        focusFirstListItemAnchor: store.focusFirstListItemAnchor,
+        focusedListItemAnchorIndex: store.focusedListItemAnchorIndex,
         listID: store.listID,
         popper: popper,
         setButtonRef: store.setButtonRef,
@@ -69,8 +76,23 @@ export const Root = forwardRef((props: MenuButtonProps, ref: ForwardedRef<HTMLDi
 export function Button(props: MenuButtonButtonProps) {
   const ref = useSafeRef('button')
 
-  const onClick = () => {
+  const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     props.setExpanded(!props.expanded)
+
+    if (props.expanded) {
+      ref.current.focus()
+    }
+
+    if (!props.expanded) {
+      props.focusFirstListItemAnchor()
+    }
+
+    props.onClick && props.onClick(event)
+  }
+
+  const onMouseDown = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    props.onMouseDown && props.onMouseDown(event)
   }
 
   useEffect(() => props.setButtonRef(ref), [])
@@ -82,6 +104,7 @@ export function Button(props: MenuButtonButtonProps) {
       aria-expanded={props.expanded}
       id={props.buttonID}
       onClick={onClick}
+      onMouseDown={onMouseDown}
       ref={ref}
       type='button'
       aria-haspopup
@@ -115,7 +138,7 @@ export const ListItem = forwardRef((props: MenuButtonListItemProps, ref: Forward
 export function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
   const ref = useSafeRef('a')
 
-  const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
+  const onClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     props.setExpanded(false)
     props.onClick && props.onClick(event)
   }
@@ -125,7 +148,15 @@ export function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
     return () => props.deleteListItemAnchorRef(props.index)
   }, [])
 
-  return <a {...ObjectUtils.omit(props, [...ROOT_CHILDREN_PROPS_KEYS, 'index'])} onClick={onClick} ref={ref} role='menuitem' tabIndex={-1} />
+  return (
+    <a
+      {...ObjectUtils.omit(props, [...ROOT_CHILDREN_PROPS_KEYS, 'index'])}
+      onClick={onClick}
+      ref={ref}
+      role='menuitem'
+      tabIndex={props.expanded ? (props.index === props.focusedListItemAnchorIndex ? 0 : -1) : props.index === 0 ? 0 : -1}
+    />
+  )
 }
 
 export const AriaMenuButton = {

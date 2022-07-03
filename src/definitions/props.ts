@@ -681,6 +681,14 @@ export interface MenuButtonChildrenProps {
    */
   expanded: boolean
   /**
+   * The method which focuses the first ListItemAnchor element.
+   */
+  focusFirstListItemAnchor: () => void
+  /**
+   * The index of the focused ListItemAnchor element.
+   */
+  focusedListItemAnchorIndex: number
+  /**
    * The ID of the List element.
    */
   listID: ID

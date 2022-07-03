@@ -8,6 +8,7 @@ import { StoreLogger } from '../loggers/store.logger'
 export class MenuButtonStore extends ComponentStore {
   buttonID: ID
   buttonRef: MutableRefObject<HTMLButtonElement>
+  collapsable: boolean
   expanded: boolean
   listID: ID
   listRef: MutableRefObject<HTMLUListElement>
@@ -18,6 +19,7 @@ export class MenuButtonStore extends ComponentStore {
 
     this.buttonID = IDUtils.prefixed(ComponentName.MENU_BUTTON_BUTTON)
     this.buttonRef = ReactUtils.createDummyRef('button')
+    this.collapsable = true
     this.expanded = false
     this.listID = IDUtils.prefixed(ComponentName.MENU_BUTTON_LIST)
     this.listRef = ReactUtils.createDummyRef('ul')
@@ -42,86 +44,48 @@ export class MenuButtonStore extends ComponentStore {
 
     switch (event.key) {
       case Key.ARROW_DOWN:
-        let next: MutableRefObject<HTMLAnchorElement> | undefined
-
         if (this.isCollapsed) {
-          let first: MutableRefObject<HTMLAnchorElement> | undefined
-
-          first = this.listItemAnchorsRef.get(0)
-          if (!first) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first list item anchor ref.`)
-
           this.setExpanded(true)
-
-          first.current.focus()
-          StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The first list item anchor ref has been focused.`)
+          this.focusFirstListItemAnchor()
 
           break
         }
 
-        next = this.listItemAnchorsRef.get(this.focusedListItemAnchorIndex < this.listItemAnchorsRef.size - 1 ? this.focusedListItemAnchorIndex + 1 : 0)
-        if (!next) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the next list item anchor ref.`)
-
-        next.current.focus()
-        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The list item anchor ref with index ${this.focusedListItemAnchorIndex} has been focused.`)
+        this.focusListItemAnchor(this.focusedListItemAnchorIndex < this.listItemAnchorsRef.size - 1 ? this.focusedListItemAnchorIndex + 1 : 0)
 
         break
       case Key.ARROW_UP:
-        let previous: MutableRefObject<HTMLAnchorElement> | undefined
-
         if (this.isCollapsed) {
-          let last: MutableRefObject<HTMLAnchorElement> | undefined
-
-          last = this.listItemAnchorsRef.get(this.listItemAnchorsRef.size - 1)
-          if (!last) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the end list item anchor ref.`)
-
           this.setExpanded(true)
-
-          last.current.focus()
-          StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The last list item anchor ref has been focused.`)
+          this.focusLastListItemAnchor()
 
           break
         }
 
-        previous = this.listItemAnchorsRef.get(this.focusedListItemAnchorIndex > 0 ? this.focusedListItemAnchorIndex - 1 : this.listItemAnchorsRef.size - 1)
-        if (!previous) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the previous list item anchor ref.`)
-
-        previous.current.focus()
-        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The list item anchor ref with index ${this.focusedListItemAnchorIndex} has been focused.`)
+        this.focusListItemAnchor(this.focusedListItemAnchorIndex > 0 ? this.focusedListItemAnchorIndex - 1 : this.listItemAnchorsRef.size - 1)
 
         break
       case Key.HOME:
-        let first: MutableRefObject<HTMLAnchorElement> | undefined
-
-        first = this.listItemAnchorsRef.get(0)
-        if (!first) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the first list item anchor ref.`)
-
-        first.current.focus()
-        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The first list item anchor ref has been focused.`)
-
+        this.focusFirstListItemAnchor()
         break
       case Key.END:
-        let last: MutableRefObject<HTMLAnchorElement> | undefined
-
-        last = this.listItemAnchorsRef.get(this.listItemAnchorsRef.size - 1)
-        if (!last) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the end list item anchor ref.`)
-
-        last.current.focus()
-        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The last list item anchor ref has been focused.`)
-
+        this.focusLastListItemAnchor()
         break
       case Key.ENTER:
       case Key.SPACE:
-        let active: MutableRefObject<HTMLAnchorElement> | undefined
+        if (this.isCollapsed) {
+          this.focusFirstListItemAnchor()
+          this.setExpanded(true)
 
-        active = this.listItemAnchorsRef.get(this.focusedListItemAnchorIndex)
-        if (!active) return StoreLogger.error(this.id, 'handleKeyboardInteractions', `Failed to find the active list item anchor ref.`)
+          break
+        }
 
-        active.current.click()
-        StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The active list item anchor ref has been clicked.`)
-
+        this.focusListItemAnchor(this.focusedListItemAnchorIndex)
         break
       case Key.ESCAPE:
         this.setExpanded(false)
+        this.focusButton()
+
         break
     }
   }
@@ -154,16 +118,46 @@ export class MenuButtonStore extends ComponentStore {
     this.expanded = expanded
     StoreLogger.debug(this.id, 'setExpanded', `The menu button has been ${expanded ? 'expanded' : 'collapsed'}.`)
 
-    if (this.isCollapsed) {
-      this.buttonRef.current.focus()
-      StoreLogger.debug(this.id, 'handleKeyboardInteractions', `The button has been focused.`)
-    }
+    this.dispatch()
+  }
+
+  focusButton = (): void => {
+    this.buttonRef.current.focus()
+    StoreLogger.debug(this.id, 'focusButton', `The button has been focused.`)
+  }
+
+  focusFirstListItemAnchor = (): void => {
+    return this.focusListItemAnchor(0)
+  }
+
+  focusLastListItemAnchor = (): void => {
+    return this.focusListItemAnchor(this.listItemAnchorsRef.size - 1)
+  }
+
+  focusListItemAnchor = (index: number): void => {
+    let anchor: MutableRefObject<HTMLAnchorElement> | undefined
+
+    anchor = this.listItemAnchorsRef.get(index)
+    if (!anchor) return StoreLogger.error(this.id, 'focusListItemAnchor', `Failed to find the list item anchor ref with index ${index}.`)
+
+    this.collapsable = false
+    StoreLogger.debug(this.id, 'focusListItemAnchor', `The collapsable state has been set to false.`)
+
+    anchor.current.focus()
+    StoreLogger.debug(this.id, 'focusListItemAnchor', `The list item anchor ref with index ${index} has been focused.`)
+
+    this.collapsable = true
+    StoreLogger.debug(this.id, 'focusListItemAnchor', `The collapsable state has been set to true.`)
 
     this.dispatch()
   }
 
   get focusedListItemAnchorIndex(): number {
     return [...this.listItemAnchorsRef.values()].findIndex((v: MutableRefObject<HTMLAnchorElement>) => v.current === document.activeElement)
+  }
+
+  get isCollapsable(): boolean {
+    return this.collapsable === true
   }
 
   get isCollapsed(): boolean {

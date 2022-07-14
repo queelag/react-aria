@@ -13,7 +13,7 @@ import type {
   Orientation,
   WithGetStore
 } from '@queelag/react-core'
-import { KeyboardEvent, MutableRefObject, ReactFragment, ReactNode, TouchEvent } from 'react'
+import { KeyboardEvent, MutableRefObject, ReactElement, ReactNode, TouchEvent } from 'react'
 import type { AccordionStore } from '../stores/accordion.store'
 import type { CarouselStore } from '../stores/carousel.store'
 import type { ComboBoxStore } from '../stores/combo.box.store'
@@ -402,7 +402,7 @@ export interface DialogTitleProps extends Omit<HTMLSpanProps, 'id'>, DialogChild
 export interface DisclosureProps extends HTMLDListProps {}
 
 export interface DisclosureSectionProps extends WithGetStore<Element, DisclosureSectionStore> {
-  children: (props: DisclosureSectionChildrenProps) => ReactFragment
+  children: (props: DisclosureSectionChildrenProps) => ReactElement
   expanded?: boolean
 }
 

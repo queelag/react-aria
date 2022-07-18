@@ -148,6 +148,10 @@ export function Item(props: MenuItemProps) {
     props.setItemMenuItemAnchorRef(props.index, index, ref)
   }
 
+  useEffect(() => {
+    popper.update && popper.update()
+  }, [props.isItemExpanded(props.index)])
+
   return (
     <li
       {...ObjectUtils.omit(props, [...MENU_CHILDREN_PROPS_KEYS, 'index', 'popperOptions'])}

@@ -37,6 +37,10 @@ export const Root = forwardRef((props: ListBoxProps, ref: ForwardedRef<HTMLDivEl
     props.onKeyDown && props.onKeyDown(event)
   }
 
+  useEffect(() => {
+    popper.update && popper.update()
+  }, [store.expanded])
+
   return (
     <div {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} ref={ref} style={{ position: 'relative', ...props.style }}>
       {props.children({

@@ -57,6 +57,10 @@ export const Root = forwardRef((props: ComboBoxProps, ref: ForwardedRef<HTMLDivE
   }
 
   useEffect(() => {
+    popper.update && popper.update()
+  }, [store.expanded])
+
+  useEffect(() => {
     store.listBoxRef.current.scrollTo({ behavior: 'smooth', top: store.focusedListBoxItemRef.current.offsetTop })
     ComponentLogger.verbose(store.id, 'useEffect', 'The focused listbox item has been scrolled into view.')
   }, [store.listBoxRef.current])

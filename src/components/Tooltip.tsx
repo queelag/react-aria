@@ -31,6 +31,10 @@ export const Root = forwardRef((props: TooltipProps, ref: ForwardedRef<HTMLDivEl
     props.onKeyDown && props.onKeyDown(event)
   }
 
+  useEffect(() => {
+    popper.update && popper.update()
+  }, [store.visible])
+
   return (
     <div {...ObjectUtils.omit(props, TOOLTIP_PROPS_KEYS)} id={store.id} onKeyDown={onKeyDown} ref={ref}>
       {props.children({

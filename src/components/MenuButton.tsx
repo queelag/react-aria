@@ -47,6 +47,10 @@ export const Root = forwardRef((props: MenuButtonProps, ref: ForwardedRef<HTMLDi
     props.onKeyDown && props.onKeyDown(event)
   }
 
+  useEffect(() => {
+    popper.update && popper.update()
+  }, [store.expanded])
+
   return (
     <div
       {...ObjectUtils.omit(props, ROOT_PROPS_KEYS)}

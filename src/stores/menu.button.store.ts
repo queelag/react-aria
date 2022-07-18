@@ -80,7 +80,8 @@ export class MenuButtonStore extends ComponentStore {
           break
         }
 
-        this.focusListItemAnchor(this.focusedListItemAnchorIndex)
+        this.listItemAnchorsRef.get(this.focusedListItemAnchorIndex)?.current.click()
+
         break
       case Key.ESCAPE:
         this.setExpanded(false)

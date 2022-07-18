@@ -17,7 +17,7 @@ const ROOT_CHILDREN_PROPS_KEYS: (keyof MenuButtonChildrenProps)[] = [
   'buttonID',
   'deleteListItemAnchorRef',
   'expanded',
-  'focusFirstListItemAnchor',
+  'focusListItemAnchor',
   'focusedListItemAnchorIndex',
   'listID',
   'popper',
@@ -64,7 +64,7 @@ export const Root = forwardRef((props: MenuButtonProps, ref: ForwardedRef<HTMLDi
         buttonID: store.buttonID,
         deleteListItemAnchorRef: store.deleteListItemAnchorRef,
         expanded: store.expanded,
-        focusFirstListItemAnchor: store.focusFirstListItemAnchor,
+        focusListItemAnchor: store.focusListItemAnchor,
         focusedListItemAnchorIndex: store.focusedListItemAnchorIndex,
         listID: store.listID,
         popper: popper,
@@ -88,7 +88,7 @@ export function Button(props: MenuButtonButtonProps) {
     }
 
     if (!props.expanded) {
-      props.focusFirstListItemAnchor()
+      props.focusListItemAnchor(0)
     }
 
     props.onClick && props.onClick(event)
@@ -142,9 +142,14 @@ export const ListItem = forwardRef((props: MenuButtonListItemProps, ref: Forward
 export function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
   const ref = useSafeRef('a')
 
-  const onClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     props.setExpanded(false)
     props.onClick && props.onClick(event)
+  }
+
+  const onMouseDown = (event: MouseEvent<HTMLAnchorElement>) => {
+    props.focusListItemAnchor(props.index)
+    props.onMouseDown && props.onMouseDown(event)
   }
 
   useEffect(() => {
@@ -156,6 +161,7 @@ export function ListItemAnchor(props: MenuButtonListItemAnchorProps) {
     <a
       {...ObjectUtils.omit(props, [...ROOT_CHILDREN_PROPS_KEYS, 'index'])}
       onClick={onClick}
+      onMouseDown={onMouseDown}
       ref={ref}
       role='menuitem'
       tabIndex={props.expanded ? (props.index === props.focusedListItemAnchorIndex ? 0 : -1) : props.index === 0 ? 0 : -1}
